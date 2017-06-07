@@ -130,7 +130,7 @@ class User:
             self.stage = self.MainMenu
             send_message("Click to /start", chat)
         else:
-            db.add_item(text, "BOT Improvements", chat, name)
+            db.add_item(text, "BOT Improvements", str(chat), name)
             send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to submit all your responses.", chat)
 
     def FeedbackGF(self,text,chat,name):
@@ -139,7 +139,7 @@ class User:
             self.stage = self.MainMenu
             send_message("Click to /start", chat)
         else:
-            db.add_item(text, "General Feedback", chat, name)
+            db.add_item(text, "General Feedback", str(chat), name)
             send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to submit all your responses.", chat)
 
     def orderFood(self,text,chat,name):
@@ -242,7 +242,7 @@ class User:
     def addOrder(self,text,chat,name):
         global orderstarter
         if text != "back":
-            food.add_order(text,chat,name)
+            food.add_order(text,str(chat),name)
             send_message("Order added/edited", chat, remove_keyboard())
             send_message("1 order added/edited", orderstarter, remove_keyboard())
         options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
@@ -360,10 +360,10 @@ class User:
         global blast_message
         global blast_options
         if text == "/no":
-            allusers = USERS.get_id()
+            allusers = USERS.get_id_and_name()
             print allusers
             for x in allusers:
-                send_message(blast_message, x)
+                send_message(blast_message, int(x[1]))
             send_message("Message Sent. Back to admin page.", chat)
             self.stage = self.admin
             send_message("Hi admin", chat, remove_keyboard())
@@ -375,14 +375,14 @@ class User:
             poll.clear()
             for x in allusers:
                 poll.add_answer("Yet to reply",x[1],x[2])
-                send_message(blast_message, x[1], keyboard)
+                send_message(blast_message, int(x[1]), keyboard)
             send_message("Message Sent. Back to admin page.", chat)
             thread.start_new_thread(delayed_response, (blast_message, keyboard))
             self.stage = self.admin
             send_message("Hi admin", chat, remove_keyboard())
 
     def blast_poll(self,text,chat,name):
-        poll.add_answer(text, chat, name)
+        poll.add_answer(text, str(chat), name)
         send_message("Answer recorded!", chat, remove_keyboard())
 
 
@@ -409,7 +409,7 @@ def main():
                 if chat not in [user.id for user in users]:
                         x = User(chat)
                         users.append(x)
-                        USERS.add_user(chat,name)
+                        USERS.add_user(str(chat),name)
                         print("new temporary user")
                         if text.startswith("!"):
                             x.blast_poll(text,chat,name)
