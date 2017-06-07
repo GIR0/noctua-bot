@@ -118,8 +118,8 @@ class userdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        #tblstmt = "CREATE TABLE IF NOT EXISTS users (id serial, owner integer, name varchar, CONSTRAINT owner_name UNIQUE (owner, name));"
-        #self.cur.execute(tblstmt)
+        tblstmt = "CREATE TABLE IF NOT EXISTS users (id serial, owner integer, name varchar, CONSTRAINT owner_name UNIQUE (owner, name));"
+        self.cur.execute(tblstmt)
         self.connection.commit()
 
     def add_user(self, owner, name):
