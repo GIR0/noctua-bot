@@ -389,7 +389,7 @@ class User:
 users = []
 
 def main():
-    last_update_id = None
+    last_update_id = 1
     while True:
         updates = get_updates(last_update_id)
         if len(updates["result"]) > 0:
