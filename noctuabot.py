@@ -83,7 +83,7 @@ class User:
     def __init__(self, id):
         self.id = id
     def MainMenu(self,text,chat,name):
-        if chat == 221211693:
+        if chat == -1001078638946:
             if text == "/admin":
                 self.stage = self.admin
                 send_message("Hi admin", chat)
