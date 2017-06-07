@@ -5,6 +5,7 @@ import urllib
 import thread
 from db import *
 
+admin =[221211693,174955135]
 db = feedbackdb()
 USERS = userdb()
 poll = polldb()
@@ -83,7 +84,7 @@ class User:
     def __init__(self, id):
         self.id = id
     def MainMenu(self,text,chat,name):
-        if chat == -1001078638946:
+        if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
                 send_message("Hi admin", chat)
@@ -130,7 +131,7 @@ class User:
             self.stage = self.MainMenu
             send_message("Click to /start", chat)
         else:
-            db.add_item(text, "BOT Improvements", str(chat), name)
+            db.add_item(text, "BOT Improvements", chat, name)
             send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to submit all your responses.", chat)
 
     def FeedbackGF(self,text,chat,name):
@@ -139,7 +140,7 @@ class User:
             self.stage = self.MainMenu
             send_message("Click to /start", chat)
         else:
-            db.add_item(text, "General Feedback", str(chat), name)
+            db.add_item(text, "General Feedback", chat, name)
             send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to submit all your responses.", chat)
 
     def orderFood(self,text,chat,name):
@@ -242,7 +243,7 @@ class User:
     def addOrder(self,text,chat,name):
         global orderstarter
         if text != "back":
-            food.add_order(text,str(chat),name)
+            food.add_order(text,chat,name)
             send_message("Order added/edited", chat, remove_keyboard())
             send_message("1 order added/edited", orderstarter, remove_keyboard())
         options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
@@ -363,7 +364,7 @@ class User:
             allusers = USERS.get_id_and_name()
             print allusers
             for x in allusers:
-                send_message(blast_message, int(x[1]))
+                send_message(blast_message, x[1])
             send_message("Message Sent. Back to admin page.", chat)
             self.stage = self.admin
             send_message("Hi admin", chat, remove_keyboard())
@@ -375,14 +376,14 @@ class User:
             poll.clear()
             for x in allusers:
                 poll.add_answer("Yet to reply",x[1],x[2])
-                send_message(blast_message, int(x[1]), keyboard)
+                send_message(blast_message, x[1], keyboard)
             send_message("Message Sent. Back to admin page.", chat)
             thread.start_new_thread(delayed_response, (blast_message, keyboard))
             self.stage = self.admin
             send_message("Hi admin", chat, remove_keyboard())
 
     def blast_poll(self,text,chat,name):
-        poll.add_answer(text, str(chat), name)
+        poll.add_answer(text, chat, name)
         send_message("Answer recorded!", chat, remove_keyboard())
 
 
@@ -397,24 +398,25 @@ def main():
                 text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
                 name = update["message"]["from"]["first_name"]
-                for user in users:
-                    if chat == user.id:
-                        if text.startswith("!"):
-                            user.blast_poll(text,chat,name)
+                if chat > 0:
+                    for user in users:
+                        if chat == user.id:
+                            if text.startswith("!"):
+                                user.blast_poll(text,chat,name)
+                            else:
+                                user.stage(text,chat,name)
+                            break
                         else:
-                            user.stage(text,chat,name)
-                        break
-                    else:
-                        continue
-                if chat not in [user.id for user in users]:
-                        x = User(chat)
-                        users.append(x)
-                        USERS.add_user(str(chat),name)
-                        print("new temporary user")
-                        if text.startswith("!"):
-                            x.blast_poll(text,chat,name)
-                        else:
-                            x.stage(text,chat,name)
+                            continue
+                    if chat not in [user.id for user in users]:
+                            x = User(chat)
+                            users.append(x)
+                            USERS.add_user(chat),name)
+                            print("new temporary user")
+                            if text.startswith("!"):
+                                x.blast_poll(text,chat,name)
+                            else:
+                                x.stage(text,chat,name)
             last_update_id = get_last_update_id(updates) + 1
         time.sleep(0.5)
 

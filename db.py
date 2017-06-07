@@ -17,7 +17,7 @@ class orderdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orders varchar, owner varchar, name varchar, CONSTRAINT owner_name3 UNIQUE (owner, name));"
+        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orders varchar, owner integer, name varchar, CONSTRAINT owner_name3 UNIQUE (owner, name));"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
@@ -62,7 +62,7 @@ class polldb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS PollResults (id serial, answer varchar, owner varchar, name varchar, CONSTRAINT owner_name2 UNIQUE (owner, name));"
+        tblstmt = "CREATE TABLE IF NOT EXISTS PollResults (id serial, answer varchar, owner integer, name varchar, CONSTRAINT owner_name2 UNIQUE (owner, name));"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
@@ -118,7 +118,7 @@ class userdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS users (id serial, owner varchar, name varchar, CONSTRAINT owner_name UNIQUE (owner, name));"
+        tblstmt = "CREATE TABLE IF NOT EXISTS users (id serial, owner integer, name varchar, CONSTRAINT owner_name UNIQUE (owner, name));"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
@@ -163,7 +163,7 @@ class feedbackdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS Feedbacks (id serial, feedback varchar, kind varchar, owner varchar, name varchar);"
+        tblstmt = "CREATE TABLE IF NOT EXISTS Feedbacks (id serial, feedback varchar, kind varchar, owner integer, name varchar);"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
