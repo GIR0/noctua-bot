@@ -396,7 +396,7 @@ def main():
                 text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
                 name = update["message"]["from"]["first_name"]
-                if name.find("\") != -1:
+                if name.find("\") > 0:
                     name = name[:name.find("\")]
                 if chat > 0:
                     for user in users:
