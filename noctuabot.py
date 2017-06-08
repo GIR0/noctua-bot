@@ -304,7 +304,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
         elif text == "/help":
-            send_message("/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard)
+            send_message("/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
         else:
             return
 
