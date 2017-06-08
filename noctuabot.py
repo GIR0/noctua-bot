@@ -278,11 +278,7 @@ class User:
         elif text == "/delete":
             send_message("Whose feedback do you want to delete?", chat, remove_keyboard())
             self.stage = self.delete
-        elif text == "/viewusers":
-            items = USERS.get_name()
-            message = "\n".join(items)
-            send_message(message, chat, remove_keyboard())
-        elif text == "/removeuser":
+        elif text == "/manageuser":
             items = USERS.get_name()
             items.append("back")
             keyboard = build_keyboard(items)
