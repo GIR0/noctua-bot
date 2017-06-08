@@ -123,6 +123,9 @@ class User:
             send_message("Feel free to tell us anything you want us to know!\n\nDo note that all responses will be kept private and confidential.", chat, remove_keyboard())
             self.stage = self.FeedbackGF
         elif text == "back":
+            options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
+            keyboard = build_keyboard(options)
+            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
             self.stage = self.MainMenu
 
     def FeedbackBI(self,text,chat,name):
