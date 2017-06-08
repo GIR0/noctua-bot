@@ -297,13 +297,14 @@ class User:
             message += "\n\nStatistics\n"
             for keys, values in stats.items():
                 message += keys + " " + str(values) +"\n"
-            print (message)
             send_message(message, chat, remove_keyboard())
         elif text == "/done":
             self.stage = self.MainMenu
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
             send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+        elif text == "/help":
+            send_message("/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard)
         else:
             return
 
@@ -365,9 +366,7 @@ class User:
             print allusers
             for x in allusers:
                 send_message(blast_message, x[1])
-            send_message("Message Sent. Back to admin page.", chat)
             self.stage = self.admin
-            send_message("Hi admin", chat, remove_keyboard())
         else:
             blast_options = ["!" + x for x in text.split()]
             keyboard = build_keyboard(blast_options)
@@ -377,14 +376,12 @@ class User:
             for x in allusers:
                 poll.add_answer("Yet to reply",x[1],x[2])
                 send_message(blast_message, x[1], keyboard)
-            send_message("Message Sent. Back to admin page.", chat)
             thread.start_new_thread(delayed_response, (blast_message, keyboard))
             self.stage = self.admin
-            send_message("Hi admin", chat, remove_keyboard())
 
     def blast_poll(self,text,chat,name):
         poll.add_answer(text, chat, name)
-        send_message("Answer recorded!", chat, remove_keyboard())
+        send_message("Answer recorded!", chat)
 
 
 users = []
@@ -395,28 +392,31 @@ def main():
         updates = get_updates(last_update_id)
         if len(updates["result"]) > 0:
             for update in updates["result"]:
-                text = update["message"]["text"]
-                chat = update["message"]["chat"]["id"]
-                name = update["message"]["from"]["first_name"]
-                if chat > 0:
-                    for user in users:
-                        if chat == user.id:
-                            if text.startswith("!"):
-                                user.blast_poll(text,chat,name)
+                try:
+                    text = update["message"]["text"]
+                    chat = update["message"]["chat"]["id"]
+                    name = update["message"]["from"]["first_name"]
+                    if chat > 0:
+                        for user in users:
+                            if chat == user.id:
+                                if text.startswith("!"):
+                                    user.blast_poll(text,chat,name)
+                                else:
+                                    user.stage(text,chat,name)
+                                break
                             else:
-                                user.stage(text,chat,name)
-                            break
-                        else:
-                            continue
-                    if chat not in [user.id for user in users]:
-                            x = User(chat)
-                            users.append(x)
-                            USERS.add_user(chat,name)
-                            print("new temporary user")
-                            if text.startswith("!"):
-                                x.blast_poll(text,chat,name)
-                            else:
-                                x.stage(text,chat,name)
+                                continue
+                        if chat not in [user.id for user in users]:
+                                x = User(chat)
+                                users.append(x)
+                                USERS.add_user(chat,name)
+                                print("new temporary user")
+                                if text.startswith("!"):
+                                    x.blast_poll(text,chat,name)
+                                else:
+                                    x.stage(text,chat,name)
+                except:
+                    pass
             last_update_id = get_last_update_id(updates) + 1
         time.sleep(0.5)
 
