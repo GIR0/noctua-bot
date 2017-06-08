@@ -415,8 +415,9 @@ def main():
                                 if text.startswith("!"):
                                     x.blast_poll(text,chat,name)
                                 else:
+                                    x.stage(text,chat,name)
             except:
-                pass                        x.stage(text,chat,name)
+                pass
             last_update_id = get_last_update_id(updates) + 1
         time.sleep(0.5)
 
