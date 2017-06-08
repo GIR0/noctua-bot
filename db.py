@@ -185,7 +185,7 @@ class feedbackdb:
         try:
             self.cur.execute(stmt)
             print("get_all executed")
-            hold = [x[1]+" "+x[2]+" "+x[4] for x in self.cur]
+            hold = [x[4]+" "+x[2]+" "+x[1] for x in self.cur]
             return [str(i+1) + ". " + x for i, x in enumerate(hold)]
         except:
             print("Failure")
