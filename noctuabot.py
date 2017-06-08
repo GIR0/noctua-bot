@@ -396,7 +396,9 @@ def main():
                 text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
                 name = update["message"]["from"]["first_name"]
-                print name
+                e = name.find("\u")
+                if e > 0:
+                    name = name[:e]
                 if chat > 0:
                     for user in users:
                         if chat == user.id:
