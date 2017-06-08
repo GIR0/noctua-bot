@@ -392,29 +392,31 @@ def main():
     while True:
         updates = get_updates(last_update_id)
         if len(updates["result"]) > 0:
-            for update in updates["result"]:
-                text = update["message"]["text"]
-                chat = update["message"]["chat"]["id"]
-                name = update["message"]["from"]["first_name"]
-                if chat > 0:
-                    for user in users:
-                        if chat == user.id:
-                            if text.startswith("!"):
-                                user.blast_poll(text,chat,name)
+            try:
+                for update in updates["result"]:
+                    text = update["message"]["text"]
+                    chat = update["message"]["chat"]["id"]
+                    name = update["message"]["from"]["first_name"]
+                    if chat > 0:
+                        for user in users:
+                            if chat == user.id:
+                                if text.startswith("!"):
+                                    user.blast_poll(text,chat,name)
+                                else:
+                                    user.stage(text,chat,name)
+                                break
                             else:
-                                user.stage(text,chat,name)
-                            break
-                        else:
-                            continue
-                    if chat not in [user.id for user in users]:
-                            x = User(chat)
-                            users.append(x)
-                            USERS.add_user(chat,name)
-                            print("new temporary user")
-                            if text.startswith("!"):
-                                x.blast_poll(text,chat,name)
-                            else:
-                                x.stage(text,chat,name)
+                                continue
+                        if chat not in [user.id for user in users]:
+                                x = User(chat)
+                                users.append(x)
+                                USERS.add_user(chat,name)
+                                print("new temporary user")
+                                if text.startswith("!"):
+                                    x.blast_poll(text,chat,name)
+                                else:
+            except:
+                pass                        x.stage(text,chat,name)
             last_update_id = get_last_update_id(updates) + 1
         time.sleep(0.5)
 
