@@ -53,7 +53,10 @@ def get_last_chat_id_and_text(updates):
     return (text, chat_id)
 
 def send_message(text, chat_id, reply_markup=None):
-    #text = urllib.quote_plus(text.encode("utf8"))
+    try:
+        text = urllib.quote_plus(text.encode("utf8"))
+    except:
+        pass
     url = URL + "sendMessage?text={}&chat_id={}&parse_mode=Markdown".format(text, chat_id)
     if reply_markup:
         url += "&reply_markup={}".format(reply_markup)
