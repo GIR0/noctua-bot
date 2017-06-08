@@ -280,7 +280,6 @@ class User:
             self.stage = self.delete
         elif text == "/viewusers":
             items = USERS.get_name()
-            items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/removeuser":
