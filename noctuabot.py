@@ -483,14 +483,15 @@ def main():
                     photo = update["message"]["photo"]
                     chat = update["message"]["chat"]["id"]
                     name = update["message"]["from"]["first_name"]
+                    if chat > 0:
                         for user in users:
                             if chat == user.id:
                                 if user.stage == user.blastA:
                                     check = True
                                     user.stage(photo,chat,name)
                                 break
-                    if not check:
-                        send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
+                        if not check:
+                            send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
                 elif ["audio"] in update["message"] or ["video"] in update["message"] or ["sticker"] in update["message"] or ["document"] in update["message"]:
                     chat = update["message"]["chat"]["id"]
                     send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
