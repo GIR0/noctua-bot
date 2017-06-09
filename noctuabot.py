@@ -293,14 +293,14 @@ class User:
     def admin(self,text,chat,name):
         if text == "/view":
             items = db.get_Suggestions()
-            items2 = db.get_General()
+            items += db.get_General()
             items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
             items = db.get_Suggestions()
-            items2 = db.get_General()
+            items += db.get_General()
             items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "\n".join(items)
@@ -343,7 +343,7 @@ class User:
         if text != "back":
             try:
                 items = db.get_Suggestions()
-                items2 = db.get_General()
+                items += db.get_General()
                 index = int(text) - 1
                 feedback = items[index][1]
                 db.delete_item(feedback)
