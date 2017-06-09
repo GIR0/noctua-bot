@@ -294,15 +294,15 @@ class User:
         if text == "/view":
             items = db.get_Suggestions()
             items2 = db.get_General()
-            hold = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
-            return [str(i+1) + ". " + x for i, x in enumerate(hold)]
+            items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
+            items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
             items = db.get_Suggestions()
             items2 = db.get_General()
-            hold = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in self.cur]
-            return [str(i+1) + ". " + x for i, x in enumerate(hold)]
+            items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
+            items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "\n".join(items)
             send_message("Which feedback do you want to delete? Input the correct number\nType back to exit", chat, remove_keyboard())
             self.stage = self.delete
