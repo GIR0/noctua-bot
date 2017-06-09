@@ -401,6 +401,7 @@ class User:
             allusers = USERS.get_id_and_name()
             for x in allusers:
                 send_photo(photo_id, x[1])
+            send_message("Photo sent", chat, remove_keyboard())
             self.stage = self.admin
 
     def blastC(self,text,chat,name):
@@ -408,6 +409,7 @@ class User:
         allusers = USERS.get_id_and_name()
         for x in allusers:
             send_photo(photo_id, x[1],text)
+        send_message("Photo sent", chat, remove_keyboard())
         self.stage = self.admin
 
 
