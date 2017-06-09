@@ -394,11 +394,11 @@ class User:
 
     def blastC(self,text,chat,name):
         global photo_id
-            allusers = USERS.get_id_and_name()
-            print allusers
-            for x in allusers:
-                send_photo(photo_id, x[1],text)
-            self.stage = self.admin
+        allusers = USERS.get_id_and_name()
+        print allusers
+        for x in allusers:
+            send_photo(photo_id, x[1],text)
+        self.stage = self.admin
 
 
     def blast1(self,text,chat,name):
