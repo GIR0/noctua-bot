@@ -345,16 +345,14 @@ class User:
     def delete(self,text,chat,name):
         if text != "back":
             try:
-                items = db.get_Suggestions()
-                print items
-                print len(items)
-                items2 = db.get_General()
+                items = [x[1] for x in db.get_Suggestions()]
+                items2 = [x[1] for x in db.get_General()]
                 if int(text) > len(items):
                     index = int(text) - len(items) - 1
-                    feedback = items2[index][1]
+                    feedback = items2[index]
                 else:
                     index = int(text) - 1
-                    feedback = items[index][1]
+                    feedback = items[index]
                 print feedback
                 db.delete_item(feedback)
                 self.stage = self.admin
