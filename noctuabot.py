@@ -306,7 +306,7 @@ class User:
             items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items2]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "\n".join(items)
-            send_message("Which feedback do you want to delete? Input the correct number\nType back to exit", chat, remove_keyboard())
+            send_message("Which feedback do you want to delete? Input the correct number\n\nType back to exit", chat, remove_keyboard())
             self.stage = self.delete
         elif text == "/viewusers":
             items = USERS.get_name()
@@ -384,6 +384,7 @@ class User:
     def blastA(self,photo,chat,name):
         global photo_id
         photo_id = photo
+        print photo_id
         options =[("Yes"), ("No")]
         keyboard = build_keyboard(options)
         send_message("Photo saved! Do you want a caption?", chat, keyboard)
@@ -391,12 +392,12 @@ class User:
 
     def blastB(self,text,chat,name):
         global photo_id
+        print photo_id
         if text == "Yes":
             send_message("Type your caption:", chat, remove_keyboard())
             self.stage = self.blastC
         if text == "No":
             allusers = USERS.get_id_and_name()
-            print allusers
             for x in allusers:
                 send_photo(photo_id, x[1])
             self.stage = self.admin
@@ -404,7 +405,6 @@ class User:
     def blastC(self,text,chat,name):
         global photo_id
         allusers = USERS.get_id_and_name()
-        print allusers
         for x in allusers:
             send_photo(photo_id, x[1],text)
         self.stage = self.admin
@@ -435,7 +435,6 @@ class User:
         global blast_options
         if text == "/no":
             allusers = USERS.get_id_and_name()
-            print allusers
             for x in allusers:
                 send_message(blast_message, x[1])
             self.stage = self.admin
@@ -443,7 +442,6 @@ class User:
             blast_options = ["!" + x for x in text.split()]
             keyboard = build_keyboard(blast_options)
             allusers = USERS.get_id_and_name()
-            print allusers
             poll.clear()
             for x in allusers:
                 poll.add_answer("Yet to reply",x[1],x[2])
