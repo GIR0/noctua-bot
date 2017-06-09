@@ -427,7 +427,7 @@ class User:
             send_message("Type your message:", chat, remove_keyboard())
             self.stage = self.blast
         elif text == "Next Step":
-            send_message("Send the blast with your own customised reply keyboard.\n1. Type in the options separated by a single space.\n2. Type /no to not have a reply keyboard", chat, remove_keyboard())
+            send_message("Send the blast with your own customised reply keyboard.\n1. Type in the options separated by a single '$'.\n2. Type /no to not have a reply keyboard", chat, remove_keyboard())
             self.stage = self.blast3
         elif text == "back":
             self.stage = self.admin
@@ -442,7 +442,7 @@ class User:
                 send_message(blast_message, x[1])
             self.stage = self.admin
         else:
-            blast_options = ["!" + x for x in text.split()]
+            blast_options = ["!" + x for x in text.split("$")]
             keyboard = build_keyboard(blast_options)
             allusers = USERS.get_id_and_name()
             poll.clear()
@@ -474,6 +474,12 @@ def main():
                             if chat == user.id:
                                 if text.startswith("!"):
                                     user.blast_poll(text,chat,name)
+                                elif text == "/home":
+                                    user.stage = user.MainMenu
+                                    user.stage(text,chat,name)
+                                    options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
+                                    keyboard = build_keyboard(options)
+                                    send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
                                 else:
                                     user.stage(text,chat,name)
                                 break
@@ -486,6 +492,12 @@ def main():
                                 print("new temporary user")
                                 if text.startswith("!"):
                                     x.blast_poll(text,chat,name)
+                                elif text == "/home":
+                                    x.stage = x.MainMenu
+                                    x.stage(text,chat,name)
+                                    options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
+                                    keyboard = build_keyboard(options)
+                                    send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
                                 else:
                                     x.stage(text,chat,name)
                 if "photo" in update["message"]:
