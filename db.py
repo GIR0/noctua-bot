@@ -192,7 +192,7 @@ class feedbackdb:
     def get_General(self):
         try:
             self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("General Feedback"),))
-            print("get_Suggestions executed")
+            print("get_General executed")
             return self.cur
         except:
             print("Failure")
