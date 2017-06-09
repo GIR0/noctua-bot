@@ -487,7 +487,7 @@ def main():
                                     x.stage(text,chat,name)
                 if "photo" in update["message"]:
                     check = False
-                    photo = update["message"]["photo"]
+                    photo = update["message"]["photo"]["file_id"]
                     chat = update["message"]["chat"]["id"]
                     name = update["message"]["from"]["first_name"]
                     if chat > 0:
