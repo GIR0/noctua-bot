@@ -10,6 +10,7 @@ db = feedbackdb()
 USERS = userdb()
 poll = polldb()
 food = orderdb()
+photo_id = " "
 blast_message = " "
 blast_options = []
 NoctuachatID = -1001080757384
@@ -62,6 +63,16 @@ def send_message(text, chat_id, reply_markup=None):
         url += "&reply_markup={}".format(reply_markup)
     get_url(url)
 
+def send_photo(file_id, chat_id, caption=None):
+    url = URL + "sendPhoto?chat_id={}&photo={}".format(chat_id,file_id)
+    if caption:
+        try:
+            caption = urllib.quote_plus(caption.encode("utf8"))
+        except:
+            pass
+        url += "&caption={}".format(caption)
+    get_url(url)
+
 def build_keyboard(items):
     keyboard = [[item] for item in items]
     reply_markup = {"keyboard":keyboard, "one_time_keyboard": True, "selective": True}
@@ -96,7 +107,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
         elif text == "Feedback":
-            options =[("BOT Improvements"), ("General Feedback"), ("back")]
+            options =[("Suggestions for BOT"), ("General Feedback"), ("back")]
             keyboard = build_keyboard(options)
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
             self.stage = self.Feedback1
@@ -119,7 +130,7 @@ class User:
         self.MainMenu(text,chat,name)
 
     def Feedback1(self,text,chat,name):
-        if text == "BOT Improvements":
+        if text == "Suggestions for BOT":
             send_message("Found a bug? Are we missing essential features? Have a suggestion for improvement?\nLet us know here!", chat, remove_keyboard())
             self.stage = self.FeedbackBI
         elif text == "General Feedback":
@@ -135,19 +146,25 @@ class User:
         if text == "/done":
             send_message("Thank you for your feedback! If your feedback requires a response, we'll get back to you soon!", chat)
             self.stage = self.MainMenu
-            send_message("Click to /start", chat)
+            options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
+            keyboard = build_keyboard(options)
+            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            self.stage = self.MainMenu
         else:
-            db.add_item(text, "BOT Improvements", chat, name)
-            send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to submit all your responses.", chat)
+            db.add_item(text, "Suggestions for BOT", chat, name)
+            send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to return to the main menu.", chat)
 
     def FeedbackGF(self,text,chat,name):
         if text == "/done":
             send_message("Thank you for your feedback! If your feedback requires a response, we'll get back to you soon!", chat)
             self.stage = self.MainMenu
-            send_message("Click to /start", chat)
+            options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
+            keyboard = build_keyboard(options)
+            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            self.stage = self.MainMenu
         else:
             db.add_item(text, "General Feedback", chat, name)
-            send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to submit all your responses.", chat)
+            send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to return to the main menu.", chat)
 
     def orderFood(self,text,chat,name):
         global NoctuachatID
@@ -276,10 +293,16 @@ class User:
     def admin(self,text,chat,name):
         if text == "/view":
             items = db.get_all()
+            hold = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in self.cur]
+            return [str(i+1) + ". " + x for i, x in enumerate(hold)]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
-            send_message("Whose feedback do you want to delete?", chat, remove_keyboard())
+            items = db.get_all()
+            hold = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in self.cur]
+            return [str(i+1) + ". " + x for i, x in enumerate(hold)]
+            message = "\n".join(items)
+            send_message("Which feedback do you want to delete? Input the correct number\nType back to exit", chat, remove_keyboard())
             self.stage = self.delete
         elif text == "/viewusers":
             items = USERS.get_name()
@@ -293,8 +316,10 @@ class User:
             send_message("Which user do you want to remove?", chat, keyboard)
             self.stage = self.removeuser
         elif text == "/blast":
-            send_message("Type your message:", chat, remove_keyboard())
-            self.stage = self.blast
+            options =[("text"),("photo"),("back")]
+            keyboard = build_keyboard(options)
+            send_message("Choose the type:", chat, keyboard)
+            self.stage = self.blast0
         elif text == "/blastresults":
             results = [x[1] + " " + x[3] for x in poll.get_results()]
             results = [str(i+1) + ". " + x for i, x in enumerate(results)]
@@ -313,24 +338,18 @@ class User:
             return
 
     def delete(self,text,chat,name):
-        try:
-            items = db.get_all_from_name(text)
-            items.append("back")
-            keyboard = build_keyboard(items)
-            send_message("Which feedback?", chat, keyboard)
-            self.stage = self.delete2
-        except:
-            send_message("invalid name", chat)
-
-    def delete2(self,text,chat,name):
-        if text == "back":
-            self.stage = self.admin
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
-        else:
-            db.delete_item(text)
-            self.stage = self.admin
-            send_message("Feedback deleted",chat, remove_keyboard())
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
+        if text != "back":
+            try:
+                items = db.get_all()
+                index = int(text) - 1
+                feedback = items[index][1]
+                db.delete_item(feedback)
+                self.stage = self.admin
+                send_message("Feedback deleted",chat, remove_keyboard())
+            except:
+                send_message("Error deleting", chat)
+        send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
+        self.stage = self.admin
 
     def removeuser(self,text,chat,name):
         if text == "back":
@@ -338,14 +357,54 @@ class User:
             send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
         else:
             USERS.delete_user(text)
-            self.stage = self.admin
             send_message("User removed", chat, remove_keyboard())
+            self.stage = self.admin
             send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
 
-    def blast(self,text,chat,name):
+    def blast0(self,text,chat,name):
+        if text == "text":
+            send_message("Type your message:", chat)
+            self.stage = self.blast1
+        elif text == "photo":
+            send_message("Send your photo here", chat)
+            self.stage = self.blastA
+        elif text == "back":
+            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
+            self.stage = self.admin
+
+    def blastA(self,photo,chat,name):
+        global photo_id
+        photo_id = photo
+        options =[("Yes"), ("No")]
+        keyboard = build_keyboard(options)
+        send_message("Photo saved! Do you want a caption?", chat, keyboard)
+        self.stage = self.blastB
+
+    def blastB(self,text,chat,name):
+        global photo_id
+        if text == "Yes":
+            send_message("Type your caption:", chat, remove_keyboard())
+            self.stage = self.blastC
+        if text == "No":
+            allusers = USERS.get_id_and_name()
+            print allusers
+            for x in allusers:
+                send_photo(photo_id, x[1])
+            self.stage = self.admin
+
+    def blastC(self,text,chat,name):
+        global photo_id
+            allusers = USERS.get_id_and_name()
+            print allusers
+            for x in allusers:
+                send_photo(photo_id, x[1],text)
+            self.stage = self.admin
+
+
+    def blast1(self,text,chat,name):
         global blast_message
         blast_message = text
-        options =[("Next Step"), ("Retype"), ("EXIT")]
+        options =[("Next Step"), ("Retype"), ("back")]
         keyboard = build_keyboard(options)
         send_message("Message saved!", chat, keyboard)
         self.stage = self.blast2
@@ -358,7 +417,7 @@ class User:
         elif text == "Next Step":
             send_message("Send the blast with your own customised reply keyboard.\n1. Type in the options separated by a single space.\n2. Type /no to not have a reply keyboard", chat, remove_keyboard())
             self.stage = self.blast3
-        elif text == "EXIT":
+        elif text == "back":
             self.stage = self.admin
             send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/done - To get back to main menu", chat, remove_keyboard())
 
@@ -396,28 +455,45 @@ def main():
         updates = get_updates(last_update_id)
         if len(updates["result"]) > 0:
             for update in updates["result"]:
-                text = update["message"]["text"]
-                chat = update["message"]["chat"]["id"]
-                name = update["message"]["from"]["first_name"]
-                if chat > 0:
-                    for user in users:
-                        if chat == user.id:
-                            if text.startswith("!"):
-                                user.blast_poll(text,chat,name)
+                if ["text"] in update["message"]: #only read text
+                    text = update["message"]["text"]
+                    chat = update["message"]["chat"]["id"]
+                    name = update["message"]["from"]["first_name"]
+                    if chat > 0:
+                        for user in users:
+                            if chat == user.id:
+                                if text.startswith("!"):
+                                    user.blast_poll(text,chat,name)
+                                else:
+                                    user.stage(text,chat,name)
+                                break
                             else:
-                                user.stage(text,chat,name)
-                            break
-                        else:
-                            continue
-                    if chat not in [user.id for user in users]:
-                            x = User(chat)
-                            users.append(x)
-                            USERS.add_user(chat,name)
-                            print("new temporary user")
-                            if text.startswith("!"):
-                                x.blast_poll(text,chat,name)
-                            else:
-                                x.stage(text,chat,name)
+                                continue
+                        if chat not in [user.id for user in users]:
+                                x = User(chat)
+                                users.append(x)
+                                USERS.add_user(chat,name)
+                                print("new temporary user")
+                                if text.startswith("!"):
+                                    x.blast_poll(text,chat,name)
+                                else:
+                                    x.stage(text,chat,name)
+                if ["photo"] in update["message"]:
+                    check = False
+                    photo = update["message"]["photo"]
+                    chat = update["message"]["chat"]["id"]
+                    name = update["message"]["from"]["first_name"]
+                        for user in users:
+                            if chat == user.id:
+                                if user.stage == user.blastA:
+                                    check = True
+                                    user.stage(photo,chat,name)
+                                break
+                    if not check:
+                        send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
+                elif ["audio"] in update["message"] or ["video"] in update["message"] or ["sticker"] in update["message"] or ["document"] in update["message"]:
+                    chat = update["message"]["chat"]["id"]
+                    send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
             last_update_id = get_last_update_id(updates) + 1
         time.sleep(0.5)
 

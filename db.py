@@ -181,12 +181,13 @@ class feedbackdb:
         self.connection.commit()
 
     def get_all(self):
-        stmt = "SELECT * FROM Feedbacks"
         try:
-            self.cur.execute(stmt)
+            self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("Suggestions for BOT"),))
+            hold = self.cur
+            self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("General Feedback"),))
+            hold += self.cur
             print("get_all executed")
-            hold = [x[4]+" "+x[2]+" "+x[1] for x in self.cur]
-            return [str(i+1) + ". " + x for i, x in enumerate(hold)]
+            return hold
         except:
             print("Failure")
             return []
