@@ -180,14 +180,20 @@ class feedbackdb:
         self.cur.execute(stmt, args)
         self.connection.commit()
 
-    def get_all(self):
+    def get_Suggestions(self):
         try:
             self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("Suggestions for BOT"),))
-            hold = self.cur
+            print("get_Suggestions executed")
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_General(self):
+        try:
             self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("General Feedback"),))
-            hold += self.cur
-            print("get_all executed")
-            return hold
+            print("get_Suggestions executed")
+            return self.cur
         except:
             print("Failure")
             return []
