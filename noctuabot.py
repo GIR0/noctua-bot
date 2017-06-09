@@ -353,6 +353,7 @@ class User:
                 else:
                     index = int(text) - 1
                     feedback = items[index][1]
+                print feedback
                 db.delete_item(feedback)
                 self.stage = self.admin
                 send_message("Feedback deleted",chat, remove_keyboard())
