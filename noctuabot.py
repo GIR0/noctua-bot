@@ -455,7 +455,7 @@ def main():
         updates = get_updates(last_update_id)
         if len(updates["result"]) > 0:
             for update in updates["result"]:
-                if ["text"] in update["message"]: #only read text
+                if "text" in update["message"]: #only read text
                     text = update["message"]["text"]
                     chat = update["message"]["chat"]["id"]
                     name = update["message"]["from"]["first_name"]
@@ -478,7 +478,7 @@ def main():
                                     x.blast_poll(text,chat,name)
                                 else:
                                     x.stage(text,chat,name)
-                if ["photo"] in update["message"]:
+                if "photo" in update["message"]:
                     check = False
                     photo = update["message"]["photo"]
                     chat = update["message"]["chat"]["id"]
@@ -492,7 +492,7 @@ def main():
                                 break
                         if not check:
                             send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
-                elif ["audio"] in update["message"] or ["video"] in update["message"] or ["sticker"] in update["message"] or ["document"] in update["message"]:
+                elif "audio" in update["message"] or "video" in update["message"] or "sticker" in update["message"] or "document" in update["message"]:
                     chat = update["message"]["chat"]["id"]
                     send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
             last_update_id = get_last_update_id(updates) + 1
