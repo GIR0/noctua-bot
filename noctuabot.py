@@ -346,6 +346,8 @@ class User:
         if text != "back":
             try:
                 items = db.get_Suggestions()
+                print items
+                print len(items)
                 items2 = db.get_General()
                 if int(text) > len(items):
                     index = int(text) - len(items) - 1
