@@ -439,7 +439,7 @@ class User:
 
     def blast_poll(self,text,chat,name):
         poll.add_answer(text, chat, name)
-        send_message("Answer recorded!", chat)
+        send_message("Response recorded!\n\nType /mainmenu to return to the main menu.", chat)
 
 
 users = []
