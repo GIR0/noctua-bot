@@ -335,7 +335,7 @@ class User:
         if text != "back":
             items = [x[1] for x in db.get_Suggestions()]
             items2 = [x[1] for x in db.get_General()]
-            for x in text.split:
+            for x in text.split():
                 try:
                     if int(x) > len(items):
                         index = int(x) - len(items) - 1
