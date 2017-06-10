@@ -102,7 +102,7 @@ class User:
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
-                send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat)
+                send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
         if text == "/start" or text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
@@ -312,14 +312,15 @@ class User:
             self.stage = self.blast0
         elif text == "/blastresults":
             stats = poll.get_stats()
+            message = ""
             if "Yet to reply" in stats:
                 message = "Yet to reply" + ": " + str(stats["Yet to reply"]) + "\n"
                 results = [x[3] for x in poll.get_results("Yet to reply")]
                 results = [str(i+1) + ". " + x for i, x in enumerate(results)]
-                message += "\n".join(results)
+                message += "\n".join(results) +"\n\n"
             for key in stats:
                 if key != "Yet to reply":
-                    message += "\n\n" + key + ": " + str(stats[key]) + "\n"
+                    message += key + ": " + str(stats[key]) + "\n"
                     results = [x[3] for x in poll.get_results(key)]
                     results = [str(i+1) + ". " + x for i, x in enumerate(results)]
                     message += "\n".join(results)
