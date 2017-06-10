@@ -144,7 +144,6 @@ class User:
             self.stage = self.MainMenu
 
     def FeedbackBI(self,text,chat,name):
-        print text.encode("utf8")
         db.add_item(text, "Suggestions for BOT", chat, name)
         send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /mainmenu to return to the main menu.", chat)
 
@@ -489,7 +488,7 @@ def main():
                                     x.stage(text,chat,name)
                                     options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
                                     keyboard = build_keyboard(options)
-                                    send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+                                    send_message("Hello there "+ name + "0xF0, 0x9F, 0x98, 0x81" + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
                                 else:
                                     x.stage(text,chat,name)
                 if "photo" in update["message"]:
