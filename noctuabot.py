@@ -488,7 +488,7 @@ def main():
                                     x.stage(text,chat,name)
                                     options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
                                     keyboard = build_keyboard(options)
-                                    send_message("Hello there "+ name + "0xF0, 0x9F, 0x98, 0x81" + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+                                    send_message("Hello there "+ name + "☺️" + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
                                 else:
                                     x.stage(text,chat,name)
                 if "photo" in update["message"]:
