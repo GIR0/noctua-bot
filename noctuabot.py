@@ -294,6 +294,9 @@ class User:
             send_message(message, chat, remove_keyboard())
             send_message("Which feedback do you wish to delete? Please input the respective numbers.\n\n Type back to exit", chat, remove_keyboard())
             self.stage = self.delete
+        elif text == "/clearall":
+            db.clear()
+            send_message("Feedbacks cleared", chat, remove_keyboard())
         elif text == "/viewusers":
             items = USERS.get_name()
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
@@ -330,23 +333,24 @@ class User:
 
     def delete(self,text,chat,name):
         if text != "back":
-            try:
-                items = [x[1] for x in db.get_Suggestions()]
-                items2 = [x[1] for x in db.get_General()]
-                if int(text) > len(items):
-                    index = int(text) - len(items) - 1
-                    feedback = items2[index]
-                else:
-                    index = int(text) - 1
-                    feedback = items[index]
-                print feedback
-                db.delete_item(feedback)
-                self.stage = self.admin
-                send_message("Feedback deleted",chat, remove_keyboard())
-            except:
-                send_message("Error deleting", chat)
-        send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
-        self.stage = self.admin
+            items = [x[1] for x in db.get_Suggestions()]
+            items2 = [x[1] for x in db.get_General()]
+            for x in text.split:
+                try:
+                    if int(x) > len(items):
+                        index = int(x) - len(items) - 1
+                        feedback = items2[index]
+                    else:
+                        index = int(x) - 1
+                        feedback = items[index]
+                    db.delete_item(feedback)
+                except:
+                    send_message("Error deleting " + x, chat)
+            send_message("Feedbacks deleted", chat, remove_keyboard())
+            self.stage = self.admin
+        else:
+            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
+            self.stage = self.admin
 
     def removeuser(self,text,chat,name):
         if text == "back":

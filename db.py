@@ -83,7 +83,6 @@ class polldb:
         try:
             args = (answer,)
             self.cur.execute(stmt, args)
-            print("get_results executed")
             return self.cur
         except:
             print("Failure")
@@ -208,3 +207,8 @@ class feedbackdb:
         except:
             print("Failure")
             return []
+
+    def clear(self, name):
+        stmt = "DELETE FROM Feedbacks;"
+        self.cur.execute(stmt)
+        self.connection.commit()
