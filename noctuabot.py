@@ -101,7 +101,7 @@ class User:
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
-                send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/home - To get back to main menu", chat)
+                send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat)
         if text == "/start" or text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
@@ -307,7 +307,7 @@ class User:
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
-            send_message("Which feedback do you want to delete? Input the correct number\n\nType back to exit", chat, remove_keyboard())
+            send_message("Which feedback do you wish to delete? Please input the respective numbers.\n\n Type back to exit", chat, remove_keyboard())
             self.stage = self.delete
         elif text == "/viewusers":
             items = USERS.get_name()
@@ -354,18 +354,18 @@ class User:
                 send_message("Feedback deleted",chat, remove_keyboard())
             except:
                 send_message("Error deleting", chat)
-        send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/home - To get back to main menu", chat, remove_keyboard())
+        send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
         self.stage = self.admin
 
     def removeuser(self,text,chat,name):
         if text == "back":
             self.stage = self.admin
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/home - To get back to main menu", chat, remove_keyboard())
+            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
         else:
             USERS.delete_user(text)
             send_message("User removed", chat, remove_keyboard())
             self.stage = self.admin
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/home - To get back to main menu", chat, remove_keyboard())
+            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
 
     def blast0(self,text,chat,name):
         if text == "text":
@@ -375,7 +375,7 @@ class User:
             send_message("Send your photo here", chat)
             self.stage = self.blastA
         elif text == "back":
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/home - To get back to main menu", chat, remove_keyboard())
+            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
             self.stage = self.admin
 
     def blastA(self,photo,chat,name):
@@ -427,7 +427,7 @@ class User:
             self.stage = self.blast3
         elif text == "back":
             self.stage = self.admin
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/home - To get back to main menu", chat, remove_keyboard())
+            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
 
     def blast3(self,text,chat,name):
         global blast_message
@@ -470,7 +470,7 @@ def main():
                             if chat == user.id:
                                 if text.startswith("!"):
                                     user.blast_poll(text,chat,name)
-                                elif text == "/home":
+                                elif text == "/mainmenu":
                                     user.stage = user.MainMenu
                                     user.stage(text,chat,name)
                                     options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
@@ -488,7 +488,7 @@ def main():
                                 print("new temporary user")
                                 if text.startswith("!"):
                                     x.blast_poll(text,chat,name)
-                                elif text == "/home":
+                                elif text == "/mainmenu":
                                     x.stage = x.MainMenu
                                     x.stage(text,chat,name)
                                     options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
