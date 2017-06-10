@@ -106,7 +106,7 @@ class User:
         if text == "/start" or text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
         elif text == "Feedback":
             options =[("Suggestions for BOT"), ("General Feedback"), ("back")]
             keyboard = build_keyboard(options)
@@ -140,7 +140,7 @@ class User:
         elif text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
             self.stage = self.MainMenu
 
     def FeedbackBI(self,text,chat,name):
@@ -221,7 +221,7 @@ class User:
         elif text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
             self.stage = self.MainMenu
 
     def startOrder(self,text,chat,name):
@@ -470,7 +470,7 @@ def main():
                                     user.stage(text,chat,name)
                                     options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
                                     keyboard = build_keyboard(options)
-                                    send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+                                    send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
                                 else:
                                     user.stage(text,chat,name)
                                 break
