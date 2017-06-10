@@ -78,10 +78,11 @@ class polldb:
         self.cur.execute(stmt)
         self.connection.commit()
 
-    def get_results(self):
-        stmt = "SELECT * FROM PollResults"
+    def get_results(self, answer):
+        stmt = "SELECT * FROM PollResults where answer = %s"
         try:
-            self.cur.execute(stmt)
+            args = (answer,)
+            self.cur.execute(stmt, args)
             print("get_results executed")
             return self.cur
         except:

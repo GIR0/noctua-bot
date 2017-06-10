@@ -143,28 +143,12 @@ class User:
             self.stage = self.MainMenu
 
     def FeedbackBI(self,text,chat,name):
-        if text == "/done":
-            send_message("Thank you for your feedback! If your feedback requires a response, we'll get back to you soon!", chat)
-            self.stage = self.MainMenu
-            options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
-            keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
-            self.stage = self.MainMenu
-        else:
-            db.add_item(text, "Suggestions for BOT", chat, name)
-            send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to return to the main menu.", chat)
+        db.add_item(text, "Suggestions for BOT", chat, name)
+        send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /mainmenu to return to the main menu.", chat)
 
     def FeedbackGF(self,text,chat,name):
-        if text == "/done":
-            send_message("Thank you for your feedback! If your feedback requires a response, we'll get back to you soon!", chat)
-            self.stage = self.MainMenu
-            options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
-            keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
-            self.stage = self.MainMenu
-        else:
-            db.add_item(text, "General Feedback", chat, name)
-            send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /done to return to the main menu.", chat)
+        db.add_item(text, "General Feedback", chat, name)
+        send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /mainmenu to return to the main menu.", chat)
 
     def orderFood(self,text,chat,name):
         global NoctuachatID
@@ -326,13 +310,18 @@ class User:
             send_message("Choose the type:", chat, keyboard)
             self.stage = self.blast0
         elif text == "/blastresults":
-            results = [x[1] + " " + x[3] for x in poll.get_results()]
-            results = [str(i+1) + ". " + x for i, x in enumerate(results)]
-            message = "\n".join(results)
             stats = poll.get_stats()
-            message += "\n\nStatistics\n"
-            for keys, values in stats.items():
-                message += keys + " " + str(values) +"\n"
+            if "Yet to reply" in stats:
+                message = "Yet to reply" + ": " + str(stats["Yet to reply"]) + "\n"
+                results = [x[3] for x in poll.get_results("Yet to reply")]
+                results = [str(i+1) + ". " + x for i, x in enumerate(results)]
+                message += "\n".join(results)
+            for key in stats:
+                if key not "Yet to reply":
+                    message += "\n\n" + key + ": " + str(stats["key"]) + "\n"
+                    results = [x[3] for x in poll.get_results(key)]
+                    results = [str(i+1) + ". " + x for i, x in enumerate(results)]
+                    message += "\n".join(results)
             send_message(message, chat, remove_keyboard())
         else:
             return
