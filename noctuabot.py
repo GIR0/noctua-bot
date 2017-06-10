@@ -317,13 +317,13 @@ class User:
                 message = "Yet to reply" + ": " + str(stats["Yet to reply"]) + "\n"
                 results = [x[3] for x in poll.get_results("Yet to reply")]
                 results = [str(i+1) + ". " + x for i, x in enumerate(results)]
-                message += "\n".join(results) +"\n\n"
+                message += "\n".join(results) + "\n\n"
             for key in stats:
                 if key != "Yet to reply":
                     message += key + ": " + str(stats[key]) + "\n"
                     results = [x[3] for x in poll.get_results(key)]
                     results = [str(i+1) + ". " + x for i, x in enumerate(results)]
-                    message += "\n".join(results)
+                    message += "\n".join(results) + "\n\n"
             send_message(message, chat, remove_keyboard())
         else:
             return
