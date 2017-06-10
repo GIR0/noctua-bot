@@ -318,7 +318,7 @@ class User:
                 results = [str(i+1) + ". " + x for i, x in enumerate(results)]
                 message += "\n".join(results)
             for key in stats:
-                if key not "Yet to reply":
+                if key != "Yet to reply":
                     message += "\n\n" + key + ": " + str(stats["key"]) + "\n"
                     results = [x[3] for x in poll.get_results(key)]
                     results = [str(i+1) + ". " + x for i, x in enumerate(results)]
