@@ -144,6 +144,7 @@ class User:
             self.stage = self.MainMenu
 
     def FeedbackBI(self,text,chat,name):
+        print text
         db.add_item(text, "Suggestions for BOT", chat, name)
         send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /mainmenu to return to the main menu.", chat)
 
