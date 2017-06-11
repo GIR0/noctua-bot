@@ -208,7 +208,7 @@ class feedbackdb:
             print("Failure")
             return []
 
-    def clear(self, name):
+    def clear(self):
         stmt = "DELETE FROM Feedbacks;"
         self.cur.execute(stmt)
         self.connection.commit()
