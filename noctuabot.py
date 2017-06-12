@@ -344,6 +344,7 @@ class User:
             items = [x[1] for x in db.get_BOT()]
             items2 = [x[1] for x in db.get_General()]
             for x in text.split():
+                count = 0
                 try:
                     if int(x) > len(items):
                         index = int(x) - len(items) - 1
@@ -352,9 +353,11 @@ class User:
                         index = int(x) - 1
                         feedback = items[index]
                     db.delete_item(feedback)
+                    count += 1
                 except:
                     send_message("Error deleting " + x, chat)
-            send_message("Feedbacks deleted", chat, remove_keyboard())
+            if count > 0:
+                send_message("Feedbacks deleted", chat, remove_keyboard())
             self.stage = self.admin
         else:
             send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
