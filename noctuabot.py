@@ -147,11 +147,11 @@ class User:
 
     def FeedbackBI(self,text,chat,name):
         db.add_item(text, "BOT Functions", chat, name)
-        send_message("Your feedback has been received! Thank you for your submission " + u'\ud83d\ude0a' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
+        send_message("Your feedback has been received! Thank you for your submission " + u'\ud83d\ude0a' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def FeedbackGF(self,text,chat,name):
         db.add_item(text, "General Feedback", chat, name)
-        send_message("Your feedback has been received! Thank you for your submission " + u'\ud83d\ude0a' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
+        send_message("Your feedback has been received! Thank you for your submission " + u'\ud83d\ude0a' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def orderFood(self,text,chat,name):
         global NoctuachatID
