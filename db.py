@@ -180,10 +180,10 @@ class feedbackdb:
         self.cur.execute(stmt, args)
         self.connection.commit()
 
-    def get_Suggestions(self):
+    def get_BOT(self):
         try:
-            self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("Suggestions for BOT"),))
-            print("get_Suggestions executed")
+            self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("BOT Functions"),))
+            print("get_BOT executed")
             return self.cur
         except:
             print("Failure")
