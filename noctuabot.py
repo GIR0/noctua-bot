@@ -341,7 +341,7 @@ class User:
 
     def delete(self,text,chat,name):
         if text != "back":
-            items = [x[1] for x in db.get_Suggestions()]
+            items = [x[1] for x in db.get_BOT()]
             items2 = [x[1] for x in db.get_General()]
             for x in text.split():
                 try:
