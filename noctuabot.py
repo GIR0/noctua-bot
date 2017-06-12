@@ -102,13 +102,13 @@ class User:
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
-                send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/clearall - To delete all feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
+                send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n//blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         if text == "/start" or text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
         elif text == "Feedback":
-            options =[("Suggestions for BOT"), ("General Feedback"), ("back")]
+            options =[("BOT Functions"), ("General Feedback"), ("back")]
             keyboard = build_keyboard(options)
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
             self.stage = self.Feedback1
@@ -131,25 +131,27 @@ class User:
         self.MainMenu(text,chat,name)
 
     def Feedback1(self,text,chat,name):
-        if text == "Suggestions for BOT":
-            send_message("Found a bug? Are we missing essential features? Have a suggestion for improvement?\nLet us know here!", chat, remove_keyboard())
+        if text == "BOT Functions":
+            send_message("This option is for submitting feedback about bot functions. Please submit bug reports, feature requests, and suggestions for future improvements here! We thank you for your contributions " + u'\ud83d\ude47\ud83c\udffb'\
+            + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
             self.stage = self.FeedbackBI
         elif text == "General Feedback":
-            send_message("Feel free to tell us anything you want us to know!\n\nDo note that all responses will be kept private and confidential.", chat, remove_keyboard())
+            send_message("This option is for submitting feedback about any general issues. Please submit any house-related queries and suggestions you may have here! We want to hear your voice " + u'\ud83d\udce3'\
+            + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
             self.stage = self.FeedbackGF
         elif text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
 
     def FeedbackBI(self,text,chat,name):
-        db.add_item(text, "Suggestions for BOT", chat, name)
-        send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /mainmenu to return to the main menu.", chat)
+        db.add_item(text, "BOT Functions", chat, name)
+        send_message("Your feedback has been received! Thank you for your submission " + u'\ud83d\ude0a' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def FeedbackGF(self,text,chat,name):
         db.add_item(text, "General Feedback", chat, name)
-        send_message("Feedback received! Would you like to submit another?\n\nWhen you're done, simply type /mainmenu to return to the main menu.", chat)
+        send_message("Your feedback has been received! Thank you for your submission " + u'\ud83d\ude0a' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def orderFood(self,text,chat,name):
         global NoctuachatID
@@ -221,7 +223,7 @@ class User:
         elif text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
-            send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
 
     def startOrder(self,text,chat,name):
@@ -282,7 +284,9 @@ class User:
             items2 = db.get_General()
             items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items2]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
-            message = "\n".join(items)
+            message = "There are no feedbacks submitted at the moment."
+            if len(items) > 0:
+                message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
             items = db.get_Suggestions()
@@ -290,10 +294,14 @@ class User:
             items2 = db.get_General()
             items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items2]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
-            message = "\n".join(items)
-            send_message(message, chat, remove_keyboard())
-            send_message("Which feedback do you wish to delete? Please input the respective numbers.\n\n Type back to exit", chat, remove_keyboard())
-            self.stage = self.delete
+            if len(items) == 0:
+                message = "There are no feedbacks submitted at the moment."
+                send_message(message, chat, remove_keyboard())
+            else:
+                message = "\n".join(items)
+                send_message(message, chat, remove_keyboard())
+                send_message("Which feedback do you wish to delete? Please input the respective numbers.\n\n Type back to exit", chat, remove_keyboard())
+                self.stage = self.delete
         elif text == "/clearall":
             db.clear()
             send_message("Feedbacks cleared", chat, remove_keyboard())
@@ -349,18 +357,18 @@ class User:
             send_message("Feedbacks deleted", chat, remove_keyboard())
             self.stage = self.admin
         else:
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/clearall - To delete all feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n//blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
 
     def removeuser(self,text,chat,name):
         if text == "back":
             self.stage = self.admin
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/clearall - To delete all feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n//blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         else:
             USERS.delete_user(text)
             send_message("User removed", chat, remove_keyboard())
             self.stage = self.admin
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/clearall - To delete all feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n//blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
 
     def blast0(self,text,chat,name):
         if text == "text":
@@ -370,7 +378,7 @@ class User:
             send_message("Send your photo here", chat)
             self.stage = self.blastA
         elif text == "back":
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/clearall - To delete all feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n//blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
 
     def blastA(self,photo,chat,name):
@@ -422,7 +430,7 @@ class User:
             self.stage = self.blast3
         elif text == "back":
             self.stage = self.admin
-            send_message("Hi admin\n\n/view - To see all feedbacks\n/delete - To delete feedbacks\n/clearall - To delete all feedbacks\n/viewusers\n/removeuser\n/blast\n/blastresults\n/mainmenu - To get back to main menu", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n//blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
 
     def blast3(self,text,chat,name):
         global blast_message
@@ -470,7 +478,7 @@ def main():
                                     user.stage(text,chat,name)
                                     options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
                                     keyboard = build_keyboard(options)
-                                    send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+                                    send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
                                 else:
                                     user.stage(text,chat,name)
                                 break
@@ -488,7 +496,7 @@ def main():
                                     x.stage(text,chat,name)
                                     options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
                                     keyboard = build_keyboard(options)
-                                    send_message("Hello there "+ name + u'\u263a\ufe0f' + "! Welcome to the BOT of Noctua!\nWhat can I help you with?", chat, keyboard)
+                                    send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
                                 else:
                                     x.stage(text,chat,name)
                 if "photo" in update["message"]:
