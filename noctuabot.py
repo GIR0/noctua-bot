@@ -343,8 +343,8 @@ class User:
         if text != "back":
             items = [x[1] for x in db.get_BOT()]
             items2 = [x[1] for x in db.get_General()]
+            count = 0
             for x in text.split():
-                count = 0
                 try:
                     if int(x) > len(items):
                         index = int(x) - len(items) - 1
