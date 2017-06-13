@@ -120,7 +120,7 @@ class User:
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
             self.stage = self.orderFood
         elif text == "Rate Events":
-            events = event.get_all_events()
+            events = [x[0] for x in event.get_all_events()]
             options = list(set(events))
             options.append("back")
             keyboard = build_keyboard(options)
@@ -379,9 +379,7 @@ class User:
             self.stage = self.event
         elif text == "/viewrating":
             events = [x[0] for x in event.get_all_events()]
-            print events
             options = list(set(events))
-            print options
             options.append("back")
             keyboard = build_keyboard(options)
             send_message("Which event would you like to check ratings for?", chat, keyboard)
@@ -403,9 +401,10 @@ class User:
         self.stage = self.admin
 
     def viewrating(self,text,chat,name):
+        events = [x[0] for x in event.get_all_events()]
         if text == "back":
             send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
-        elif text in event.get_all_events():
+        elif text in events:
             ratings = [x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4] for x in event.get_by_event(text)]
             message = text + "\n\n"
             message += "\n\n".join(ratings)
