@@ -212,3 +212,61 @@ class feedbackdb:
         stmt = "DELETE FROM Feedbacks;"
         self.cur.execute(stmt)
         self.connection.commit()
+
+class eventdb:
+    def __init__(self):
+        self.connection = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        self.cur = self.connection.cursor()
+
+    def setup(self):
+        tblstmt = "CREATE TABLE IF NOT EXISTS Events (id serial, event varchar, A varchar, B varchar, C varchar, owner integer, name varchar);"
+        self.cur.execute(tblstmt)
+        self.connection.commit()
+
+    def add_item(self, answer, owner, name):
+        event, A, B, C = answer
+        stmt = "INSERT INTO Events (event, A, B, C, owner, name) VALUES (%s, %s, %s, %s, %s, %s)"
+        args = (event, A, B, C, owner, name)
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def delete_event(self, event):
+        stmt = "DELETE FROM Events WHERE event = %s"
+        args = (event, )
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def get_all_events(self):
+            stmt = "SELECT event FROM Events"
+            self.cur.execute(stmt)
+            return self.cur
+
+    def get_by_event(self, event):
+        try:
+            self.cur.execute("SELECT * FROM Events WHERE event = %s", (event,))
+            print("get_event executed")
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_all_from_name(self, name):
+        stmt = "SELECT * FROM Events WHERE name = %s"
+        args =(name, )
+        try:
+            self.cur.execute(stmt, args)
+            return [x[0] for x in self.cur]
+        except:
+            print("Failure")
+            return []
+
+    def clear(self):
+        stmt = "DELETE FROM Event;"
+        self.cur.execute(stmt)
+        self.connection.commit()
