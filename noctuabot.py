@@ -320,6 +320,7 @@ class User:
         if text == "/view":
             items = db.get_BOT()
             items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
+            print items
             items2 = db.get_General()
             items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items2]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
