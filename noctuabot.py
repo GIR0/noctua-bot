@@ -378,7 +378,8 @@ class User:
             send_message("Add an event to be rated\n\nor type back to exit", chat, remove_keyboard())
             self.stage = self.event
         elif text == "/viewrating":
-            events = event.get_all_events()
+            events = [x[0] for x in event.get_all_events()]
+            print events
             options = list(set(events))
             print options
             options.append("back")
