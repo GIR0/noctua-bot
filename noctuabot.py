@@ -410,7 +410,7 @@ class User:
             ratings = [str(i+1) + ". " + x for i, x in enumerate(ratings)]
             message = text + "\n\n"
             print ratings
-            message += "\n\n".join(ratings)
+            message += ratings
             print message
             send_message(message, chat, remove_keyboard())
         self.stage = self.admin
