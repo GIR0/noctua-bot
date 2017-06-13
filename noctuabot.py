@@ -282,12 +282,13 @@ class User:
         self.stage = self.orderFood
 
     def rate1(self,text,chat,name):
+        events = [x[0] for x in event.get_all_events()]
         if text == "back":
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
-        elif text in event.get_all_events:
+        elif text in events:
             self.rate[0] = text
             send_message("What did you like about the event?", chat, remove_keyboard())
             self.stage = self.rate2
