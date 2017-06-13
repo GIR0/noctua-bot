@@ -99,7 +99,7 @@ def delayed_response(blast_message, keyboard):
 class User:
     def __init__(self, id):
         self.id = id
-        self.rate =[]
+        self.rate =["","","",""]
     def MainMenu(self,text,chat,name):
         if chat in admin:
             if text == "/admin":
