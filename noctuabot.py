@@ -375,11 +375,12 @@ class User:
                     message += "\n".join(results) + "\n\n"
             send_message(message, chat, remove_keyboard())
         elif text == "/event":
-            send_message("Add an event to be rated\n\n or type back to exit", chat, remove_keyboard())
+            send_message("Add an event to be rated\n\nor type back to exit", chat, remove_keyboard())
             self.stage = self.event
         elif text == "/viewrating":
             events = event.get_all_events()
             options = list(set(events))
+            print options
             options.append("back")
             keyboard = build_keyboard(options)
             send_message("Which event would you like to check ratings for?", chat, keyboard)
