@@ -243,9 +243,9 @@ class eventdb:
         self.connection.commit()
 
     def get_all_events(self):
-            stmt = "SELECT event FROM Events"
-            self.cur.execute(stmt)
-            return self.cur
+        stmt = "SELECT event FROM Events"
+        self.cur.execute(stmt)
+        return self.cur
 
     def get_by_event(self, event):
         try:
