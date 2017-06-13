@@ -375,7 +375,7 @@ class User:
                     message += "\n".join(results) + "\n\n"
             send_message(message, chat, remove_keyboard())
         elif text == "/event":
-            send_message("Add an event to be rated\n\n Type back to exit", chat, remove_keyboard())
+            send_message("Add an event to be rated\n\n or type back to exit", chat, remove_keyboard())
             self.stage = self.event
         elif text == "/viewrating":
             events = event.get_all_events()
@@ -403,7 +403,7 @@ class User:
     def viewrating(self,text,chat,name):
         if text == "back":
             send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
-        elif text in event.get_all_events:
+        elif text in event.get_all_events():
             ratings = [x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4] for x in event.get_by_event(text)]
             message = text + "\n\n"
             message += "\n\n".join(ratings)
@@ -416,7 +416,7 @@ class User:
         elif text in event.get_all_events:
             event.delete_event(text)
             send_message("Event deleted", chat, remove_keyboard())
-        self.stage = self.admin        
+        self.stage = self.admin
 
     def delete(self,text,chat,name):
         if text != "back":
