@@ -385,13 +385,13 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Which event would you like to check ratings for?", chat, keyboard)
             self.stage = self.viewrating
-        elif text == "clearevent":
+        elif text == "/clearevent":
             events = [x[0] for x in event.get_all_events()]
             options = list(set(events))
             options.append("back")
             keyboard = build_keyboard(options)
             send_message("Which event would you like to remove?", chat, keyboard)
-            self.stage = self.viewrating
+            self.stage = self.clearevent
         else:
             return
     def addevent(self,text,chat,name):
