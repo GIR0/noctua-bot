@@ -326,6 +326,7 @@ class User:
             message = "There are no feedbacks submitted at the moment."
             if len(items) > 0:
                 message = "\n".join(items)
+            print message
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
             items = db.get_BOT()
