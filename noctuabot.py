@@ -488,7 +488,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Which event would you like to remove?", chat, keyboard)
             self.stage = self.clearevent
-        elif text == "viewrating":
+        elif text == "/viewrating":
             events = [x[0] for x in rate.get_all_events()]
             options = list(set(events))
             options.append("back")
