@@ -362,7 +362,7 @@ class User:
         else:
             event = self.event
             rate.add_item(event,data,chat,name)
-            edit_message(chat, message_id, "Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", remove_keyboard())
+            edit_message(chat, message_id, "Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!")
             options =[("Feedback"), ("Order Food"), ("Rate Events"), ("About the Bot")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
