@@ -352,11 +352,11 @@ class User:
             options = list(set(events))
             options.append("back")
             keyboard = build_keyboard(options)
-            edit_message(chat, message_id, "What did you like about the event?", remove_keyboard())
+            edit_message(chat, message_id, "What did you like about the event?")
             send_message("Which event would you like to rate?", chat, keyboard)
             self.stage = self.rate1
         elif data == "Input your own option":
-            edit_message(chat, message_id, "Please give your input below", remove_keyboard())
+            edit_message(chat, message_id, "Please give your input below")
             self.stage = self.rate3
         else:
             event = self.event
