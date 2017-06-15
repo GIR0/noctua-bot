@@ -107,7 +107,11 @@ def inline_keyboard(items):
     for a in items:
         for b in a:
             for c in b:
-                b[c] = urllib.quote_plus(b[c].encode("utf8"))
+                try:
+                    b[c] = (b[c].encode("utf8"))
+                except:
+                    pass
+                b[c] = urllib.quote_plus(b[c])
     reply_markup = {"inline_keyboard":items}
     return json.dumps(reply_markup)
 
