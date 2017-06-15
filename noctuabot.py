@@ -129,6 +129,7 @@ class User:
         self.survey =["","","",""]
         self.event = ""
     def MainMenu(self,text,chat,name):
+        print text
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
