@@ -57,9 +57,10 @@ def get_last_chat_id_and_text(updates):
 
 def send_message(text, chat_id, reply_markup=None):
     try:
-        text = urllib.quote_plus(text.encode("utf8"))
+        text = (text.encode("utf8"))
     except:
         pass
+    text = urllib.quote_plus(text)
     url = URL + "sendMessage?text={}&chat_id={}".format(text, chat_id)
     if reply_markup:
         url += "&reply_markup={}".format(reply_markup)
@@ -76,7 +77,11 @@ def send_photo(file_id, chat_id, caption=None):
     get_url(url)
 
 def edit_message(chat_id, message_id, text, reply_markup=None):
-    text = urllib.quote_plus(text.encode("utf8"))
+    try:
+        text = (text.encode("utf8"))
+    except:
+        pass
+    text = urllib.quote_plus(text)
     url = URL + "editMessageText?text={}&chat_id={}&message_id={}".format(text, chat_id, message_id)
     if reply_markup:
         url += "&reply_markup={}".format(reply_markup)
@@ -326,7 +331,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
-        elif text in events:
+        elif text.encode("utf8") in events:
             self.event = text
             ratings = [x[2] for x in rate.get_by_event(text)]
             ratings = list(set(ratings))
@@ -384,7 +389,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
-        elif text in events:
+        elif text.encode("utf8") in events:
             self.survey[0] = text
             send_message("What did you like about the event?", chat, remove_keyboard())
             self.stage = self.survey2
@@ -510,7 +515,7 @@ class User:
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
             send_message("Hello there, Administrator! " + u'U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
-        elif text in events:
+        elif text.encode("utf8") in events:
             ratings = [x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4]+ " " for x in survey.get_by_event(text)]
             ratings = [str(i+1) + ". " + x for i, x in enumerate(ratings)]
             message = "\n\n".join(ratings)
@@ -521,7 +526,7 @@ class User:
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
             send_message("Hello there, Administrator! " + u'U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
-        elif text in events:
+        elif text.encode("utf8") in events:
             survey.delete_event(text)
             rate.delete_event(text)
             send_message("Event deleted", chat, remove_keyboard())
