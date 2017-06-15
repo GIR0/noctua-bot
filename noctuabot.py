@@ -27,7 +27,7 @@ URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
 def get_url(url):
     response = requests.get(url)
-    content = response.content.decode("utf8")
+    content = response.content
     return content
 
 def get_json_from_url(url):
@@ -131,7 +131,6 @@ class User:
     def MainMenu(self,text,chat,name):
         print(type(text))
         print repr(text)
-        print(type(u"About the Bot\ud83e\udd89"))
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
