@@ -130,7 +130,7 @@ class User:
         self.event = ""
     def MainMenu(self,text,chat,name):
         print(type(text))
-        print text
+        print repr(text)
         print(type(u"About the Bot\ud83e\udd89"))
         if chat in admin:
             if text == "/admin":
