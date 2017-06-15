@@ -129,7 +129,6 @@ class User:
         self.survey =["","","",""]
         self.event = ""
     def MainMenu(self,text,chat,name):
-        print text
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
@@ -138,7 +137,7 @@ class User:
             options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
-        elif text == "Feedback"+u'\ud83d\uddd2':
+        elif text == "Feedback\ud83d\uddd2":
             options =[("BOT Functions"), ("General Feedback"), ("back")]
             keyboard = build_keyboard(options)
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
