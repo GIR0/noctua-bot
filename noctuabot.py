@@ -134,7 +134,7 @@ class User:
                 self.stage = self.admin
                 send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         if text == "/start" or text == "back":
-            options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+            options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
         elif text.startswith("Feedback"):
@@ -154,7 +154,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Which event would you like to rate?", chat, keyboard)
             self.stage = self.rate1
-        elif text == "About the Bot"+u'\ud83e\udd89':
+        elif text == u"About the Bot\ud83e\udd89":
             options =[("back")]
             keyboard = build_keyboard(options)
             send_message("It's just a BOT :)", chat, keyboard)
@@ -183,7 +183,7 @@ class User:
             + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
             self.stage = self.FeedbackGF
         elif text == "back":
-            options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+            options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
@@ -264,7 +264,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
         elif text == "back":
-            options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+            options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
@@ -322,7 +322,7 @@ class User:
     def rate1(self,text,chat,name):
         events = [x[0] for x in rate.get_all_events()]
         if text == "back":
-            options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+            options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
@@ -363,7 +363,7 @@ class User:
             event = self.event
             rate.add_item(event,data,chat,name)
             edit_message(chat, message_id, "Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!")
-            options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+            options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
@@ -372,7 +372,7 @@ class User:
         event = self.event
         rate.add_item(event,text,chat,name)
         send_message("Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
-        options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+        options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
         self.stage = self.MainMenu
@@ -380,7 +380,7 @@ class User:
     def survey1(self,text,chat,name):
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
-            options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+            options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
@@ -407,7 +407,7 @@ class User:
         answer = self.survey
         survey.add_item(answer,chat,name)
         send_message("Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
-        options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+        options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
         self.stage = self.MainMenu
@@ -684,7 +684,7 @@ def main():
                                     elif text == "/mainmenu":
                                         user.stage = user.MainMenu
                                         user.stage(text,chat,name)
-                                        options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+                                        options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
                                         keyboard = build_keyboard(options)
                                         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
                                     else:
@@ -702,7 +702,7 @@ def main():
                                     elif text == "/mainmenu":
                                         x.stage = x.MainMenu
                                         x.stage(text,chat,name)
-                                        options =[("OrderFood"+u'\ud83c\udf5f'), ("Rate Events"+u'\u2764\ufe0f'), ("Feedback"+u'\ud83d\uddd2'), ("About the Bot"+u'\ud83e\udd89')]
+                                        options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
                                         keyboard = build_keyboard(options)
                                         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
                                     else:
