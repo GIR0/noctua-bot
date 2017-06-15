@@ -147,7 +147,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
             self.stage = self.orderFood
-        elif text == "Rate Events""+u'\u2764\ufe0f':
+        elif text == "Rate Events"+u'\u2764\ufe0f':
             events = [x[0] for x in rate.get_all_events()]
             options = list(set(events))
             options.append("back")
