@@ -346,7 +346,7 @@ class User:
         chat = update["callback_query"]["message"]["chat"]["id"]
         data = update["callback_query"]["data"]
         message_id = update["callback_query"]["message"]["message_id"]
-        name = update["message"]["from"]["first_name"]
+        name = update["callback_query"]["message"]["from"]["first_name"]
         empty_answer(call_id)
         if data == "back":
             events = [x[0] for x in rate.get_all_events()]
@@ -523,6 +523,7 @@ class User:
             send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         elif text in events:
             survey.delete_event(text)
+            rate.delete_event(text)
             send_message("Event deleted", chat, remove_keyboard())
         self.stage = self.admin
 
