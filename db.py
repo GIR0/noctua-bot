@@ -314,7 +314,7 @@ class ratedb:
             return []
 
     def get_stats(self, event):
-        stmt = "SELECT * FROM RateEvents WHERE event = %s", (event,))
+        stmt = "SELECT * FROM RateEvents WHERE event = %s", (event,)
         x = dict()
         try:
             self.cur.execute(stmt)
