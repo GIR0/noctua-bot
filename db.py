@@ -304,7 +304,7 @@ class ratedb:
             return []
 
     def get_results(self, event, answer):
-        stmt = "SELECT * FROM RateEvents where event = %s AND answer = %s"
+        stmt = "SELECT * FROM RateEvents WHERE event = %s AND answer = %s"
         try:
             args = (event, answer)
             self.cur.execute(stmt, args)
