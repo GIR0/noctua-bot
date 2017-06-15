@@ -326,7 +326,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
-        elif text in events:
+        elif urllib.quote_plus(text.encode("utf8")) in events:
             self.event = text
             ratings = [x[2] for x in rate.get_by_event(text)]
             ratings = list(set(ratings))
