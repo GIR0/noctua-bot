@@ -60,7 +60,7 @@ def send_message(text, chat_id, reply_markup=None):
         text = urllib.quote_plus(text.encode("utf8"))
     except:
         pass
-    url = URL + "sendMessage?text={}&chat_id={}&parse_mode=Markdown".format(text, chat_id)
+    url = URL + "sendMessage?text={}&chat_id={}".format(text, chat_id)
     if reply_markup:
         url += "&reply_markup={}".format(reply_markup)
     get_url(url)
@@ -131,6 +131,7 @@ class User:
     def MainMenu(self,text,chat,name):
         print(type(text))
         print repr(text)
+        print text
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
