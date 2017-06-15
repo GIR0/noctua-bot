@@ -131,7 +131,7 @@ class User:
     def MainMenu(self,text,chat,name):
         print(type(text))
         print repr(text)
-        print text
+        print text.encode("utf8")
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
