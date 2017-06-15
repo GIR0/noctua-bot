@@ -346,6 +346,7 @@ class User:
         chat = update["callback_query"]["message"]["chat"]["id"]
         data = update["callback_query"]["data"]
         message_id = update["callback_query"]["message"]["message_id"]
+        name = update["message"]["from"]["first_name"]
         empty_answer(call_id)
         if data == "back":
             events = [x[0] for x in rate.get_all_events()]
