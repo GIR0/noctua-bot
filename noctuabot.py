@@ -156,7 +156,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Which event would you like to rate?", chat, keyboard)
             self.stage = self.rate1
-        elif text.startswith("About the Bot"):
+        elif text == u"About the Bot\ud83e\udd89":
             options =[("back")]
             keyboard = build_keyboard(options)
             send_message("It's just a BOT :)", chat, keyboard)
