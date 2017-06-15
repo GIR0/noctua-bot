@@ -332,7 +332,7 @@ class User:
             ratings = list(set(ratings))
             options = []
             for x in ratings:
-                if x != "-"
+                if x != "-":
                     options.append([{"text":x, "callback_data":x}])
             options.append([{"text": "Input your own option", "callback_data": "Input your own option"}])
             options.append([{"text": "back", "callback_data": "back"}])
