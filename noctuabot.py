@@ -392,7 +392,7 @@ class User:
     def survey2(self,text,chat,name):
         self.survey[1] = text
         send_message("What could be improved with regards to the event?", chat, remove_keyboard())
-        self.stage = self.rate3
+        self.stage = self.survey3
 
     def survey3(self,text,chat,name):
         self.survey[2] = text
