@@ -140,7 +140,7 @@ class User:
             options =[(u"OrderFood\ud83c\udf5f"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\ud83d\uddd2"), (u"About the Bot\ud83e\udd89")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
-        elif text.startswith("Feedback"):
+        elif text == u'About the Bot\U0001f989':
             options =[("BOT Functions"), ("General Feedback"), ("back")]
             keyboard = build_keyboard(options)
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
