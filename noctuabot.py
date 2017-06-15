@@ -328,11 +328,12 @@ class User:
             self.stage = self.MainMenu
         elif text in events:
             self.event = text
-            ratings = [x[2] for x in rate.get_by_event()]
+            ratings = [x[2] for x in rate.get_by_event(text)]
             ratings = list(set(ratings))
             options = []
             for x in ratings:
-                options.append([{"text":x, "callback_data":x}])
+                if x != "-"
+                    options.append([{"text":x, "callback_data":x}])
             options.append([{"text": "Input your own option", "callback_data": "Input your own option"}])
             options.append([{"text": "back", "callback_data": "back"}])
             keyboard = inline_keyboard(options)
