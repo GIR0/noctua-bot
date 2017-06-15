@@ -213,7 +213,7 @@ class feedbackdb:
         self.cur.execute(stmt)
         self.connection.commit()
 
-class eventdb:
+class surveydb:
     def __init__(self):
         self.connection = psycopg2.connect(
             database=url.path[1:],
@@ -225,48 +225,112 @@ class eventdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS Events (id serial, event varchar, A varchar, B varchar, C varchar, owner integer, name varchar);"
+        tblstmt = "CREATE TABLE IF NOT EXISTS SurveyEvents (id serial, event varchar, A varchar, B varchar, C varchar, owner integer, name varchar);"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
     def add_item(self, answer, owner, name):
         event, A, B, C = answer
-        stmt = "INSERT INTO Events (event, A, B, C, owner, name) VALUES (%s, %s, %s, %s, %s, %s)"
+        stmt = "INSERT INTO SurveyEvents (event, A, B, C, owner, name) VALUES (%s, %s, %s, %s, %s, %s)"
         args = (event, A, B, C, owner, name)
         self.cur.execute(stmt, args)
         self.connection.commit()
 
     def delete_event(self, event):
-        stmt = "DELETE FROM Events WHERE event = %s"
+        stmt = "DELETE FROM SurveyEvents WHERE event = %s"
         args = (event, )
         self.cur.execute(stmt, args)
         self.connection.commit()
 
     def get_all_events(self):
-        stmt = "SELECT event FROM Events"
+        stmt = "SELECT event FROM SurveyEvents"
         self.cur.execute(stmt)
         return self.cur
 
     def get_by_event(self, event):
         try:
-            self.cur.execute("SELECT * FROM Events WHERE event = %s", (event,))
+            self.cur.execute("SELECT * FROM SurveyEvents WHERE event = %s", (event,))
             print("get_event executed")
             return self.cur
         except:
             print("Failure")
             return []
 
-    def get_all_from_name(self, name):
-        stmt = "SELECT * FROM Events WHERE name = %s"
-        args =(name, )
+    def clear(self):
+        stmt = "DELETE FROM SurveyEvents;"
+        self.cur.execute(stmt)
+        self.connection.commit()
+
+class ratedb:
+    def __init__(self):
+        self.connection = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        self.cur = self.connection.cursor()
+
+    def setup(self):
+        tblstmt = "CREATE TABLE IF NOT EXISTS RateEvents (id serial, event varchar, answer varchar, owner integer, name varchar, CONSTRAINT owner_name3 UNIQUE (event, owner, name));"
+        self.cur.execute(tblstmt)
+        self.connection.commit()
+
+    def add_item(self, event, answer, owner, name):
+        stmt = "INSERT INTO RateEvents (event, answer, owner, name) VALUES (%s, %s, %s, %s) ON CONFLICT (event,owner,name) DO UPDATE SET answer = EXCLUDED.answer;"
+        args = (event, answer, owner, name)
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def delete_event(self, event):
+        stmt = "DELETE FROM RateEvents WHERE event = %s"
+        args = (event, )
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def get_all_events(self):
+        stmt = "SELECT event FROM RateEvents"
+        self.cur.execute(stmt)
+        return self.cur
+
+    def get_by_event(self, event):
         try:
-            self.cur.execute(stmt, args)
-            return [x[0] for x in self.cur]
+            self.cur.execute("SELECT * FROM RateEvents WHERE event = %s", (event,))
+            print("get_event executed")
+            return self.cur
         except:
             print("Failure")
             return []
 
+    def get_results(self, event, answer):
+        stmt = "SELECT * FROM RateEvents where event = %s AND answer = %s"
+        try:
+            args = (event, answer)
+            self.cur.execute(stmt, args)
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_stats(self, event):
+        stmt = "SELECT * FROM RateEvents WHERE event = %s", (event,))
+        x = dict()
+        try:
+            self.cur.execute(stmt)
+            print("get_stats executed")
+            for each in self.cur:
+                key = each[2]
+                if key in x:
+                    x[key] += 1
+                else:
+                    x[key] = 1
+            return x
+        except:
+            print("Failure")
+            return x
+
     def clear(self):
-        stmt = "DELETE FROM Event;"
+        stmt = "DELETE FROM RateEvents;"
         self.cur.execute(stmt)
         self.connection.commit()
