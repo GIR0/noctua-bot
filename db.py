@@ -273,7 +273,7 @@ class ratedb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS RateEvents (id serial, event varchar, answer varchar, owner integer, name varchar, CONSTRAINT owner_name3 UNIQUE (event, owner, name));"
+        tblstmt = "CREATE TABLE IF NOT EXISTS RateEvents (id serial, event varchar, answer varchar, owner integer, name varchar, CONSTRAINT owner_name4 UNIQUE (event, owner, name));"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
