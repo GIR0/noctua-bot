@@ -129,6 +129,7 @@ class User:
         self.survey =["","","",""]
         self.event = ""
     def MainMenu(self,text,chat,name):
+        print(type(text))
         if chat in admin:
             if text == "/admin":
                 self.stage = self.admin
@@ -142,7 +143,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
             self.stage = self.Feedback1
-        elif text.startswith("OrderFood"):
+        elif text.startswith("Rate Events"):
             options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
@@ -326,7 +327,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\ud83e\udd89', chat, keyboard)
             self.stage = self.MainMenu
-        elif urllib.quote_plus(text.encode("utf8")) in events:
+        elif text in events:
             self.event = text
             ratings = [x[2] for x in rate.get_by_event(text)]
             ratings = list(set(ratings))
@@ -510,7 +511,7 @@ class User:
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
             send_message("Hello there, Administrator! " + u'\ud83e\udd16' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
-        elif urllib.quote_plus(text.encode("utf8")) in events:
+        elif text in events:
             ratings = [x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4]+ " " for x in survey.get_by_event(text)]
             ratings = [str(i+1) + ". " + x for i, x in enumerate(ratings)]
             message = "\n\n".join(ratings)
