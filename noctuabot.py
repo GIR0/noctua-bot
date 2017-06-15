@@ -142,19 +142,19 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
             self.stage = self.Feedback1
-        elif text == "OrderFood"+u'\ud83c\udf5f':
+        elif text.startswith("OrderFood"):
             options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
             self.stage = self.orderFood
-        elif text == "Rate Events"+u'\u2764\ufe0f':
+        elif text.startswith("Rate Events"):
             events = [x[0] for x in rate.get_all_events()]
             options = list(set(events))
             options.append("back")
             keyboard = build_keyboard(options)
             send_message("Which event would you like to rate?", chat, keyboard)
             self.stage = self.rate1
-        elif text == urllib.quote_plus((u"About the Bot\ud83e\udd89").encode("utf8")):
+        elif text.startswith("About the Bot"):
             options =[("back")]
             keyboard = build_keyboard(options)
             send_message("It's just a BOT :)", chat, keyboard)
