@@ -369,7 +369,7 @@ class User:
             edit_message(chat, message_id, "Please enter your option.", keyboard)
             self.stage = self.rate3
         elif data == "back":
-            ratings = [x[2] for x in rate.get_by_event(text)]
+            ratings = [x[2] for x in rate.get_by_event(self.event)]
             ratings = list(set(ratings))
             options = []
             for x in ratings:
@@ -378,7 +378,7 @@ class User:
             options.append([{"text": u'\u2764'+"New Option", "callback_data": u'\u2764'+"New Option"}])
             options.append([{"text": u'\u274C'+"Cancel", "callback_data": u'\u274C'+"Cancel"}])
             keyboard = inline_keyboard(options)
-            send_message("What did you like about the event?", chat, keyboard)
+            send_message("Select one option below that best describes how you feel about this event!", chat, keyboard)
             self.inline = self.rate2
             self.stage = self.empty
         else:
