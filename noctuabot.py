@@ -300,10 +300,7 @@ class User:
                 self.stage = self.AddOrder
             except:
                 send_message("Invalid format", chat, remove_keyboard())
-                options =[("Hunger Cry"), ("Start Order"), ("View Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Close Order"), ("back")]
-                keyboard = build_keyboard(options)
-                send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
-                self.stage = self.orderFood
+                send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
 
     def AddOrder(self,text,chat,name):
         global orderstarter
