@@ -343,10 +343,10 @@ class User:
             for x in ratings:
                 if x != "-":
                     options.append([{"text":x, "callback_data":x}])
-            options.append([{"text": "Input your own option", "callback_data": "Input your own option"}])
-            options.append([{"text": "cancel", "callback_data": "cancel"}])
+            options.append([{"text": u'\u2764'+"New Option", "callback_data": u'\u2764'+"New Option"}])
+            options.append([{"text": u'\u274C'+"Cancel", "callback_data": u'\u274C'+"Cancel"}])
             keyboard = inline_keyboard(options)
-            send_message("What did you like about the event?", chat, keyboard)
+            send_message("Select one option below that best describes how you feel about this event!", chat, keyboard)
             self.inline = self.rate2
             self.stage = self.empty
 
@@ -357,13 +357,13 @@ class User:
         message_id = update["callback_query"]["message"]["message_id"]
         name = update["callback_query"]["message"]["chat"]["first_name"]
         empty_answer(call_id)
-        if data == "cancel":
-            edit_message(chat, message_id, "What did you like about the event?")
+        if data == u'\u274C'+"Cancel":
+            edit_message(chat, message_id, "Cancelled")
             options =[(u"OrderFood\U0001F35F"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\U0001F5D2"), (u"About the Bot\U0001F989")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
-        elif data == "Input your own option":
+        elif data == u'\u2764'+"New Option":
             options = [[{"text": "back", "callback_data": "back"}]]
             keyboard = inline_keyboard(options)
             edit_message(chat, message_id, "Please enter your option.", keyboard)
@@ -375,8 +375,8 @@ class User:
             for x in ratings:
                 if x != "-":
                     options.append([{"text":x, "callback_data":x}])
-            options.append([{"text": "Input your own option", "callback_data": "Input your own option"}])
-            options.append([{"text": "cancel", "callback_data": "cancel"}])
+            options.append([{"text": u'\u2764'+"New Option", "callback_data": u'\u2764'+"New Option"}])
+            options.append([{"text": u'\u274C'+"Cancel", "callback_data": u'\u274C'+"Cancel"}])
             keyboard = inline_keyboard(options)
             send_message("What did you like about the event?", chat, keyboard)
             self.inline = self.rate2
