@@ -387,7 +387,7 @@ class User:
         else:
             event = self.event
             rate.add_item(event,data,chat,name)
-            edit_message(chat, message_id, "Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!")
+            edit_message(chat, message_id, "Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!")
             options =[(u"OrderFood\U0001F35F"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\U0001F5D2"), (u"About the Bot\U0001F989")]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
@@ -396,7 +396,7 @@ class User:
     def rate3(self,text,chat,name):
         event = self.event
         rate.add_item(event,text,chat,name)
-        send_message("Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
+        send_message("Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
         options =[(u"OrderFood\U0001F35F"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\U0001F5D2"), (u"About the Bot\U0001F989")]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
@@ -431,7 +431,7 @@ class User:
         self.survey[3] = text
         answer = self.survey
         survey.add_item(answer,chat,name)
-        send_message("Thank you for your review! We'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
+        send_message("Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
         options =[(u"OrderFood\U0001F35F"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\U0001F5D2"), (u"About the Bot\U0001F989")]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
@@ -460,7 +460,7 @@ class User:
             else:
                 message = "\n".join(items)
                 send_message(message, chat, remove_keyboard())
-                send_message("Which feedback do you wish to delete? Please input the respective numbers.\n\n Type back to exit", chat, remove_keyboard())
+                send_message("Which feedback do you wish to delete? Please input the respective numbers.\n\nor click /back to exit", chat, remove_keyboard())
                 self.stage = self.delete
         elif text == "/clearall":
             db.clear()
@@ -497,7 +497,7 @@ class User:
                     message += "\n".join(results) + "\n\n"
             send_message(message, chat, remove_keyboard())
         elif text == "/addevent":
-            send_message("Add an event to be rated\n\nor type back to exit", chat, remove_keyboard())
+            send_message("Add an event to be rated\n\nor click /back to exit", chat, remove_keyboard())
             self.stage = self.addevent
         elif text == "/surveyresults":
             events = [x[0] for x in survey.get_all_events()]
@@ -524,7 +524,7 @@ class User:
             return
 
     def addevent(self,text,chat,name):
-        if text != "back":
+        if text != "/back":
             survey.add_item([text,"-","-","-"],chat,name)
             rate.add_item(text,"-",chat,name)
             send_message("Event added!", chat, remove_keyboard())
@@ -569,7 +569,7 @@ class User:
         self.stage = self.admin
 
     def delete(self,text,chat,name):
-        if text != "back":
+        if text != "/back":
             items = [x[1] for x in db.get_BOT()]
             items2 = [x[1] for x in db.get_General()]
             count = 0
