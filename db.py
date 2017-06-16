@@ -25,7 +25,6 @@ class orderdb:
         stmt = "INSERT INTO foodorders (orders, owner, name) VALUES (%s, %s, %s) ON CONFLICT (owner,name) DO UPDATE SET orders = EXCLUDED.orders;"
         args = (orders, owner, name)
         self.cur.execute(stmt, args)
-        print("order added")
         self.connection.commit()
 
     def clear(self):
@@ -70,7 +69,6 @@ class polldb:
         stmt = "INSERT INTO PollResults (answer, owner, name) VALUES (%s, %s, %s) ON CONFLICT (owner,name) DO UPDATE SET answer = EXCLUDED.answer;"
         args = (answer, owner, name)
         self.cur.execute(stmt, args)
-        print("answer added")
         self.connection.commit()
 
     def clear(self):
@@ -78,7 +76,7 @@ class polldb:
         self.cur.execute(stmt)
         self.connection.commit()
 
-    def get_results(self, answer):
+    def get_results(self):
         stmt = "SELECT * FROM PollResults where answer = %s"
         try:
             args = (answer,)
@@ -105,6 +103,14 @@ class polldb:
             print("Failure")
             return x
 
+    def get_all(self):
+        stmt = "SELECT * FROM PollResults"
+        try:
+            self.cur.execute(stmt)
+            return self.cur
+        except:
+            print("Failure")
+            return []
 
 class userdb:
     def __init__(self):
@@ -168,7 +174,6 @@ class feedbackdb:
         self.connection.commit()
 
     def add_item(self, feedback, kind, owner, name):
-        print("Item added")
         stmt = "INSERT INTO Feedbacks (feedback, kind, owner, name) VALUES (%s, %s, %s, %s)"
         args = (feedback, kind, owner, name)
         self.cur.execute(stmt, args)

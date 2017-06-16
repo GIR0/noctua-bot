@@ -125,7 +125,7 @@ def delayed_response(blast_message, keyboard):
     while (count != 3):
         for x in xrange(108):
             time.sleep(100)
-        results = poll.get_results()
+        results = poll.get_all()
         for x in results:
             if x[1] == "Yet to reply":
                 send_message(blast_message, x[2], keyboard)
