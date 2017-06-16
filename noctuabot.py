@@ -378,7 +378,7 @@ class User:
             options.append([{"text": u'\u2764'+"New Option", "callback_data": u'\u2764'+"New Option"}])
             options.append([{"text": u'\u274C'+"Cancel", "callback_data": u'\u274C'+"Cancel"}])
             keyboard = inline_keyboard(options)
-            send_message("Select one option below that best describes how you feel about this event!", chat, keyboard)
+            edit_message(chat, message_id, "Select one option below that best describes how you feel about this event!", keyboard)
             self.inline = self.rate2
             self.stage = self.empty
         else:
