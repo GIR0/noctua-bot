@@ -152,7 +152,7 @@ class User:
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
             self.stage = self.Feedback1
         elif text == u"OrderFood\U0001F35F":
-            options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+            options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
             self.stage = self.orderFood
@@ -182,6 +182,9 @@ class User:
     def inline(self,update):
         self.rate2(update)
 
+    def empty(self,text,chat,name):
+        pass
+
     def Feedback1(self,text,chat,name):
         if text == "BOT Functions":
             send_message("This option is for submitting feedback about bot functions. Please submit bug reports, feature requests, and suggestions for future improvements here! We thank you for your contributions " + u'\ud83d\ude47\ud83c\udffb'\
@@ -210,16 +213,16 @@ class User:
         global hungerCriers
         global hungermessages
         global orderstarter
-        if text == "startOrder":
+        if text == "Start Order":
             if orderstarter == 0:
-                send_message("Please key in the details of your order in the following format.\nSHOP <space> TIME TO CLOSE ORDER BY\nE.g.\nAmeens 11:30pm\n\n or type 'back' to return to the previous menu", chat, remove_keyboard())
-                self.stage = self.startOrder
+                send_message("Please key in the details of your order in the following format.\nSHOP <space> TIME TO CLOSE ORDER BY\nE.g.\nAmeens 11:30pm\n\n or click /back to return to the previous menu", chat, remove_keyboard())
+                self.stage = self.StartOrder
             else:
                 send_message("The previous order has yet to be closed", chat, remove_keyboard())
-                options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+                options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
                 keyboard = build_keyboard(options)
                 send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
-        elif text == "viewOrder":
+        elif text == "View Order":
             if chat == orderstarter:
                 orders = [x[1] + " " + x[3] for x in food.get_orders()]
                 orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
@@ -227,10 +230,10 @@ class User:
                 send_message(message, chat, remove_keyboard())
             else:
                 send_message("Only the person who started the order can view the order", chat, remove_keyboard())
-            options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+            options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
-        elif text == "closeOrder":
+        elif text == "Close Order":
             if chat == orderstarter:
                 orders = [x[1] + " " + x[3] for x in food.get_orders()]
                 orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
@@ -238,28 +241,28 @@ class User:
                 options =[("close"), ("back")]
                 keyboard = build_keyboard(options)
                 send_message(message, chat, keyboard)
-                self.stage = self.closeOrder
+                self.stage = self.CloseOrder
             else:
                 send_message("Only the person who started the order can close the order", chat, remove_keyboard())
-                options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+                options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
                 keyboard = build_keyboard(options)
                 send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
-        elif text == "addOrder" or text == "editOrder":
+        elif text == "Add Order" or text == "Edit Order":
             if orderstarter == 0:
                 send_message("An order needs to be started", chat, remove_keyboard())
-                options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+                options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
                 keyboard = build_keyboard(options)
                 send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
             else:
-                send_message("What would you like to order?\n\n or type 'back' to return to the previous menu", chat, remove_keyboard())
-                self.stage = self.addOrder
-        elif text == "deleteOrder":
+                send_message("What would you like to order?\n\n or click /back to return to the previous menu", chat, remove_keyboard())
+                self.stage = self.AddOrder
+        elif text == "Delete Order":
             food.delete_order(chat)
             send_message("Order deleted", chat, remove_keyboard())
-            options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+            options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
-        elif text == "hungerCry":
+        elif text == "Hunger Cry":
             if chat not in hungerCriers:
                 hungerCriers.append(chat)
                 count = len(hungerCriers)
@@ -269,7 +272,7 @@ class User:
                 send_message(hungermessages[count-1] + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
             else:
                 send_message("You can only cry once :(", chat, remove_keyboard())
-            options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+            options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
         elif text == "back":
@@ -278,11 +281,11 @@ class User:
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
 
-    def startOrder(self,text,chat,name):
+    def StartOrder(self,text,chat,name):
         global NoctuachatID
         global orderstarter
-        if text == "back":
-            options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+        if text == "/back":
+            options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
             keyboard = build_keyboard(options)
             send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
             self.stage = self.orderFood
@@ -292,28 +295,28 @@ class User:
                 send_message(name + " has started an order!\nFood from: " + details[0] + "\nOrder closing at: " + details[1], NoctuachatID, remove_keyboard())
                 orderstarter = chat
                 for x in hungerCriers:
-                    send_message(name + " has started an order!\nFood from: " + details[0] + "\nOrder closing at: " + details[1] + "\n\nNavigate to orderFood > addOrder to add your order!", x)
-                send_message("What would you like to order?\n\n or type 'back' if you are not ordering", chat, remove_keyboard())
-                self.stage = self.addOrder
+                    send_message(name + " has started an order!\nFood from: " + details[0] + "\nOrder closing at: " + details[1] + "\n\nNavigate to orderFood > Add Order to add your order!", x)
+                send_message("What would you like to order?\n\n or click /back if you are not ordering", chat, remove_keyboard())
+                self.stage = self.AddOrder
             except:
                 send_message("Invalid format", chat, remove_keyboard())
-                options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+                options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
                 keyboard = build_keyboard(options)
                 send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
                 self.stage = self.orderFood
 
-    def addOrder(self,text,chat,name):
+    def AddOrder(self,text,chat,name):
         global orderstarter
-        if text != "back":
+        if text != "/back":
             food.add_order(text,chat,name)
             send_message("Order added/edited", chat, remove_keyboard())
             send_message("1 order added/edited", orderstarter, remove_keyboard())
-        options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+        options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
         keyboard = build_keyboard(options)
         send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
         self.stage = self.orderFood
 
-    def closeOrder(self,text,chat,name):
+    def CloseOrder(self,text,chat,name):
         global NoctuachatID
         global orderstarter
         global hungerCriers
@@ -323,7 +326,7 @@ class User:
             hungerCriers = []
             send_message("Order is closed", chat, remove_keyboard())
             send_message("Order is closed", NoctuachatID, remove_keyboard())
-        options =[("startOrder"), ("viewOrder"), ("closeOrder"), ("addOrder"), ("editOrder"), ("deleteOrder"), ("hungerCry"), ("back")]
+        options =[("Start Order"), ("View Order"), ("Close Order"), ("Add Order"), ("Edit Order"), ("Delete Order"), ("Hunger Cry"), ("back")]
         keyboard = build_keyboard(options)
         send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
         self.stage = self.orderFood
@@ -344,30 +347,43 @@ class User:
                 if x != "-":
                     options.append([{"text":x, "callback_data":x}])
             options.append([{"text": "Input your own option", "callback_data": "Input your own option"}])
-            options.append([{"text": "back", "callback_data": "back"}])
+            options.append([{"text": "cancel", "callback_data": "cancel"}])
             keyboard = inline_keyboard(options)
             send_message("What did you like about the event?", chat, keyboard)
             self.inline = self.rate2
-            self.stage = self.MainMenu
+            self.stage = self.empty
 
     def rate2(self,update):
         call_id = update["callback_query"]["id"]
         chat = update["callback_query"]["message"]["chat"]["id"]
         data = update["callback_query"]["data"]
         message_id = update["callback_query"]["message"]["message_id"]
-        name = update["callback_query"]["message"]["from"]["first_name"]
+        name = update["callback_query"]["message"]["chat"]["first_name"]
         empty_answer(call_id)
-        if data == "back":
-            events = [x[0] for x in rate.get_all_events()]
-            options = list(set(events))
-            options.append("back")
-            keyboard = build_keyboard(options)
+        if data == "cancel":
             edit_message(chat, message_id, "What did you like about the event?")
-            send_message("Which event would you like to rate?", chat, keyboard)
-            self.stage = self.rate1
+            options =[(u"OrderFood\U0001F35F"), (u"Rate Events\u2764\ufe0f"), (u"Feedback\U0001F5D2"), (u"About the Bot\U0001F989")]
+            keyboard = build_keyboard(options)
+            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
+            self.stage = self.MainMenu
         elif data == "Input your own option":
-            edit_message(chat, message_id, "Please give your input below")
+            options = [[{"text": "back", "callback_data": "back"}]]
+            keyboard = inline_keyboard(options)
+            edit_message(chat, message_id, "Please give your input below", keyboard)
             self.stage = self.rate3
+        elif data == "back":
+            ratings = [x[2] for x in rate.get_by_event(text)]
+            ratings = list(set(ratings))
+            options = []
+            for x in ratings:
+                if x != "-":
+                    options.append([{"text":x, "callback_data":x}])
+            options.append([{"text": "Input your own option", "callback_data": "Input your own option"}])
+            options.append([{"text": "cancel", "callback_data": "cancel"}])
+            keyboard = inline_keyboard(options)
+            send_message("What did you like about the event?", chat, keyboard)
+            self.inline = self.rate2
+            self.stage = self.empty
         else:
             event = self.event
             rate.add_item(event,data,chat,name)
