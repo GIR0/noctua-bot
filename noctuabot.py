@@ -408,7 +408,9 @@ class User:
             self.stage = self.orderFood
         elif text.encode("utf8") in descriptions:
             self.ordererid[1] = text
-            self.ordererid[0] = food.get_by_description(text)[0][1]
+            for x in food.get_by_description(text):
+                self.ordererid[0] = x[1]
+                break
             send_message("What would you like to order?\n\n or click /back if you are not ordering", chat, remove_keyboard())
             self.stage = self.AddOrder2
 
