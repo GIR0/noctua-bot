@@ -254,7 +254,7 @@ class User:
                         if x[5] != "-":
                             orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    if len(orders) > 0;
+                    if len(orders) > 0:
                         message = "\n".join(orders)
                     else:
                         message = "There are 0 orders on your list."
