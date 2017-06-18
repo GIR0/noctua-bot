@@ -238,7 +238,7 @@ class User:
             allorders = [x[1] for x in food.get_all()]
             if len(allorders) > 0:
                 orderstarters = list(set([x[1] for x in food.get_all()]))
-                if chat in orderstarter:
+                if chat in orderstarters:
                     orders =[]
                     for x in food.get_by_orderstarter(chat):
                         if x[5] != "-":
