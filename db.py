@@ -17,7 +17,7 @@ class orderdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orderstarter integer, description varchar, orders varchar, owner integer, name varchar;"
+        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orderstarter integer, description varchar, orders varchar, owner integer, name varchar);"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
