@@ -482,7 +482,7 @@ class User:
         global NoctuachatID
         global hungerCriers
         if text == "Close Order":
-            for x in food.get_by_orderstarter:
+            for x in food.get_by_orderstarter(chat):
                 description = x[2]
                 break
             food.clear_by_orderstarter(chat)
