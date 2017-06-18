@@ -230,7 +230,7 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
             else:
-                options =[["Start Order"+u'\U0001F4CD']],["back"]]
+                options =[["Start Order"+u'\U0001F4CD'],["back"]]
                 keyboard = build_keyboard(options)
                 send_message("There is already an ongoing order being collated. Would you like to start a different order?", chat, keyboard)
                 self.stage = self.StartOrder1
