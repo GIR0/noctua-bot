@@ -235,11 +235,14 @@ class User:
                 send_message("There is already an ongoing order being collated. Would you like to start a different order?", chat, keyboard)
                 self.stage = self.StartOrder1
         elif text == "View Order"+u'\U0001F5D2':
-            allorders = food.get_all()
+            allorders = [x[1] for x in food.get_all()]
             if len(allorders) > 0:
                 orderstarters = list(set([x[1] for x in food.get_all()]))
                 if chat in orderstarter:
-                    orders = [x[5] + " - " + x[3] for x in food.get_by_orderstarter(chat)]
+                    orders =[]
+                    for x in food.get_by_orderstarter(chat):
+                        if x[5] != "-":
+                            orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message = "\n".join(orders)
                 else:
@@ -265,7 +268,10 @@ class User:
         elif text == "Close Order"+	u'\U0001F510':
             orderstarters = list(set([x[1] for x in food.get_all()]))
             if chat in orderstarters:
-                orders = [x[5] + " - " + x[3] for x in food.get_by_orderstarter(chat)]
+                orders =[]
+                for x in food.get_by_orderstarter(chat):
+                    if x[5] != "-":
+                        orders.append(x[5] + " - " + x[3])
                 orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                 message = "\n".join(orders)
                 options =[["Close Order"],["back"]]
@@ -277,7 +283,7 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message("A hungry man is an angry man.\nWhat can I do for you?", chat, keyboard)
         elif text == "Add Order"+u'\U0001F355':
-            allorders = food.get_all()
+            allorders = [x[1] for x in food.get_all()]
             if len(allorders) > 0:
                 descriptions = [x[0] for x in food.get_all_description()]
                 options = [[x] for x in list(set(descriptions))]
@@ -643,7 +649,10 @@ class User:
             count = 1
             for x in descriptions:
                 message += str(count) + ". " + x + "\n"
-                orders = [y[5] + " - " + y[3] for y in food.get_by_description(x)]
+                orders =[]
+                for y in food.get_by_description(x):
+                    if y[5] != "-":
+                        orders.append(y[5] + " - " + y[3])
                 message += "\n".join(orders)
                 message += "\n\n"
                 options.append([str(count) + ". " + x])
