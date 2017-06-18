@@ -317,7 +317,7 @@ class User:
                 options = [[x] for x in list(set(descriptions))]
                 options.append(["back"])
                 keyboard = build_keyboard(options)
-                send_message("Which order?", chat, remove_keyboard())
+                send_message("Which order?", chat, keyboard)
                 self.stage = self.AddOrder1
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
