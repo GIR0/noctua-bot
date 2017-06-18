@@ -17,37 +17,91 @@ class orderdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orders varchar, owner integer, name varchar, CONSTRAINT owner_name3 UNIQUE (owner, name));"
+        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orderstarter integer, description varchar, orders varchar, owner integer, name varchar;"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
-    def add_order(self, orders, owner, name):
-        stmt = "INSERT INTO foodorders (orders, owner, name) VALUES (%s, %s, %s) ON CONFLICT (owner,name) DO UPDATE SET orders = EXCLUDED.orders;"
-        args = (orders, owner, name)
+    def add_order(self, orderstarter, description, orders, owner, name):
+        stmt = "INSERT INTO foodorders (orderstarter, description, orders, owner, name) VALUES (%s, %s, %s, %s, %s);"
+        args = (orderstarter, description, orders, owner, name)
         self.cur.execute(stmt, args)
         self.connection.commit()
 
-    def clear(self):
-        stmt = "DELETE FROM foodorders;"
-        self.cur.execute(stmt)
-        self.connection.commit()
-
-    def delete_order(self, owner):
-        stmt = "DELETE FROM foodorders WHERE owner = %s"
-        args = (owner, )
+    def clear_by_orderstarter(self, orderstarter):
+        stmt = "DELETE FROM foodorders WHERE orderstarter = %s;"
+        args = (orderstarter,)
         self.cur.execute(stmt, args)
         self.connection.commit()
 
-    def get_orders(self):
-        stmt = "SELECT * FROM foodorders"
+    def clear_order(self, orders, owner):
+        stmt = "DELETE FROM foodorders WHERE orders = %s AND owner = %s"
+        args = (orders, owner)
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def clear_by_description(self, description):
+        stmt = "DELETE FROM foodorders WHERE description = %s;"
+        args = (description,)
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def get_by_order(self, orders, owner):
+        stmt = "SELECT * FROM foodorders WHERE orders = %s AND owner = %s"
         try:
-            self.cur.execute(stmt)
-            print("get_orders executed")
+            args = (orders, owner)
+            self.cur.execute(stmt, args)
             return self.cur
         except:
             print("Failure")
             return []
 
+    def get_by_orderstarter(self, orderstarter):
+        stmt = "SELECT * FROM foodorders WHERE orderstarter = %s"
+        try:
+            args = (orderstarter,)
+            self.cur.execute(stmt, args)
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_by_owner(self, owner):
+        stmt = "SELECT * FROM foodorders WHERE owner = %s"
+        try:
+            args = (owner,)
+            self.cur.execute(stmt, args)
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_by_description(self, description):
+        stmt = "SELECT * FROM foodorders WHERE description = %s"
+        try:
+            args = (description,)
+            self.cur.execute(stmt, args)
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_all(self):
+        stmt = "SELECT * FROM foodorders"
+        try:
+            self.cur.execute(stmt)
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_all_description(self):
+        stmt = "SELECT description FROM foodorders"
+        try:
+            self.cur.execute(stmt)
+            return self.cur
+        except:
+            print("Failure")
+            return []
 
 class polldb:
     def __init__(self):
@@ -76,7 +130,7 @@ class polldb:
         self.cur.execute(stmt)
         self.connection.commit()
 
-    def get_results(self):
+    def get_results(self, answer):
         stmt = "SELECT * FROM PollResults where answer = %s"
         try:
             args = (answer,)
@@ -111,6 +165,7 @@ class polldb:
         except:
             print("Failure")
             return []
+
 
 class userdb:
     def __init__(self):
