@@ -467,7 +467,7 @@ class User:
         if text != "/back":
             for x in food.get_by_order(self.edit,chat):
                 orderstarter = x[1]
-                description = order[2]
+                description = x[2]
                 break
             food.clear_order(self.edit, chat)
             food.add_order(orderstarter,description,text,chat,name)
