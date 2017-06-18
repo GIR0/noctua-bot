@@ -284,7 +284,7 @@ class User:
                 send_message(message, chat, keyboard)
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
-            descriptions = [x[0] for x in food.get_all_description()]/descriptions = list(set(descriptions))///options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
+            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
             keyboard = build_keyboard(options)
             send_message(orderfood_message(), chat, keyboard)
         elif text == "Close Order"+	u'\U0001F510':
