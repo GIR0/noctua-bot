@@ -142,7 +142,7 @@ def orderfood_message():
     if len(descriptions) > 0:
         message = ""
         for x in descriptions:
-            message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split[1]+".\n"
+            message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
     else:
         message = "There is currently no order ongoing"
     message += "\n\nWhat would you like to do?"
@@ -406,7 +406,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message(orderfood_message(), chat, keyboard)
             self.stage = self.orderFood
-        elif text in descriptions:
+        elif text.encode("utf8") in descriptions:
             self.ordererid[1] = text
             self.ordererid[0] = food.get_by_description(text)[0][1]
             send_message("What would you like to order?\n\n or click /back if you are not ordering", chat, remove_keyboard())
@@ -429,7 +429,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message(orderfood_message(), chat, keyboard)
             self.stage = self.orderFood
-        elif text in orders:
+        elif text.encode("utf8") in orders:
             food.clear_order(text, chat)
             send_message("Order has been deleted", chat, remove_keyboard())
             options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
@@ -458,7 +458,7 @@ class User:
                 options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
                 keyboard = build_keyboard(options)
                 send_message(orderfood_message(), chat, keyboard)
-        elif text in orders:
+        elif text.encode("utf8") in orders:
             self.edit = text
             send_message("What would you like to order instead?\n\nor click /back to return to the Order Food menu", chat, remove_keyboard())
             self.stage = self.EditOrder2
@@ -728,7 +728,7 @@ class User:
         if text == "back":
             send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
-        elif text in descriptions:
+        elif text.encode("utf8") in descriptions:
             food.clear_by_description(text)
             send_message("Order is closed", chat, remove_keyboard())
             send_message(text + " - Order is closed", NoctuachatID, remove_keyboard())
