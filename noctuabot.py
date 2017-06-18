@@ -254,7 +254,10 @@ class User:
                         if x[5] != "-":
                             orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message = "\n".join(orders)
+                    if len(orders) > 0;
+                        message = "\n".join(orders)
+                    else:
+                        message = "There are 0 orders on your list."
                 else:
                     message = "Ongoing orders:\n\n"
                     descriptions = [x[0] for x in food.get_all_description()]
@@ -291,7 +294,8 @@ class User:
                 else:
                     options =[["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
-                    send_message("There are no orders", chat, keyboard)
+                    send_message("There are 0 orders on your list. Proceed to close?", chat, keyboard)
+                self.stage = self.CloseOrder
             else:
                 send_message("Only the person who started an order can close the order", chat, remove_keyboard())
                 options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
@@ -665,6 +669,7 @@ class User:
                 options = [["back"]]
                 keyboard = build_keyboard(options)
                 send_message("There are currently no events added " + u'\U0001F607', chat, keyboard)
+            self.stage = self.viewrating
         elif text == "/closeorder":
             descriptions = [x[0] for x in food.get_all_description()]
             descriptions = list(set(descriptions))
