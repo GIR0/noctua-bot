@@ -465,9 +465,10 @@ class User:
 
     def EditOrder2(self,text,chat,name):
         if text != "/back":
-            order = [x[1], x[2] for x in food.get_by_order(self.edit,chat)]
-            orderstarter = order[0]
-            description = order[1]
+            for x in food.get_by_order(self.edit,chat):
+                orderstarter = x[1]
+                description = order[2]
+                break
             food.clear_order(self.edit, chat)
             food.add_order(orderstarter,description,text,chat,name)
             send_message("Order has been edited", chat, remove_keyboard())
@@ -481,7 +482,9 @@ class User:
         global NoctuachatID
         global hungerCriers
         if text == "Close Order":
-            description = food.get_by_orderstarter(chat)[0][2]
+            for x in food.get_by_orderstarter:
+                description = x[2]
+                break
             food.clear_by_orderstarter(chat)
             hungerCriers = []
             send_message("Order is closed", chat, remove_keyboard())
