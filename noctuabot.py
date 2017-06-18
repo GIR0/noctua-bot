@@ -281,7 +281,7 @@ class User:
                         message += "\n".join(orders)
                     else:
                         message += "You have 0 orders added currently."
-                send_message(message, chat, keyboard)
+                send_message(message, chat, remove_keyboard())
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
             options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
