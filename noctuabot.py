@@ -165,10 +165,15 @@ class User:
             self.stage = self.orderFood
         elif text == u"Rate Events\u2764\ufe0f":
             events = [x[0] for x in rate.get_all_events()]
-            options = [[x] for x in list(set(events))]
-            options.append("back")
-            keyboard = build_keyboard(options)
-            send_message("Which event would you like to rate?", chat, keyboard)
+            if len(events) > 0:
+                options = [[x] for x in list(set(events))]
+                options.append(["back"])
+                keyboard = build_keyboard(options)
+                send_message("Which event would you like to rate?", chat, keyboard)
+            else:
+                options = [["back"]]
+                keyboard = build_keyboard(options)
+                send_message("There are currently no events to rate " + u'\U0001F607', chat, keyboard)
             self.stage = self.rate1
         elif text == u"About the Bot\U0001F989":
             options =[["back"]]
@@ -176,10 +181,15 @@ class User:
             send_message("It's just a BOT :)", chat, keyboard)
         elif text == "/survey":
             events = [x[0] for x in survey.get_all_events()]
-            ptions = [[x] for x in list(set(events))]
-            options.append("back")
-            keyboard = build_keyboard(options)
-            send_message("Which event would you like to give feedback on?", chat, keyboard)
+            if len(events) > 0:
+                options = [[x] for x in list(set(events))]
+                options.append(["back"])
+                keyboard = build_keyboard(options)
+                send_message("Which event would you like to give feedback on?", chat, keyboard)
+            else:
+                options = [["back"]]
+                keyboard = build_keyboard(options)
+                send_message("There are currently no events to give feedback on " + u'\U0001F607', chat, keyboard)
             self.stage = self.survey1
         else:
             return
@@ -272,11 +282,16 @@ class User:
                 for x in food.get_by_orderstarter(chat):
                     if x[5] != "-":
                         orders.append(x[5] + " - " + x[3])
-                orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                message = "\n".join(orders)
-                options =[["Close Order"],["back"]]
-                keyboard = build_keyboard(options)
-                send_message(message, chat, keyboard)
+                if len(orders) > 0:
+                    orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
+                    message = "\n".join(orders)
+                    options =[["Close Order"],["back"]]
+                    keyboard = build_keyboard(options)
+                    send_message(message, chat, keyboard)
+                else:
+                    options =[["Close Order"],["back"]]
+                    keyboard = build_keyboard(options)
+                    send_message("There are no orders", chat, keyboard)
             else:
                 send_message("Only the person who started an order can close the order", chat, remove_keyboard())
                 options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
@@ -622,10 +637,15 @@ class User:
             self.stage = self.addevent
         elif text == "/surveyresults":
             events = [x[0] for x in survey.get_all_events()]
-            options = [[x] for x in list(set(events))]
-            options.append(["back"])
-            keyboard = build_keyboard(options)
-            send_message("Which event would you like to view results for?", chat, keyboard)
+            if len(events) > 0:
+                options = [[x] for x in list(set(events))]
+                options.append(["back"])
+                keyboard = build_keyboard(options)
+                send_message("Which event would you like to view results for?", chat, keyboard)
+            else:
+                options = [["back"]]
+                keyboard = build_keyboard(options)
+                send_message("There are currently no events added " + u'\U0001F607', chat, keyboard)
             self.stage = self.surveyresults
         elif text == "/clearevent":
             events = [x[0] for x in survey.get_all_events()]
@@ -636,31 +656,40 @@ class User:
             self.stage = self.clearevent
         elif text == "/viewrating":
             events = [x[0] for x in rate.get_all_events()]
-            options = [[x] for x in list(set(events))]
-            options.append(["back"])
-            keyboard = build_keyboard(options)
-            send_message("Which event would you like to view results for?", chat, keyboard)
-            self.stage = self.viewrating
+            if len(events) > 0:
+                options = [[x] for x in list(set(events))]
+                options.append(["back"])
+                keyboard = build_keyboard(options)
+                send_message("Which event would you like to view results for?", chat, keyboard)
+            else:
+                options = [["back"]]
+                keyboard = build_keyboard(options)
+                send_message("There are currently no events added " + u'\U0001F607', chat, keyboard)
         elif text == "/closeorder":
             descriptions = [x[0] for x in food.get_all_description()]
             descriptions = list(set(descriptions))
-            message = "Ongoing Orders:\n\n"
-            options = []
-            count = 1
-            for x in descriptions:
-                message += str(count) + ". " + x + "\n"
-                orders =[]
-                for y in food.get_by_description(x):
-                    if y[5] != "-":
-                        orders.append(y[5] + " - " + y[3])
-                message += "\n".join(orders)
-                message += "\n\n"
-                options.append([str(count) + ". " + x])
-                count += 1
-            send_message(message, chat, remove_keyboard())
-            options.append(["back"])
-            keyboard = build_keyboard(options)
-            send_message("Which order would you like to close?", chat, keyboard)
+            if len(descriptions) > 0:
+                message = "Ongoing Orders:\n\n"
+                options = []
+                count = 1
+                for x in descriptions:
+                    message += str(count) + ". " + x + "\n"
+                    orders =[]
+                    for y in food.get_by_description(x):
+                        if y[5] != "-":
+                            orders.append(y[5] + " - " + y[3])
+                    message += "\n".join(orders)
+                    message += "\n\n"
+                    options.append([x])
+                    count += 1
+                send_message(message, chat, remove_keyboard())
+                options.append(["back"])
+                keyboard = build_keyboard(options)
+                send_message("Which order would you like to close?", chat, keyboard)
+            else:
+                options = [["back"]]
+                keyboard = build_keyboard(options)
+                send_message("There are currently no ongoing orders " + u'\U0001F607', chat, keyboard)
             self.stage = self.adminclose
         else:
             return
