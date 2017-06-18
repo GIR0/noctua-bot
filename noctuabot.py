@@ -219,7 +219,7 @@ class User:
         global NoctuachatID
         global hungerCriers
         global hungermessages
-        if text == Start Order"+u'\U0001F4CD':
+        if text == "Start Order"+u'\U0001F4CD':
             orderstarters = list(set([x[1] for x in food.get_all()]))
             if len(orderstarters) == 0:
                 send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
