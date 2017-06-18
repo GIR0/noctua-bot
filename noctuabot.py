@@ -465,9 +465,9 @@ class User:
 
     def EditOrder2(self,text,chat,name):
         if text != "/back":
-            order = food.get_by_order(self.edit,chat)[0]
-            orderstarter = order[1]
-            description = order[2]
+            order = [x[1], x[2] for x in food.get_by_order(self.edit,chat)]
+            orderstarter = order[0]
+            description = order[1]
             food.clear_order(self.edit, chat)
             food.add_order(orderstarter,description,text,chat,name)
             send_message("Order has been edited", chat, remove_keyboard())
