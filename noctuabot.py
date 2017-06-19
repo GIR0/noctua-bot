@@ -608,7 +608,7 @@ class User:
             keyboard = inline_keyboard(options)
             edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
         elif data == u"\u2B05":
-            if self.idx = 0:
+            if self.idx == 0:
                 return
             options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
             ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
