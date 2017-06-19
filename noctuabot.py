@@ -269,7 +269,7 @@ class User:
                         message = "My List:\n\n" + "\n".join(orders)
                     else:
                         message = "There are 0 orders on your list."
-                    orders = [x[3] for x in food.get_by_owner(chat)]
+                    orders = ["("+x[2]+")"+ x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message += "\n\nMy Orders:\n\n"
                     if len(orders) > 0:
