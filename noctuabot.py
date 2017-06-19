@@ -585,6 +585,7 @@ class User:
         elif data == u"\U0001F4BE"+u"\u27A1":
             self.orderlist[self.idx][1] = self.display
             if self.idx == len(self.orderlist) - 1:
+                self.idx += 1
                 options = [[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": "done", "callback_data": "done"}]]
                 keyboard = inline_keyboard(options)
                 edit_message(chat, message_id, "Done?", keyboard)
