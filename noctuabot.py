@@ -482,7 +482,7 @@ class User:
             orders = []
             for x in descriptions:
                 for x in food.get_by_owner_description(chat,x):
-                    orders.append([x[3])
+                    orders.append(x[3])
             try:
                 self.edit = orders[int(text)-1]
                 send_message("What would you like to order instead?\n\nor click /back to return to the Order Food menu", chat, remove_keyboard())
