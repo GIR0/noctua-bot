@@ -622,7 +622,7 @@ class User:
         elif data == "done":
             message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
             for x in self.orderlist:
-                message += "$" + x[1] + " - " x[3]
+                message += "$" + x[1] + " - " + x[3]
             edit_message(chat, message_id, message)
             for x in self.orderlist:
                 if x[1] != "":
