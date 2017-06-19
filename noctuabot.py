@@ -155,6 +155,9 @@ class User:
         self.event = ""
         self.ordererid = [0, ""]
         self.edit = ""
+        self.idx = 0
+        self.orderlist = []
+        self.display = ""
     def MainMenu(self,text,chat,name):
         if chat in admin:
             if text == "/admin":
@@ -203,12 +206,15 @@ class User:
                 send_message("There are currently no events to give feedback on " + u'\U0001F607', chat, keyboard)
             self.stage = self.survey1
         else:
-            return
+            send_message("Did you mean: /start", chat, remove_keyboard)
     def stage(self,text,chat,name):
         self.MainMenu(text,chat,name)
 
     def inline(self,update):
-        self.rate2(update)
+        self.ignore(update)
+
+    def ignore(self,update):
+        pass
 
     def empty(self,text,chat,name):
         pass
@@ -303,8 +309,8 @@ class User:
                         orders.append(x[5] + " - " + x[3])
                 if len(orders) > 0:
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message = "\n".join(orders)
-                    options =[["Close Order"],["back"]]
+                    message = "\n".join(orders) + "\n\nWhen the order has been made and delivered, click payments to split the bill before you close the order"
+                    options =[["payments"],["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
                     send_message(message, chat, keyboard)
                 else:
@@ -534,6 +540,110 @@ class User:
             keyboard = build_keyboard(options)
             send_message(orderfood_message(), chat, keyboard)
             self.stage = self.orderFood
+        elif text == "payments":
+            options = [[{"text": "start", "callback_data": "start"}]]
+            keyboard = inline_keyboard(options)
+            send_message("Let me assist you splitting the bill!", chat, keyboard)
+            self.inline = self.payments
+            self.stage = self.empty
+
+    def payments(self,update):
+        call_id = update["callback_query"]["id"]
+        chat = update["callback_query"]["message"]["chat"]["id"]
+        data = update["callback_query"]["data"]
+        message_id = update["callback_query"]["message"]["message_id"]
+        name = update["callback_query"]["message"]["chat"]["first_name"]
+        empty_answer(call_id)
+        owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
+        if data == "start":
+            self.orderlist = []
+            for x in owners:
+                if x > 0:
+                    for y in food.get_by_owner_orderstarter(x,chat):
+                        details = y[5] + "\n"
+                        break
+                    orders = [z[3] for z in food.get_by_owner_orderstarter(z,chat)]
+                    food = "\n".join(orders)
+                    details += "\n".join(orders) + "\n\n"
+                    each = [x,"",food,details]
+                    self.orderlist.append(each)
+            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
+            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
+            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
+            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": "next", "callback_data": "next"}]\
+            ,[{"text": "skip", "callback_data": "skip"},{"text": "exit", "callback_data": "exit"}]]
+            self.idx = 0
+            self.display = ""
+            keyboard = inline_keyboard(options)
+            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
+        elif data == "exit":
+            edit_message(chat, message_id, "payments cancelled")
+            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
+            keyboard = build_keyboard(options)
+            send_message(orderfood_message(), chat, keyboard)
+            self.stage = self.orderFood
+        elif data == u"\U0001F4BE"+u"\u27A1":
+            self.orderlist[self.idx][1] = self.display
+            if self.idx == len(self.orderlist) - 1:
+                options = [[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": "done", "callback_data": "done"}]]
+                keyboard = inline_keyboard(options)
+                edit_message(chat, message_id, "Done?", keyboard)
+            else:
+                options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
+                ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
+                ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
+                ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
+                ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\u27A1", "callback_data": u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
+                self.idx += 1
+                self.display = ""
+                keyboard = inline_keyboard(options)
+                edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
+        elif data == u"\u25C0":
+            self.display = self.display[:-1]
+            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
+            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
+            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
+            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
+            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
+            keyboard = inline_keyboard(options)
+            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
+        elif data == u"\u2B05":
+            if self.idx = 0:
+                return
+            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
+            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
+            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
+            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
+            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\u27A1", "callback_data": u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
+            self.idx -= 1
+            self.display = ""
+            keyboard = inline_keyboard(options)
+            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
+        elif data == "done":
+            message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
+            for x in self.orderlist:
+                message += "$" + x[1] + " - " x[3]
+            edit_message(chat, message_id, message)
+            for x in self.orderlist:
+                if x[1] != "":
+                    send_message("You are required to pay $" + x[1] + " to " + name + " for your latest order:\n" + x[2], x[0])
+            self.idx = 0
+            self.display = ""
+            self.orderlist = []
+            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
+            keyboard = build_keyboard(options)
+            send_message(orderfood_message(), chat, keyboard)
+            self.inline = self.ignore
+            self.stage = self.orderFood
+        else:
+            self.display += data
+            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
+            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
+            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
+            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
+            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\u27A1", "callback_data": u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
+            keyboard = inline_keyboard(options)
+            edit_message(chat, message_id, self.orderlist[self.idx][3]+self.display, keyboard)
 
     def rate1(self,text,chat,name):
         events = [x[0] for x in rate.get_all_events()]
@@ -570,6 +680,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
+            self.inline = self.ignore
         elif data == u'\u2764'+"New Option":
             options = [[{"text": "back", "callback_data": "back"}]]
             keyboard = inline_keyboard(options)
@@ -596,6 +707,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
+            self.inline = self.ignore
 
     def rate3(self,text,chat,name):
         event = self.event
@@ -605,6 +717,7 @@ class User:
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         self.stage = self.MainMenu
+        self.inline = self.ignore
 
     def survey1(self,text,chat,name):
         events = [x[0] for x in survey.get_all_events()]
