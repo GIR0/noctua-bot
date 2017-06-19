@@ -332,7 +332,7 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message(orderfood_message(), chat, keyboard)
         elif text == "Edit Order"+u'\U0001F4DD':
-            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
             if len(descriptions) == 0:
                 options =[["Add Order"+u'\U0001F355'],["back"]]
                 keyboard = build_keyboard(options)
@@ -351,7 +351,7 @@ class User:
                 send_message("Which order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat, remove_keyboard())
             self.stage = self.EditOrder1
         elif text == "Clear Order"+	u'\U0001F5D1':
-            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
             if len(descriptions) == 0:
                 send_message("You have 0 orders added currently.", chat, remove_keyboard())
                 options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
@@ -447,7 +447,7 @@ class User:
 
     def ClearOrder(self,text,chat,name):
         if text != "/back":
-            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
             orders = []
             for x in descriptions:
                 for x in food.get_by_owner_description(chat,x):
@@ -478,7 +478,7 @@ class User:
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
         else:
-            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
             orders = []
             for x in descriptions:
                 for x in food.get_by_owner_description(chat,x):
