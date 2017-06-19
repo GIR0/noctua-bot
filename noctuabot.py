@@ -554,7 +554,8 @@ class User:
         message_id = update["callback_query"]["message"]["message_id"]
         name = update["callback_query"]["message"]["chat"]["first_name"]
         empty_answer(call_id)
-        owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
+        owners = [x[4] for x in food.get_by_orderstarter(chat)]
+        owners = list(set(owners))
         if data == "start":
             self.orderlist = []
             for x in owners:
