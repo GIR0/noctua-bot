@@ -451,7 +451,7 @@ class User:
             orders = []
             for x in descriptions:
                 for x in food.get_by_owner_description(chat,x):
-                    orders.append([x[3])
+                    orders.append(x[3])
             try:
                 food.clear_order(orders[int(text)-1], chat)
                 send_message("Order has been deleted", chat, remove_keyboard())
