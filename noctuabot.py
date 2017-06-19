@@ -562,7 +562,7 @@ class User:
                     for y in food.get_by_owner_orderstarter(x,chat):
                         details = y[5] + "\n"
                         break
-                    orders = [z[3] for z in food.get_by_owner_orderstarter(z,chat)]
+                    orders = [z[3] for z in food.get_by_owner_orderstarter(x,chat)]
                     foods = "\n".join(orders)
                     details += "\n".join(orders) + "\n\n"
                     each = [x,"",foods,details]
