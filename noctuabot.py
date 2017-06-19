@@ -269,6 +269,13 @@ class User:
                         message = "\n".join(orders)
                     else:
                         message = "There are 0 orders on your list."
+                    orders = [x[3] for x in food.get_by_owner(chat)]
+                    orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
+                    message += "\n\nMy orders:\n\n"
+                    if len(orders) > 0:
+                        message += "\n".join(orders)
+                    else:
+                        message += "You have 0 orders added currently."
                 else:
                     message = "Ongoing orders:\n\n"
                     descriptions = [x[0] for x in food.get_all_description()]
@@ -325,29 +332,43 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message(orderfood_message(), chat, keyboard)
         elif text == "Edit Order"+u'\U0001F4DD':
-            orders = [x[3] for x in food.get_by_owner(chat)]
-            if len(orders) == 0:
+            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            if len(descriptions) == 0:
                 options =[["Add Order"+u'\U0001F355'],["back"]]
                 keyboard = build_keyboard(options)
                 send_message("You have 0 orders added currently. Would you like to add an order?", chat, keyboard)
             else:
-                options = [[x] for x in orders]
-                options.append(["back"])
-                keyboard = build_keyboard(options)
-                send_message("Please select which order you would like to edit", chat, keyboard)
+                message = "My Orders:"
+                count = 1
+                for x in descriptions:
+                    message += "\n\n" + x +"\n"
+                    orders = [x[3] for x in food.get_by_owner_description(chat,x)]
+                    for x in orders:
+                        x = str(count) + ". " + x
+                        count += 1
+                    message += "\n".join(orders)
+                send_message(message, chat, remove_keyboard())
+                send_message("Which order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat, remove_keyboard())
             self.stage = self.EditOrder1
         elif text == "Clear Order"+	u'\U0001F5D1':
-            orders = [x[3] for x in food.get_by_owner(chat)]
-            if len(orders) == 0:
+            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            if len(descriptions) == 0:
                 send_message("You have 0 orders added currently.", chat, remove_keyboard())
                 options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
                 keyboard = build_keyboard(options)
                 send_message(orderfood_message(), chat, keyboard)
             else:
-                options = [[x] for x in orders]
-                options.append(["back"])
-                keyboard = build_keyboard(options)
-                send_message("Please select which order you would like to delete", chat, keyboard)
+                message = "My Orders:"
+                count = 1
+                for x in descriptions:
+                    message += "\n\n" + x +"\n"
+                    orders = [x[3] for x in food.get_by_owner_description(chat,x)]
+                    for x in orders:
+                        x = str(count) + ". " + x
+                        count += 1
+                    message += "\n".join(orders)
+                send_message(message, chat, remove_keyboard())
+                send_message("Which order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat, remove_keyboard())
                 self.stage = self.ClearOrder
         elif text == "Hunger Cry"+u'\U0001F4E2':
             if chat not in hungerCriers:
@@ -418,34 +439,32 @@ class User:
         if text != "/back":
             food.add_order(self.ordererid[0],self.ordererid[1],text,chat,name)
             send_message("Order has been added", chat, remove_keyboard())
-            send_message("1 order added/edited by "+ name, self.ordererid[0], remove_keyboard())
+            send_message("1 order added/edited by "+ name, self.ordererid[0])
         options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
         keyboard = build_keyboard(options)
         send_message(orderfood_message(), chat, keyboard)
         self.stage = self.orderFood
 
     def ClearOrder(self,text,chat,name):
-        orders = [x[3] for x in food.get_by_owner(chat)]
-        if text == "back":
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
-            self.stage = self.orderFood
-        elif text.encode("utf8") in orders:
-            food.clear_order(text, chat)
-            send_message("Order has been deleted", chat, remove_keyboard())
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
-            self.stage = self.orderFood
+        if text != "/back":
+            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            orders = []
+            for x in descriptions:
+                for x in food.get_by_owner_description(chat,x):
+                    orders.append([x[3])
+            try:
+                food.clear_order(orders[int(text)-1], chat)
+                send_message("Order has been deleted", chat, remove_keyboard())
+            except:
+                send_message("Error deleting " + x, chat)
+        options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
+        keyboard = build_keyboard(options)
+        send_message(orderfood_message(), chat, keyboard)
+        self.stage = self.orderFood
 
     def EditOrder1(self,text,chat,name):
-        orders = [x[3] for x in food.get_by_owner(chat)]
-        if text == "back":
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
-            self.stage = self.orderFood
+        if text == "/back":
+            pass
         elif text == "Add Order"+u'\U0001F355':
             allorders = [x[1] for x in food.get_all()]
             if len(allorders) > 0:
@@ -455,15 +474,26 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message("Which order?", chat, remove_keyboard())
                 self.stage = self.AddOrder1
+                return
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
-                options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
-                keyboard = build_keyboard(options)
-                send_message(orderfood_message(), chat, keyboard)
-        elif text.encode("utf8") in orders:
-            self.edit = text
-            send_message("What would you like to order instead?\n\nor click /back to return to the Order Food menu", chat, remove_keyboard())
-            self.stage = self.EditOrder2
+        else:
+            descriptions = [x[2] for x in food.get_by_owner(chat)]
+            orders = []
+            for x in descriptions:
+                for x in food.get_by_owner_description(chat,x):
+                    orders.append([x[3])
+            try:
+                self.edit = orders[int(text)-1]
+                send_message("What would you like to order instead?\n\nor click /back to return to the Order Food menu", chat, remove_keyboard())
+                self.stage = self.EditOrder2
+            except:
+                send_message("Invalid number. Try again\n\nWhich order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat)
+            return
+        options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
+        keyboard = build_keyboard(options)
+        send_message(orderfood_message(), chat, keyboard)
+        self.stage = self.orderFood
 
     def EditOrder2(self,text,chat,name):
         if text != "/back":
@@ -474,7 +504,7 @@ class User:
             food.clear_order(self.edit, chat)
             food.add_order(orderstarter,description,text,chat,name)
             send_message("Order has been edited", chat, remove_keyboard())
-            send_message("1 order added/edited by " + name, orderstarter, remove_keyboard())
+            send_message("1 order added/edited by " + name, orderstarter)
         options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
         keyboard = build_keyboard(options)
         send_message(orderfood_message(), chat, keyboard)

@@ -75,6 +75,16 @@ class orderdb:
             print("Failure")
             return []
 
+    def get_by_owner_description(self, owner, description):
+        stmt = "SELECT * FROM foodorders WHERE owner = %s AND description = %s"
+        try:
+            args = (owner, description)
+            self.cur.execute(stmt, args)
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
     def get_by_description(self, description):
         stmt = "SELECT * FROM foodorders WHERE description = %s"
         try:
