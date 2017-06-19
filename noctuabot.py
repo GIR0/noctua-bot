@@ -266,12 +266,12 @@ class User:
                             orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     if len(orders) > 0:
-                        message = "\n".join(orders)
+                        message = "My List:\n\n" + "\n".join(orders)
                     else:
                         message = "There are 0 orders on your list."
                     orders = [x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message += "\n\nMy orders:\n\n"
+                    message += "\n\nMy Orders:\n\n"
                     if len(orders) > 0:
                         message += "\n".join(orders)
                     else:
@@ -281,7 +281,7 @@ class User:
                     descriptions = [x[0] for x in food.get_all_description()]
                     descriptions = list(set(descriptions))
                     message += "\n\n".join(descriptions)
-                    orders = [x[3] for x in food.get_by_owner(chat)]
+                    orders = ["("+x[2]+")"+ x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message += "\n\nMy orders:\n\n"
                     if len(orders) > 0:
