@@ -342,9 +342,11 @@ class User:
                 count = 1
                 for x in descriptions:
                     message += "\n\n" + x +"\n"
-                    orders = [x[3] for x in food.get_by_owner_description(chat,x)]
-                    for x in orders:
-                        x = str(count) + ". " + x
+                    hold = [x[3] for x in food.get_by_owner_description(chat,x)]
+                    orders = []
+                    for x in hold:
+                        y = str(count) + ". " + x
+                        orders.append(y)
                         count += 1
                     message += "\n".join(orders)
                 send_message(message, chat, remove_keyboard())
@@ -362,9 +364,11 @@ class User:
                 count = 1
                 for x in descriptions:
                     message += "\n\n" + x +"\n"
-                    orders = [x[3] for x in food.get_by_owner_description(chat,x)]
-                    for x in orders:
-                        x = str(count) + ". " + x
+                    hold = [x[3] for x in food.get_by_owner_description(chat,x)]
+                    orders = []
+                    for x in hold:
+                        y = str(count) + ". " + x
+                        orders.append(y)
                         count += 1
                     message += "\n".join(orders)
                 send_message(message, chat, remove_keyboard())
