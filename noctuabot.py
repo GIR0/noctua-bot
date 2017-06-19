@@ -554,8 +554,7 @@ class User:
         message_id = update["callback_query"]["message"]["message_id"]
         name = update["callback_query"]["message"]["chat"]["first_name"]
         empty_answer(call_id)
-        owners = [x[4] for x in food.get_by_orderstarter(chat)]
-        owners = list(set(owners))
+        owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
         if data == "start":
             self.orderlist = []
             for x in owners:
@@ -564,9 +563,9 @@ class User:
                         details = y[5] + "\n"
                         break
                     orders = [z[3] for z in food.get_by_owner_orderstarter(z,chat)]
-                    food = "\n".join(orders)
+                    foods = "\n".join(orders)
                     details += "\n".join(orders) + "\n\n"
-                    each = [x,"",food,details]
+                    each = [x,"",foods,details]
                     self.orderlist.append(each)
             options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
             ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
