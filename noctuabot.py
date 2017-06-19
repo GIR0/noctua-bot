@@ -570,13 +570,13 @@ class User:
             options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
             ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
             ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
-            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": "next", "callback_data": "next"}]\
-            ,[{"text": "skip", "callback_data": "skip"},{"text": "exit", "callback_data": "exit"}]]
+            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
+            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
             self.idx = 0
             self.display = ""
             keyboard = inline_keyboard(options)
             edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
-        elif data == "exit":
+        elif data == u"\u274C":
             edit_message(chat, message_id, "payments cancelled")
             options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Close Order"+	u'\U0001F510', "back"]]
             keyboard = build_keyboard(options)
@@ -593,7 +593,7 @@ class User:
                 ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
                 ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
                 ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-                ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\u27A1", "callback_data": u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
+                ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
                 self.idx += 1
                 self.display = ""
                 keyboard = inline_keyboard(options)
@@ -614,7 +614,7 @@ class User:
             ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
             ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
             ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\u27A1", "callback_data": u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
+            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
             self.idx -= 1
             self.display = ""
             keyboard = inline_keyboard(options)
@@ -641,9 +641,9 @@ class User:
             ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
             ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
             ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\u27A1", "callback_data": u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
+            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
             keyboard = inline_keyboard(options)
-            edit_message(chat, message_id, self.orderlist[self.idx][3]+self.display, keyboard)
+            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
 
     def rate1(self,text,chat,name):
         events = [x[0] for x in rate.get_all_events()]
