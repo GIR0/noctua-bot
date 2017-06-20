@@ -124,7 +124,7 @@ class orderdb:
             return []
 
     def lock(self, orderstarter):
-        stmt = "UPDATE foodorders SET description = %s + description WHERE orderstarter = %s"
+        stmt = "UPDATE foodorders SET description = %s+description WHERE orderstarter = %s"
         args = ("locked-", orderstarter)
         self.cur.execute(stmt, args)
         self.connection.commit()
