@@ -317,7 +317,7 @@ class User:
                     options =[["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
                     send_message("There are 0 orders on your list. Proceed to close?", chat, keyboard)
-                self.stage = self.CloseOrder
+                self.stage = self.ManageOrder
             else:
                 send_message("Only the person who started an order can close the order", chat, remove_keyboard())
                 options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
