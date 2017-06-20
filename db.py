@@ -123,9 +123,9 @@ class orderdb:
             print("Failure")
             return []
 
-    def lock(self, orderstarter):
-        stmt = "UPDATE foodorders SET description = %s+description WHERE orderstarter = %s"
-        args = ("locked-", orderstarter)
+    def lock(self, orderstarter, description):
+        stmt = "UPDATE foodorders SET description = %s WHERE orderstarter = %s"
+        args = ("locked-" + description, orderstarter)
         self.cur.execute(stmt, args)
         self.connection.commit()
 

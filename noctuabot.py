@@ -559,8 +559,12 @@ class User:
             self.inline = self.payments
             self.stage = self.empty
         elif text == "Lock Order":
-            food.lock(chat)
+            for x in food.get_by_orderstarter(chat):
+                description = x[2]
+                break
+            food.lock(chat,description)
             send_message("Order is locked", chat, remove_keyboard())
+            send_message(description + " - Order has been locked", chat)
             options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
             keyboard = build_keyboard(options)
             send_message(orderfood_message(), chat, keyboard)
