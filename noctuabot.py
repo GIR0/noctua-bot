@@ -292,7 +292,7 @@ class User:
                     message = "Ongoing orders:\n\n"
                     descriptions = []
                     for x in food.get_all_description():
-                        if not x[0].startswith("locked-")
+                        if not x[0].startswith("locked-"):
                             descriptions.append(x[0])
                     descriptions = list(set(descriptions))
                     descriptions = list(set(descriptions))
@@ -344,7 +344,7 @@ class User:
             if len(allorders) > 0:
                 descriptions = []
                 for x in food.get_all_description():
-                    if not x[0].startswith("locked-")
+                    if not x[0].startswith("locked-"):
                         descriptions.append(x[0])
                 descriptions = list(set(descriptions))
                 options = []
@@ -362,7 +362,7 @@ class User:
         elif text == "Edit Order"+u'\U0001F4DD':
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-")
+                if not x[2].startswith("locked-"):
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             if len(descriptions) == 0:
@@ -392,7 +392,7 @@ class User:
         elif text == "Clear Order"+	u'\U0001F5D1':
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-")
+                if not x[2].startswith("locked-"):
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             if len(descriptions) == 0:
@@ -473,7 +473,7 @@ class User:
     def AddOrder1(self,text,chat,name):
         descriptions = []
         for x in food.get_all_description(chat):
-            if not x[0].startswith("locked-")
+            if not x[0].startswith("locked-"):
                 descriptions.append(x[0])
         if text == "back":
             options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
@@ -502,7 +502,7 @@ class User:
         if text != "back":
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-")
+                if not x[2].startswith("locked-"):
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             orders = []
@@ -530,7 +530,7 @@ class User:
             if len(allorders) > 0:
                 descriptions = []
                 for x in food.get_all_description(chat):
-                    if not x[0].startswith("locked-")
+                    if not x[0].startswith("locked-"):
                         descriptions.append(x[0])
                 options = []
                 for x in list(set(descriptions)):
@@ -545,7 +545,7 @@ class User:
         else:
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-")
+                if not x[2].startswith("locked-"):
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             orders = []
