@@ -206,7 +206,7 @@ class User:
                 send_message("There are currently no events to give feedback on " + u'\U0001F607', chat, keyboard)
             self.stage = self.survey1
         else:
-            send_message("Did you mean: /start", chat, remove_keyboard)
+            send_message("Did you mean: /start", chat, remove_keyboard())
     def stage(self,text,chat,name):
         self.MainMenu(text,chat,name)
 
