@@ -605,7 +605,7 @@ class User:
                     each = [x,"",foods,details]
                     self.orderlist.append(each)
             self.idx = 0
-            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
+            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat, remove_keyboard())
         elif text == "/skip":
             if self.idx == len(self.orderlist) - 1:
                 self.idx += 1
@@ -623,10 +623,11 @@ class User:
         elif text == "/done":
             message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
             for x in self.orderlist:
-                if x[1] != "":
-                    message += "$" + x[1] + " - " + x[3]
-                    send_message("You are required to pay $" + x[1] + " to " + name + " for your latest order:\n" + x[2], x[0])
+                message += "$" + x[1] + " - " + x[3]
             send_message(message, chat)
+            for x in self.orderlist:
+                if x[1] != "":
+                    send_message("You are required to pay $" + x[1] + " to " + name + " for your latest order:\n" + x[2], x[0])
             self.idx = 0
             self.orderlist = []
             send_message(orderfood_message(), chat, orderfood_menu())
@@ -715,7 +716,6 @@ class User:
         elif data == "done":
             message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
             for x in self.orderlist:
-                if x[1] != "":
                     message += "$" + x[1] + " - " + x[3]
             edit_message(chat, message_id, message)
             for x in self.orderlist:
