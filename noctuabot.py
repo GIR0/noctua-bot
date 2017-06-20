@@ -265,7 +265,10 @@ class User:
                 send_message("There is already an ongoing order being collated. Would you like to start a different order?", chat, keyboard)
                 self.stage = self.StartOrder1
         elif text == "View Order"+u'\U0001F5D2':
-            allorders = [x[1] for x in food.get_all()]
+            allorders = []
+            for x in food.get_all():
+                if not x[2].startswith("-locked"):
+                    allorders.append(x[1])
             if len(allorders) > 0:
                 orderstarters = list(set([x[1] for x in food.get_all()]))
                 if chat in orderstarters:
@@ -287,10 +290,17 @@ class User:
                         message += "You have 0 orders added currently."
                 else:
                     message = "Ongoing orders:\n\n"
-                    descriptions = [x[0] for x in food.get_all_description()]
+                    descriptions = []
+                    for x in food.get_all_description():
+                        if not x[0].startswith("locked-")
+                            descriptions.append(x[0])
+                    descriptions = list(set(descriptions))
                     descriptions = list(set(descriptions))
                     message += "\n\n".join(descriptions)
-                    orders = ["("+x[2]+")"+ x[3] for x in food.get_by_owner(chat)]
+                    orders = []
+                    for x in food.get_by_owner(chat):
+                        if not x[2].startswith("locked-"):
+                            orders.append("("+x[2]+")"+ x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message += "\n\nMy orders:\n\n"
                     if len(orders) > 0:
@@ -327,10 +337,19 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message(orderfood_message(), chat, keyboard)
         elif text == "Add Order"+u'\U0001F355':
-            allorders = [x[1] for x in food.get_all()]
+            allorders = []
+            for x in food.get_all():
+                if not x[2].startswith("-locked"):
+                    allorders.append(x[1])
             if len(allorders) > 0:
-                descriptions = [x[0] for x in food.get_all_description()]
-                options = [[x] for x in list(set(descriptions))]
+                descriptions = []
+                for x in food.get_all_description():
+                    if not x[0].startswith("locked-")
+                        descriptions.append(x[0])
+                descriptions = list(set(descriptions))
+                options = []
+                for x in descriptions:
+                    options.append([x])
                 options.append(["back"])
                 keyboard = build_keyboard(options)
                 send_message("Which order?", chat, keyboard)
@@ -341,7 +360,11 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message(orderfood_message(), chat, keyboard)
         elif text == "Edit Order"+u'\U0001F4DD':
-            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
+            descriptions = []
+            for x in food.get_by_owner(chat):
+                if not x[2].startswith("locked-")
+                    descriptions.append(x[2])
+            descriptions = list(set(descriptions))
             if len(descriptions) == 0:
                 options =[["Add Order"+u'\U0001F355'],["back"]]
                 keyboard = build_keyboard(options)
@@ -367,7 +390,11 @@ class User:
                 send_message("Please select the respective number of the order you would like to edit", chat, keyboard)
             self.stage = self.EditOrder1
         elif text == "Clear Order"+	u'\U0001F5D1':
-            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
+            descriptions = []
+            for x in food.get_by_owner(chat):
+                if not x[2].startswith("locked-")
+                    descriptions.append(x[2])
+            descriptions = list(set(descriptions))
             if len(descriptions) == 0:
                 send_message("You have 0 orders added currently.", chat, remove_keyboard())
                 options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
@@ -444,7 +471,10 @@ class User:
                 send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
 
     def AddOrder1(self,text,chat,name):
-        descriptions = [x[0] for x in food.get_all_description()]
+        descriptions = []
+        for x in food.get_all_description(chat):
+            if not x[0].startswith("locked-")
+                descriptions.append(x[0])
         if text == "back":
             options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
             keyboard = build_keyboard(options)
@@ -470,7 +500,11 @@ class User:
 
     def ClearOrder(self,text,chat,name):
         if text != "back":
-            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
+            descriptions = []
+            for x in food.get_by_owner(chat):
+                if not x[2].startswith("locked-")
+                    descriptions.append(x[2])
+            descriptions = list(set(descriptions))
             orders = []
             for x in descriptions:
                 for x in food.get_by_owner_description(chat,x):
@@ -489,10 +523,18 @@ class User:
         if text == "/back" or text == "back":
             pass
         elif text == "Add Order"+u'\U0001F355':
-            allorders = [x[1] for x in food.get_all()]
+            allorders = []
+            for x in food.get_all():
+                if not x[2].startswith("-locked"):
+                    allorders.append(x[1])
             if len(allorders) > 0:
-                descriptions = [x[0] for x in food.get_all_description()]
-                options = [[x] for x in list(set(descriptions))]
+                descriptions = []
+                for x in food.get_all_description(chat):
+                    if not x[0].startswith("locked-")
+                        descriptions.append(x[0])
+                options = []
+                for x in list(set(descriptions)):
+                        options.append([x])
                 options.append(["back"])
                 keyboard = build_keyboard(options)
                 send_message("Which order?", chat, remove_keyboard())
@@ -501,7 +543,11 @@ class User:
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
         else:
-            descriptions = list(set([x[2] for x in food.get_by_owner(chat)]))
+            descriptions = []
+            for x in food.get_by_owner(chat):
+                if not x[2].startswith("locked-")
+                    descriptions.append(x[2])
+            descriptions = list(set(descriptions))
             orders = []
             for x in descriptions:
                 for x in food.get_by_owner_description(chat,x):
@@ -536,9 +582,6 @@ class User:
     def ManageOrder(self,text,chat,name):
         global hungerCriers
         if text == "Close Order":
-            for x in food.get_by_orderstarter(chat):
-                description = x[2]
-                break
             food.clear_by_orderstarter(chat)
             hungerCriers = []
             send_message("Order is closed", chat, remove_keyboard())
