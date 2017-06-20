@@ -144,6 +144,8 @@ def orderfood_message():
         for x in descriptions:
             if x != "locked":
                 message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
+        if message == "":
+            message = "There is currently no order ongoing"
     else:
         message = "There is currently no order ongoing"
     message += "\n\nWhat would you like to do?"
