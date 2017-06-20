@@ -151,6 +151,11 @@ def orderfood_message():
     message += "\n\nWhat would you like to do?"
     return message
 
+def orderfood_menu():
+    options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
+    keyboard = build_keyboard(options)
+    return keyboard
+
 class User:
     def __init__(self, id):
         self.id = id
@@ -176,9 +181,7 @@ class User:
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
             self.stage = self.Feedback1
         elif text == u"OrderFood\U0001F35F":
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text == u"Rate Events\u2764\ufe0f":
             events = [x[0] for x in rate.get_all_events()]
@@ -246,7 +249,6 @@ class User:
         send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def orderFood(self,text,chat,name):
-        global NoctuachatID
         global hungerCriers
         global hungermessages
         if text == "Start Order"+u'\U0001F4CD':
@@ -256,9 +258,7 @@ class User:
                 self.stage = self.StartOrder2
             elif chat in orderstarters:
                 send_message("Your previous order has yet to be closed", chat, remove_keyboard())
-                options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-                keyboard = build_keyboard(options)
-                send_message(orderfood_message(), chat, keyboard)
+                send_message(orderfood_message(), chat, orderfood_menu())
             else:
                 options =[["Start Order"+u'\U0001F4CD'],["back"]]
                 keyboard = build_keyboard(options)
@@ -310,9 +310,7 @@ class User:
                 send_message(message, chat, remove_keyboard())
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Manage Order"+	u'\U0001F510':
             orderstarters = list(set([x[1] for x in food.get_all()]))
             if chat in orderstarters:
@@ -323,7 +321,7 @@ class User:
                 if len(orders) > 0:
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message = "\n".join(orders) + "\n\nWhen the order has been made and delivered, click payments to split the bill before you close the order"
-                    options =[["payments"],["Lock Order"],["Close Order"],["back"]]
+                    options =[["payments"],["payments V2"],["Lock Order"],["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
                     send_message(message, chat, keyboard)
                 else:
@@ -333,9 +331,7 @@ class User:
                 self.stage = self.ManageOrder
             else:
                 send_message("Only the person who started an order can close the order", chat, remove_keyboard())
-                options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-                keyboard = build_keyboard(options)
-                send_message(orderfood_message(), chat, keyboard)
+                send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Add Order"+u'\U0001F355':
             allorders = []
             for x in food.get_all():
@@ -356,9 +352,7 @@ class User:
                 self.stage = self.AddOrder1
             else:
                 send_message("There is currently no order ongoing", chat, remove_keyboard())
-                options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-                keyboard = build_keyboard(options)
-                send_message(orderfood_message(), chat, keyboard)
+                send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Edit Order"+u'\U0001F4DD':
             descriptions = []
             for x in food.get_by_owner(chat):
@@ -397,9 +391,7 @@ class User:
             descriptions = list(set(descriptions))
             if len(descriptions) == 0:
                 send_message("You have 0 orders added currently.", chat, remove_keyboard())
-                options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-                keyboard = build_keyboard(options)
-                send_message(orderfood_message(), chat, keyboard)
+                send_message(orderfood_message(), chat, orderfood_menu())
             else:
                 message = "My Orders:"
                 count = 0
@@ -430,9 +422,7 @@ class User:
                 send_message(hungermessages[count-1] + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
             else:
                 send_message("Your Cry has already been heard. Please hold on tight while we patiently wait for someone to start an order.\n\nThe current number of people starving is "+str(len(hungerCriers)), chat, remove_keyboard())
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "back":
             options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f"], [u"Feedback\U0001F5D2"], [u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
@@ -441,20 +431,15 @@ class User:
 
     def StartOrder1(self,text,chat,name):
         if text == "back":
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text == "Start Order"+u'\U0001F4CD':
             send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
             self.stage = self.StartOrder2
 
     def StartOrder2(self,text,chat,name):
-        global NoctuachatID
         if text == "/back":
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         else:
             try:
@@ -476,9 +461,7 @@ class User:
             if not x[0].startswith("locked-"):
                 descriptions.append(x[0])
         if text == "back":
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text.encode("utf8") in descriptions:
             self.ordererid[1] = text
@@ -493,9 +476,7 @@ class User:
             food.add_order(self.ordererid[0],self.ordererid[1],text,chat,name)
             send_message("Order has been added", chat, remove_keyboard())
             send_message("1 order added/edited by "+ name, self.ordererid[0])
-        options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-        keyboard = build_keyboard(options)
-        send_message(orderfood_message(), chat, keyboard)
+        send_message(orderfood_message(), chat, orderfood_menu())
         self.stage = self.orderFood
 
     def ClearOrder(self,text,chat,name):
@@ -514,9 +495,7 @@ class User:
                 send_message("Order has been deleted", chat, remove_keyboard())
             except:
                 send_message("Error deleting " + x, chat)
-        options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-        keyboard = build_keyboard(options)
-        send_message(orderfood_message(), chat, keyboard)
+        send_message(orderfood_message(), chat, orderfood_menu())
         self.stage = self.orderFood
 
     def EditOrder1(self,text,chat,name):
@@ -559,9 +538,7 @@ class User:
             except:
                 send_message("Invalid number. Try again\n\nWhich order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat)
             return
-        options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-        keyboard = build_keyboard(options)
-        send_message(orderfood_message(), chat, keyboard)
+        send_message(orderfood_message(), chat, orderfood_menu())
         self.stage = self.orderFood
 
     def EditOrder2(self,text,chat,name):
@@ -574,9 +551,7 @@ class User:
             food.add_order(orderstarter,description,text,chat,name)
             send_message("Order has been edited", chat, remove_keyboard())
             send_message("1 order added/edited by " + name, orderstarter)
-        options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-        keyboard = build_keyboard(options)
-        send_message(orderfood_message(), chat, keyboard)
+        send_message(orderfood_message(), chat, orderfood_menu())
         self.stage = self.orderFood
 
     def ManageOrder(self,text,chat,name):
@@ -585,14 +560,10 @@ class User:
             food.clear_by_orderstarter(chat)
             hungerCriers = []
             send_message("Order is closed", chat, remove_keyboard())
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text == "back":
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text == "payments":
             options = [[{"text": "start", "callback_data": "start"}]]
@@ -600,6 +571,10 @@ class User:
             send_message("Let me assist you splitting the bill!", chat, keyboard)
             self.inline = self.payments
             self.stage = self.empty
+        elif text == "payments V2":
+            options = [["start"],["back"]]
+            send_message("Let me assist you splitting the bill!", chat, keyboard)
+            self.stage = self.payments2
         elif text == "Lock Order":
             for x in food.get_by_orderstarter(chat):
                 description = x[2]
@@ -607,10 +582,63 @@ class User:
             food.lock(chat,description)
             send_message("Order is locked", chat, remove_keyboard())
             send_message(description + " - Order has been locked", NoctuachatID)
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
+
+    def payments2(self,text,chat,name):
+        owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
+        if text == "back":
+            options =[["payments"],["payments V2"],["Lock Order"],["Close Order"],["back"]]
+            keyboard = build_keyboard(options)
+            send_message(message, chat, keyboard)
+        elif text == "start":
+            self.orderlist = []
+            for x in owners:
+                if x > 0:
+                    for y in food.get_by_owner_orderstarter(x,chat):
+                        details = y[5] + "\n"
+                        break
+                    orders = [z[3] for z in food.get_by_owner_orderstarter(x,chat)]
+                    foods = "\n".join(orders)
+                    details += "\n".join(orders) + "\n\n"
+                    each = [x,"",foods,details]
+                    self.orderlist.append(each)
+            self.idx = 0
+            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
+        elif text == "/skip":
+            if self.idx == len(self.orderlist) - 1:
+                self.idx += 1
+                send_message("Done?\n\nclick /back to go back\nclick /done to continue", chat)
+            elif self.idx < len(self.orderlist) - 1:
+                self.idx += 1
+                send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
+        elif text == "/exit":
+            send_message(orderfood_message(), chat, orderfood_menu())
+            self.stage = self.orderFood
+        elif text == "/back":
+            if self.idx != 0:
+                self.idx -= 1
+            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
+        elif text == "/done":
+            message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
+            for x in self.orderlist:
+                if x[1] != "":
+                    message += "$" + x[1] + " - " + x[3]
+                    send_message("You are required to pay $" + x[1] + " to " + name + " for your latest order:\n" + x[2], x[0])
+            send_message(message, chat)
+            self.idx = 0
+            self.orderlist = []
+            send_message(orderfood_message(), chat, orderfood_menu())
+            self.stage = self.orderFood
+        else:
+            if self.idx <= len(self.orderlist) - 1:
+                self.orderlist[self.idx][1] = text
+                if self.idx == len(self.orderlist) - 1:
+                    self.idx += 1
+                    send_message("Done?\n\nclick /back to go back\nclick /done to continue", chat)
+                else:
+                    self.idx += 1
+                    send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
 
     def payments(self,update):
         call_id = update["callback_query"]["id"]
@@ -643,9 +671,7 @@ class User:
             edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
         elif data == u"\u274C":
             edit_message(chat, message_id, "payments cancelled")
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif data == u"\U0001F4BE"+u"\u27A1":
             self.orderlist[self.idx][1] = self.display
@@ -697,9 +723,7 @@ class User:
             self.idx = 0
             self.display = ""
             self.orderlist = []
-            options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
-            keyboard = build_keyboard(options)
-            send_message(orderfood_message(), chat, keyboard)
+            send_message(orderfood_message(), chat, orderfood_menu())
             self.inline = self.ignore
             self.stage = self.orderFood
         else:
@@ -944,7 +968,6 @@ class User:
             return
 
     def adminclose(self,text,chat,name):
-        global NoctuachatID
         descriptions = [x[0] for x in food.get_all_description()]
         if text == "back":
             send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
