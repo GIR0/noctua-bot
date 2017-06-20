@@ -142,7 +142,7 @@ def orderfood_message():
     if len(descriptions) > 0:
         message = ""
         for x in descriptions:
-            if x.startswith("locked-"):
+            if not x.startswith("locked-"):
                 message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
         if message == "":
             message = "There is currently no order ongoing"
@@ -534,7 +534,6 @@ class User:
         self.stage = self.orderFood
 
     def ManageOrder(self,text,chat,name):
-        global NoctuachatID
         global hungerCriers
         if text == "Close Order":
             for x in food.get_by_orderstarter(chat):
@@ -564,7 +563,7 @@ class User:
                 break
             food.lock(chat,description)
             send_message("Order is locked", chat, remove_keyboard())
-            send_message(description + " - Order has been locked", chat)
+            send_message(description + " - Order has been locked", NoctuachatID)
             options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
             keyboard = build_keyboard(options)
             send_message(orderfood_message(), chat, keyboard)
