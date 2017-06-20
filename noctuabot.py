@@ -142,7 +142,7 @@ def orderfood_message():
     if len(descriptions) > 0:
         message = ""
         for x in descriptions:
-            if x.startswith= "locked-":
+            if x.startswith("locked-"):
                 message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
         if message == "":
             message = "There is currently no order ongoing"
@@ -642,7 +642,8 @@ class User:
         elif data == "done":
             message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
             for x in self.orderlist:
-                message += "$" + x[1] + " - " + x[3]
+                if x[1] != "":
+                    message += "$" + x[1] + " - " + x[3]
             edit_message(chat, message_id, message)
             for x in self.orderlist:
                 if x[1] != "":
