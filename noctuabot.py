@@ -472,7 +472,7 @@ class User:
 
     def AddOrder1(self,text,chat,name):
         descriptions = []
-        for x in food.get_all_description(chat):
+        for x in food.get_all_description():
             if not x[0].startswith("locked-"):
                 descriptions.append(x[0])
         if text == "back":
@@ -529,7 +529,7 @@ class User:
                     allorders.append(x[1])
             if len(allorders) > 0:
                 descriptions = []
-                for x in food.get_all_description(chat):
+                for x in food.get_all_description():
                     if not x[0].startswith("locked-"):
                         descriptions.append(x[0])
                 options = []
