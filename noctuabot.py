@@ -573,6 +573,7 @@ class User:
             self.stage = self.empty
         elif text == "payments V2":
             options = [["start"],["back"]]
+            keyboard = build_keyboard(options)
             send_message("Let me assist you splitting the bill!", chat, keyboard)
             self.stage = self.payments2
         elif text == "Lock Order":
