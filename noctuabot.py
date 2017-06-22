@@ -171,7 +171,7 @@ class User:
             if chat in admin:
                 self.stage = self.admin
                 send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
-        elif text == "/start" or text == "back":
+        elif text == "/start" or text == "back" or text == "/mainmenu"
             options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f"], [u"Feedback\U0001F5D2"], [u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
@@ -965,6 +965,8 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message("There are currently no ongoing orders " + u'\U0001F607', chat, keyboard)
             self.stage = self.adminclose
+        elif text == "/mainmenu":
+            pass
         else:
             return
 
@@ -1151,73 +1153,75 @@ def main():
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
-        if len(updates["result"]) > 0:
-            for update in updates["result"]:
-                if "message" in update:
-                    if "text" in update["message"]: #only read text
-                        text = update["message"]["text"]
-                        chat = update["message"]["chat"]["id"]
-                        name = update["message"]["from"]["first_name"]
-                        if chat > 0:
-                            for user in users:
-                                if chat == user.id:
-                                    if text.startswith("!"):
-                                        user.blast_poll(text,chat,name)
-                                    elif text == "/mainmenu":
-                                        user.stage = user.MainMenu
-                                        user.stage(text,chat,name)
-                                        options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f"], [u"Feedback\U0001F5D2"], [u"About the Bot\U0001F989"]]
-                                        keyboard = build_keyboard(options)
-                                        send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
+        try:
+            if len(updates["result"]) > 0:
+                for update in updates["result"]:
+                    if "message" in update:
+                        if "text" in update["message"]: #only read text
+                            text = update["message"]["text"]
+                            chat = update["message"]["chat"]["id"]
+                            name = update["message"]["from"]["first_name"]
+                            if chat > 0:
+                                for user in users:
+                                    if chat == user.id:
+                                        if text.startswith("!"):
+                                            user.blast_poll(text,chat,name)
+                                        elif text == "/mainmenu":
+                                            user.stage = user.MainMenu
+                                            user.stage(text,chat,name)
+                                        else:
+                                            user.stage(text,chat,name)
+                                        break
                                     else:
-                                        user.stage(text,chat,name)
-                                    break
-                                else:
-                                    continue
-                            if chat not in [user.id for user in users]:
-                                    x = User(chat)
-                                    users.append(x)
-                                    USERS.add_user(chat,name)
-                                    print("new temporary user")
-                                    if text.startswith("!"):
-                                        x.blast_poll(text,chat,name)
-                                    elif text == "/mainmenu":
-                                        x.stage = x.MainMenu
-                                        x.stage(text,chat,name)
-                                        options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f"], [u"Feedback\U0001F5D2"], [u"About the Bot\U0001F989"]]
-                                        keyboard = build_keyboard(options)
-                                        send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
-                                    else:
-                                        x.stage(text,chat,name)
-                    if "photo" in update["message"]:
-                        check = False
-                        photo = update["message"]["photo"][1]["file_id"]
-                        chat = update["message"]["chat"]["id"]
-                        name = update["message"]["from"]["first_name"]
-                        if chat > 0:
-                            for user in users:
-                                if chat == user.id:
-                                    if user.stage == user.blastA:
-                                        check = True
-                                        user.stage(photo,chat,name)
-                                    break
-                            if not check:
-                                send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
-                    elif "audio" in update["message"] or "video" in update["message"] or "sticker" in update["message"] or "document" in update["message"]:
-                        chat = update["message"]["chat"]["id"]
-                        send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
-                elif "callback_query" in update:
-                    chat = update["callback_query"]["message"]["chat"]["id"]
-                    for user in users:
-                        if chat == user.id:
-                            user.inline(update)
-                            break
-                    if chat not in [user.id for user in users]:
-                            x = User(chat)
-                            users.append(x)
-                            print("new temporary user")
-                            x.inline(update)
-            last_update_id = get_last_update_id(updates) + 1
+                                        continue
+                                if chat not in [user.id for user in users]:
+                                        x = User(chat)
+                                        users.append(x)
+                                        USERS.add_user(chat,name)
+                                        print("new temporary user")
+                                        if text.startswith("!"):
+                                            x.blast_poll(text,chat,name)
+                                        elif text == "/mainmenu":
+                                            x.stage = x.MainMenu
+                                            x.stage(text,chat,name)
+                                            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f"], [u"Feedback\U0001F5D2"], [u"About the Bot\U0001F989"]]
+                                            keyboard = build_keyboard(options)
+                                            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
+                                        else:
+                                            x.stage(text,chat,name)
+                        if "photo" in update["message"]:
+                            check = False
+                            photo = update["message"]["photo"][1]["file_id"]
+                            chat = update["message"]["chat"]["id"]
+                            name = update["message"]["from"]["first_name"]
+                            if chat > 0:
+                                for user in users:
+                                    if chat == user.id:
+                                        if user.stage == user.blastA:
+                                            check = True
+                                            user.stage(photo,chat,name)
+                                        break
+                                if not check:
+                                    send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
+                        elif "audio" in update["message"] or "video" in update["message"] or "sticker" in update["message"] or "document" in update["message"]:
+                            chat = update["message"]["chat"]["id"]
+                            send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
+                    elif "callback_query" in update:
+                        chat = update["callback_query"]["message"]["chat"]["id"]
+                        for user in users:
+                            if chat == user.id:
+                                user.inline(update)
+                                break
+                        if chat not in [user.id for user in users]:
+                                x = User(chat)
+                                users.append(x)
+                                print("new temporary user")
+                                x.inline(update)
+                last_update_id = get_last_update_id(updates) + 1
+        except KeyError, e:
+                print('I got a KeyError - reason "%s"' % str(e))
+                last_update_id = get_last_update_id(updates) + 1
+                continue
         time.sleep(0.5)
 
 if __name__ == '__main__':
