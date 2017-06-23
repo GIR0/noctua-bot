@@ -139,7 +139,7 @@ def delayed_response(blast_message, keyboard):
 
 def daily_reset():
     print("daily_reset started")
-    schedule.every().day.at("4:30").do(food.clear,())
+    schedule.every().day.at("20:30").do(food.clear,())
     while True:
         schedule.run_pending()
         time.sleep(1)
