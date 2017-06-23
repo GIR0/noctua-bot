@@ -3,6 +3,7 @@ import requests
 import time
 import urllib
 import thread
+import schedule
 from db import *
 
 admin =[221211693,174955135]
@@ -136,16 +137,23 @@ def delayed_response(blast_message, keyboard):
                 send_message(blast_message, x[2], keyboard)
         count += 1
 
+def daily_reset():
+    print("daily_reset started")
+    schedule.every().day.at("4:30").do(food.clear())
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
 def orderfood_message():
-    descriptions = [x[0] for x in food.get_all_description()]
+    descriptions = []
+    for x in food.get_all_description():
+        if x[1] != "(locked)":
+            descriptions.append(x[0])
     descriptions = list(set(descriptions))
     if len(descriptions) > 0:
         message = ""
         for x in descriptions:
-            if not x.startswith("locked-"):
                 message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
-        if message == "":
-            message = "There is currently no order ongoing"
     else:
         message = "There is currently no order ongoing"
     message += "\n\nWhat would you like to do?"
@@ -267,7 +275,7 @@ class User:
         elif text == "View Order"+u'\U0001F5D2':
             allorders = []
             for x in food.get_all():
-                if not x[2].startswith("-locked"):
+                if x[6] != "(locked)":
                     allorders.append(x[1])
             if len(allorders) > 0:
                 orderstarters = list(set([x[1] for x in food.get_all()]))
@@ -292,14 +300,13 @@ class User:
                     message = "Ongoing orders:\n\n"
                     descriptions = []
                     for x in food.get_all_description():
-                        if not x[0].startswith("locked-"):
+                        if not x[0].startswith("(locked)"):
                             descriptions.append(x[0])
-                    descriptions = list(set(descriptions))
                     descriptions = list(set(descriptions))
                     message += "\n\n".join(descriptions)
                     orders = []
                     for x in food.get_by_owner(chat):
-                        if not x[2].startswith("locked-"):
+                        if x[6] != "(locked)":
                             orders.append("("+x[2]+")"+ x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message += "\n\nMy orders:\n\n"
@@ -321,7 +328,7 @@ class User:
                 if len(orders) > 0:
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message = "\n".join(orders) + "\n\nWhen the order has been made and delivered, click payments to split the bill before you close the order"
-                    options =[["payments"],["payments V2"],["Lock Order"],["Close Order"],["back"]]
+                    options =[["payments"],["payments V2"],["Lock Order"],["Unlock Order"],["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
                     send_message(message, chat, keyboard)
                 else:
@@ -335,12 +342,12 @@ class User:
         elif text == "Add Order"+u'\U0001F355':
             allorders = []
             for x in food.get_all():
-                if not x[2].startswith("-locked"):
+                if x[6] != "(locked)":
                     allorders.append(x[1])
             if len(allorders) > 0:
                 descriptions = []
                 for x in food.get_all_description():
-                    if not x[0].startswith("locked-"):
+                    if x[1] != "(locked)":
                         descriptions.append(x[0])
                 descriptions = list(set(descriptions))
                 options = []
@@ -356,7 +363,7 @@ class User:
         elif text == "Edit Order"+u'\U0001F4DD':
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-"):
+                if x[6] != "(locked)":
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             if len(descriptions) == 0:
@@ -386,7 +393,7 @@ class User:
         elif text == "Clear Order"+	u'\U0001F5D1':
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-"):
+                if x[6] != "(locked)":
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             if len(descriptions) == 0:
@@ -458,7 +465,7 @@ class User:
     def AddOrder1(self,text,chat,name):
         descriptions = []
         for x in food.get_all_description():
-            if not x[0].startswith("locked-"):
+            if x[1] != "(locked)":
                 descriptions.append(x[0])
         if text == "back":
             send_message(orderfood_message(), chat, orderfood_menu())
@@ -483,7 +490,7 @@ class User:
         if text != "back":
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-"):
+                if x[6] != "(locked)":
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             orders = []
@@ -504,12 +511,12 @@ class User:
         elif text == "Add Order"+u'\U0001F355':
             allorders = []
             for x in food.get_all():
-                if not x[2].startswith("-locked"):
+                if x[6] != "(locked)":
                     allorders.append(x[1])
             if len(allorders) > 0:
                 descriptions = []
                 for x in food.get_all_description():
-                    if not x[0].startswith("locked-"):
+                    if x[1] != "(locked)":
                         descriptions.append(x[0])
                 options = []
                 for x in list(set(descriptions)):
@@ -524,7 +531,7 @@ class User:
         else:
             descriptions = []
             for x in food.get_by_owner(chat):
-                if not x[2].startswith("locked-"):
+                if x[6] != "(locked)":
                     descriptions.append(x[2])
             descriptions = list(set(descriptions))
             orders = []
@@ -577,12 +584,15 @@ class User:
             send_message("Let me assist you splitting the bill!", chat, keyboard)
             self.stage = self.payments2
         elif text == "Lock Order":
-            for x in food.get_by_orderstarter(chat):
-                description = x[2]
-                break
-            food.lock(chat,description)
+            food.lock(chat)
             send_message("Order is locked", chat, remove_keyboard())
             send_message(description + " - Order has been locked", NoctuachatID)
+            send_message(orderfood_message(), chat, orderfood_menu())
+            self.stage = self.orderFood
+        elif text == "Unlock Order":
+            food.unlock(chat)
+            send_message("Order is unlocked", chat, remove_keyboard())
+            send_message(description + " - Order has been unlocked", NoctuachatID)
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
 
@@ -1232,4 +1242,5 @@ if __name__ == '__main__':
     food.setup()
     rate.setup()
     survey.setup()
+    thread.start_new_thread(daily_reset, ())
     main()

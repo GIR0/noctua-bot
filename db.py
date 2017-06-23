@@ -17,14 +17,20 @@ class orderdb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orderstarter integer, description varchar, orders varchar, owner integer, name varchar);"
+        tblstmt = "CREATE TABLE IF NOT EXISTS foodorders (id serial, orderstarter integer, description varchar, orders varchar, owner integer, name varchar, status varchar);"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
     def add_order(self, orderstarter, description, orders, owner, name):
-        stmt = "INSERT INTO foodorders (orderstarter, description, orders, owner, name) VALUES (%s, %s, %s, %s, %s);"
-        args = (orderstarter, description, orders, owner, name)
+        stmt = "INSERT INTO foodorders (orderstarter, description, orders, owner, name, status) VALUES (%s, %s, %s, %s, %s, %s);"
+        args = (orderstarter, description, orders, owner, name, "")
         self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def clear(self):
+        stmt = "DELETE FROM foodorders"
+        print ("food cleared")
+        self.cur.execute(stmt)
         self.connection.commit()
 
     def clear_by_orderstarter(self, orderstarter):
@@ -115,17 +121,25 @@ class orderdb:
             return []
 
     def get_all_description(self):
-        stmt = "SELECT description FROM foodorders"
+        stmt = "SELECT * FROM foodorders"
         try:
             self.cur.execute(stmt)
-            return self.cur
+            for x in self.cur:
+                hold = [(x[2],x[6])]
+            return hold
         except:
             print("Failure")
             return []
 
-    def lock(self, orderstarter, description):
-        stmt = "UPDATE foodorders SET description = %s WHERE orderstarter = %s"
-        args = ("locked-" + description, orderstarter)
+    def lock(self, orderstarter):
+        stmt = "UPDATE foodorders SET status = %s WHERE orderstarter = %s"
+        args = ("(locked)", orderstarter)
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def unlock(self, orderstarter):
+        stmt = "UPDATE foodorders SET status = %s WHERE orderstarter = %s"
+        args = ("", orderstarter)
         self.cur.execute(stmt, args)
         self.connection.commit()
 
