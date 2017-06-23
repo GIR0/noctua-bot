@@ -1194,9 +1194,6 @@ def main():
                                         elif text == "/mainmenu":
                                             x.stage = x.MainMenu
                                             x.stage(text,chat,name)
-                                            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f"], [u"Feedback\U0001F5D2"], [u"About the Bot\U0001F989"]]
-                                            keyboard = build_keyboard(options)
-                                            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
                                         else:
                                             x.stage(text,chat,name)
                         if "photo" in update["message"]:
