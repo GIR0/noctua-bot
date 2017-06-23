@@ -584,12 +584,18 @@ class User:
             send_message("Let me assist you splitting the bill!", chat, keyboard)
             self.stage = self.payments2
         elif text == "Lock Order":
+            for x in food.get_by_orderstarter(chat):
+                description = x[2]
+                break
             food.lock(chat)
             send_message("Order is locked", chat, remove_keyboard())
             send_message(description + " - Order has been locked", NoctuachatID)
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text == "Unlock Order":
+            for x in food.get_by_orderstarter(chat):
+                description = x[2]
+                break
             food.unlock(chat)
             send_message("Order is unlocked", chat, remove_keyboard())
             send_message(description + " - Order has been unlocked", NoctuachatID)
