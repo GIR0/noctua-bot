@@ -4,6 +4,7 @@ import time
 import urllib
 import thread
 import schedule
+import random
 from db import *
 
 admin =[221211693,174955135]
@@ -18,9 +19,11 @@ blast_message = " "
 blast_options = []
 NoctuachatID = -1001080757384
 hungerCriers = []
-hungermessages = ["Someone is hungry...", "Two is better than one", "Anyone else out there?"\
-, "I'm not telling you it is going to be easy, I'm telling you it's going to be worth it.\n Someone order please :)", "PLEASE SOMEONE START THE ORDER ALREADY IM STARVING"\
-, "NO ONE can do everything but EVERYONE can do something.\nTime to step up!", "Still waiting for someone to volunteer as tribute..."]
+hungermessages = ["Someone is hungy... "+u"\U0001F914", "Start an order soon maybe? "+u"\U0001F644", "Please order some food soon. My family hasn't ate for 3 days... "+u"\U0001F925"\
+, "My neighbour is starting to look juicy... "+u"\U0001F924", "McSpicy meal with coke. Now wouldn't that be lovely? If only someone started an order... "+u"\U0001F31A"\
+, "I'm not telling you it's going to be easy. I'm telling you it's going to be worth it "+u"\U0001F44D"+"Okay seriously, someone start an order PLEASE! "+u"\U0001F47F"\
+, "NO ONE can do everything, but EVERYONE can do something?! "+u"\U0001F60F", r"I am 700% ready to unhinge my jaw and swallow another owl whole like some owl species tend to do"+"... "+u"\U0001F643"\
+, "Can I pleez has cheezburger naow "+u"\U0001F638"]
 
 TOKEN = "358236263:AAHDIU40ArA32mfu9mPBzhyq7X9mmEUoIro"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
@@ -138,8 +141,8 @@ def delayed_response(blast_message, keyboard):
         count += 1
 
 def daily_reset():
-    print("daily_reset started")
     schedule.every().day.at("20:30").do(food.clear)
+    send_message("food cleared", 221211693)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -328,7 +331,7 @@ class User:
                 if len(orders) > 0:
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message = "\n".join(orders) + "\n\nWhen the order has been made and delivered, click payments to split the bill before you close the order"
-                    options =[["payments"],["payments V2"],["Lock Order"],["Unlock Order"],["Close Order"],["back"]]
+                    options =[["payments"],["Lock Order"],["Unlock Order"],["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
                     send_message(message, chat, keyboard)
                 else:
@@ -423,10 +426,12 @@ class User:
             if chat not in hungerCriers:
                 hungerCriers.append(chat)
                 count = len(hungerCriers)
-                if count > 7:
-                    count = 7
+                if count < 3:
+                    send_message(hungermessages[count-1] + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
+                else:
+                    message = hungermessages[random.randint(2,len(hungermessages)-1)]
+                    send_message(message + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
                 send_message("Hoot hoot "+u'\U0001F989'+"Your cry has been heard!\n\nThe current number of people starving is "+str(len(hungerCriers))+". When an order is started, Nocbot will PM you "+u'\U0001F609', chat, remove_keyboard())
-                send_message(hungermessages[count-1] + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
             else:
                 send_message("Your Cry has already been heard. Please hold on tight while we patiently wait for someone to start an order.\n\nThe current number of people starving is "+str(len(hungerCriers)), chat, remove_keyboard())
             send_message(orderfood_message(), chat, orderfood_menu())
@@ -573,16 +578,10 @@ class User:
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text == "payments":
-            options = [[{"text": "start", "callback_data": "start"}]]
-            keyboard = inline_keyboard(options)
-            send_message("Let me assist you splitting the bill!", chat, keyboard)
-            self.inline = self.payments
-            self.stage = self.empty
-        elif text == "payments V2":
             options = [["start"],["back"]]
             keyboard = build_keyboard(options)
             send_message("Let me assist you splitting the bill!", chat, keyboard)
-            self.stage = self.payments2
+            self.stage = self.payments
         elif text == "Lock Order":
             for x in food.get_by_orderstarter(chat):
                 description = x[2]
@@ -602,10 +601,10 @@ class User:
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
 
-    def payments2(self,text,chat,name):
+    def payments(self,text,chat,name):
         owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
         if text == "back":
-            options =[["payments"],["payments V2"],["Lock Order"],["Close Order"],["back"]]
+            options =[["payments"],["Lock Order"],["Close Order"],["back"]]
             keyboard = build_keyboard(options)
             send_message(message, chat, keyboard)
         elif text == "start":
@@ -657,101 +656,6 @@ class User:
                 else:
                     self.idx += 1
                     send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
-
-    def payments(self,update):
-        call_id = update["callback_query"]["id"]
-        chat = update["callback_query"]["message"]["chat"]["id"]
-        data = update["callback_query"]["data"]
-        message_id = update["callback_query"]["message"]["message_id"]
-        name = update["callback_query"]["message"]["chat"]["first_name"]
-        empty_answer(call_id)
-        owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
-        if data == "start":
-            self.orderlist = []
-            for x in owners:
-                if x > 0:
-                    for y in food.get_by_owner_orderstarter(x,chat):
-                        details = y[5] + "\n"
-                        break
-                    orders = [z[3] for z in food.get_by_owner_orderstarter(x,chat)]
-                    foods = "\n".join(orders)
-                    details += "\n".join(orders) + "\n\n"
-                    each = [x,"",foods,details]
-                    self.orderlist.append(each)
-            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
-            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
-            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
-            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
-            self.idx = 0
-            self.display = ""
-            keyboard = inline_keyboard(options)
-            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
-        elif data == u"\u274C":
-            edit_message(chat, message_id, "payments cancelled")
-            send_message(orderfood_message(), chat, orderfood_menu())
-            self.stage = self.orderFood
-        elif data == u"\U0001F4BE"+u"\u27A1":
-            self.orderlist[self.idx][1] = self.display
-            if self.idx == len(self.orderlist) - 1:
-                self.idx += 1
-                options = [[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": "done", "callback_data": "done"}]]
-                keyboard = inline_keyboard(options)
-                edit_message(chat, message_id, "Done?", keyboard)
-            else:
-                options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
-                ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
-                ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
-                ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-                ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
-                self.idx += 1
-                self.display = ""
-                keyboard = inline_keyboard(options)
-                edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
-        elif data == u"\u25C0":
-            self.display = self.display[:-1]
-            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
-            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
-            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
-            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
-            keyboard = inline_keyboard(options)
-            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
-        elif data == u"\u2B05":
-            if self.idx == 0:
-                return
-            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
-            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
-            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
-            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
-            self.idx -= 1
-            self.display = ""
-            keyboard = inline_keyboard(options)
-            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
-        elif data == "done":
-            message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
-            for x in self.orderlist:
-                    message += "$" + x[1] + " - " + x[3]
-            edit_message(chat, message_id, message)
-            for x in self.orderlist:
-                if x[1] != "":
-                    send_message("You are required to pay $" + x[1] + " to " + name + " for your latest order:\n" + x[2], x[0])
-            self.idx = 0
-            self.display = ""
-            self.orderlist = []
-            send_message(orderfood_message(), chat, orderfood_menu())
-            self.inline = self.ignore
-            self.stage = self.orderFood
-        else:
-            self.display += data
-            options =[[{"text": "7", "callback_data": "7"},{"text": "8", "callback_data": "8"},{"text": "9", "callback_data": "9"}]\
-            ,[{"text": "4", "callback_data": "4"},{"text": "5", "callback_data": "5"},{"text": "6", "callback_data": "6"}]\
-            ,[{"text": "1", "callback_data": "1"},{"text": "2", "callback_data": "2"},{"text": "3", "callback_data": "3"}]\
-            ,[{"text": ".", "callback_data": "."},{"text": "0", "callback_data": "0"},{"text": u"\u25C0", "callback_data": u"\u25C0"}]\
-            ,[{"text": u"\u2B05", "callback_data": u"\u2B05"},{"text": u"\U0001F4BE"+u"\u27A1", "callback_data": u"\U0001F4BE"+u"\u27A1"},{"text": u"\u274C", "callback_data": u"\u274C"}]]
-            keyboard = inline_keyboard(options)
-            edit_message(chat, message_id, "Please enter amount owed by:\n\n" + self.orderlist[self.idx][3]+self.display, keyboard)
 
     def rate1(self,text,chat,name):
         events = [x[0] for x in rate.get_all_events()]
@@ -1033,7 +937,6 @@ class User:
             send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         elif text.encode("utf8") in events:
             stats = rate.get_stats(text)
-            print stats
             message = ""
             for key in stats:
                 message += key + ": " + str(stats[key]) + "\n"
