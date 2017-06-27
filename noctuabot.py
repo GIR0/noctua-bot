@@ -142,7 +142,6 @@ def delayed_response(blast_message, keyboard):
 
 def daily_reset():
     schedule.every().day.at("20:30").do(food.clear)
-    send_message("food cleared", 221211693)
     while True:
         schedule.run_pending()
         time.sleep(1)
