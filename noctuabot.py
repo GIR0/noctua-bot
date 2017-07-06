@@ -317,8 +317,6 @@ class User:
                     else:
                         message += "You have 0 orders added currently."
                 send_message(message, chat, remove_keyboard())
-            else:
-                send_message("There is currently no order ongoing", chat, remove_keyboard())
             send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Manage Order"+	u'\U0001F510':
             orderstarters = list(set([x[1] for x in food.get_all()]))
@@ -339,7 +337,7 @@ class User:
                     send_message("There are 0 orders on your list. Proceed to close?", chat, keyboard)
                 self.stage = self.ManageOrder
             else:
-                send_message("Only the person who started an order can close the order", chat, remove_keyboard())
+                send_message("Only the person who started an order can manage the orders", chat, remove_keyboard())
                 send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Add Order"+u'\U0001F355':
             allorders = []
@@ -360,7 +358,6 @@ class User:
                 send_message("Which order?", chat, keyboard)
                 self.stage = self.AddOrder1
             else:
-                send_message("There is currently no order ongoing", chat, remove_keyboard())
                 send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Edit Order"+u'\U0001F4DD':
             descriptions = []
