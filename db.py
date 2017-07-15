@@ -280,10 +280,10 @@ class feedbackdb:
         self.cur.execute(stmt, args)
         self.connection.commit()
 
-    def get_BOT(self):
+    def get_Bot(self):
         try:
-            self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("BOT Functions"),))
-            print("get_BOT executed")
+            self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("Bot Suggestions"),))
+            print("get_Bot executed")
             return self.cur
         except:
             print("Failure")
@@ -293,6 +293,15 @@ class feedbackdb:
         try:
             self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("General Feedback"),))
             print("get_General executed")
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_House(self):
+        try:
+            self.cur.execute("SELECT * FROM Feedbacks WHERE kind = %s", (("About House Events"),))
+            print("get_House executed")
             return self.cur
         except:
             print("Failure")

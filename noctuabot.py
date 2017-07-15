@@ -158,7 +158,7 @@ def orderfood_message():
                 message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
     else:
         message = "There is currently no order ongoing"
-    message += "\n\nWhat would you like to do?"
+    message += "\nWhat would you like to do?"
     return message
 
 def orderfood_menu():
@@ -180,13 +180,13 @@ class User:
         if text == "/admin":
             if chat in admin:
                 self.stage = self.admin
-                send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+                send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         elif text == "/start" or text == "back" or text == "/mainmenu":
             options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         elif text == u"Feedback\U0001F5D2":
-            options =[["BOT Functions"], ["General Feedback"], ["back"]]
+            options =[[u"General Feedback\u2601", u"Bot Suggestions\U0001F916"], [u"About House Events\U0001F3DA", "back"]]
             keyboard = build_keyboard(options)
             send_message("Is there anything particular you would like to feedback about?", chat, keyboard)
             self.stage = self.Feedback1
@@ -236,26 +236,33 @@ class User:
         pass
 
     def Feedback1(self,text,chat,name):
-        if text == "BOT Functions":
-            send_message("This option is for submitting feedback about bot functions. Please submit bug reports, feature requests, and suggestions for future improvements here! We thank you for your contributions " + u'\ud83d\ude47\ud83c\udffb'\
-            + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
-            self.stage = self.FeedbackBI
-        elif text == "General Feedback":
+        if text == u"General Feedback\u2601":
             send_message("This option is for submitting feedback about any general issues. Please submit any house-related queries and suggestions you may have here! We want to hear your voice " + u'\ud83d\udce3'\
             + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
             self.stage = self.FeedbackGF
+        elif text == u"Bot Suggestions\U0001F916":
+            send_message("This option is for submitting feedback about bot functions. Please submit bug reports, feature requests, and suggestions for future improvements here! We thank you for your contributions " + u'\ud83d\ude47\ud83c\udffb'\
+            + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
+            self.stage = self.FeedbackBI
+        elif text == u"About House Events\U0001F3DA":
+            send_message("This option is for submitting feedback regarding any house events. Please submit any queries and suggestions you may have here! " + u"\U0001F618" + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
+            self.stage = self.FeedbackHE
         elif text == "back":
             options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
 
-    def FeedbackBI(self,text,chat,name):
-        db.add_item(text, "BOT Functions", chat, name)
-        send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
-
     def FeedbackGF(self,text,chat,name):
         db.add_item(text, "General Feedback", chat, name)
+        send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
+
+    def FeedbackBI(self,text,chat,name):
+        db.add_item(text, "Bot Suggestions", chat, name)
+        send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
+
+    def FeedbackHE(self,text,chat,name):
+        db.add_item(text, "About House Events", chat, name)
         send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def orderFood(self,text,chat,name):
@@ -456,9 +463,9 @@ class User:
                 food.add_order(chat, text, "-", 0, "-")
                 for x in hungerCriers:
                     send_message(name + " has started an order!\nFood from: " + details[0] + "\nOrder closing at: " + details[1] + "\n\nNavigate to orderFood > Add Order to add your order!", x)
-                send_message("What would you like to order?\n\n or click /back if you are not ordering", chat, remove_keyboard())
                 self.ordererid = [chat, text]
-                self.stage = self.AddOrder2
+                send_message(orderfood_message(), chat, orderfood_menu())
+                self.stage = self.orderFood
             except:
                 send_message("Invalid format", chat, remove_keyboard())
                 send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
@@ -764,20 +771,24 @@ class User:
 
     def admin(self,text,chat,name):
         if text == "/view":
-            items = db.get_BOT()
+            items = db.get_Bot()
             items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
             items2 = db.get_General()
             items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items2]
+            items3 = db.get_House()
+            items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items3]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             message = "There are no feedbacks submitted at the moment."
             if len(items) > 0:
                 message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
-            items = db.get_BOT()
+            items = db.get_Bot()
             items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
             items2 = db.get_General()
             items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items2]
+            items3 = db.get_House()
+            items += ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items3]
             items = [str(i+1) + ". " + x for i, x in enumerate(items)]
             if len(items) == 0:
                 message = "There are no feedbacks submitted at the moment."
@@ -851,11 +862,9 @@ class User:
                 options.append(["back"])
                 keyboard = build_keyboard(options)
                 send_message("Which event would you like to view results for?", chat, keyboard)
+                self.stage = self.viewrating
             else:
-                options = [["back"]]
-                keyboard = build_keyboard(options)
-                send_message("There are currently no events added " + u'\U0001F607', chat, keyboard)
-            self.stage = self.viewrating
+                send_message("There are currently no events added " + u'\U0001F607', chat)
         elif text == "/closeorder":
             descriptions = [x[0] for x in food.get_all_description()]
             descriptions = list(set(descriptions))
@@ -890,13 +899,13 @@ class User:
     def adminclose(self,text,chat,name):
         descriptions = [x[0] for x in food.get_all_description()]
         if text == "back":
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
         elif text.encode("utf8") in descriptions:
             food.clear_by_description(text)
             send_message("Order is closed", chat, remove_keyboard())
             send_message(text + " - Order is closed", NoctuachatID, remove_keyboard())
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
 
     def addevent(self,text,chat,name):
@@ -904,13 +913,13 @@ class User:
             survey.add_item([text,"-","-","-"],chat,name)
             rate.add_item(text,"-",chat,name)
             send_message("Event added!", chat, remove_keyboard())
-        send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+        send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         self.stage = self.admin
 
     def surveyresults(self,text,chat,name):
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         elif text.encode("utf8") in events:
             ratings = [x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4]+ " " for x in survey.get_by_event(text)]
             ratings = [str(i+1) + ". " + x for i, x in enumerate(ratings)]
@@ -921,7 +930,7 @@ class User:
     def clearevent(self,text,chat,name):
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         elif text.encode("utf8") in events:
             survey.delete_event(text)
             rate.delete_event(text)
@@ -931,7 +940,7 @@ class User:
     def viewrating(self,text,chat,name):
         events = [x[0] for x in rate.get_all_events()]
         if text == "back":
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         elif text.encode("utf8") in events:
             stats = rate.get_stats(text)
             message = ""
@@ -945,12 +954,16 @@ class User:
 
     def delete(self,text,chat,name):
         if text != "/back":
-            items = [x[1] for x in db.get_BOT()]
+            items = [x[1] for x in db.get_Bot()]
             items2 = [x[1] for x in db.get_General()]
+            items3 = [x[1] for x in db.get_House()]
             count = 0
             for x in text.split():
                 try:
-                    if int(x) > len(items):
+                    if int(x) > len(items) + len(items2):
+                        index = int(x) - len(items) - len(items2) - 1
+                        feedback = items3[index]
+                    elif int(x) > len(items):
                         index = int(x) - len(items) - 1
                         feedback = items2[index]
                     else:
@@ -964,18 +977,18 @@ class User:
                 send_message("Feedback(s) deleted", chat, remove_keyboard())
             self.stage = self.admin
         else:
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
 
     def removeuser(self,text,chat,name):
         if text == "back":
             self.stage = self.admin
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         else:
             USERS.delete_user(text)
             send_message("User removed", chat, remove_keyboard())
             self.stage = self.admin
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
 
     def blast0(self,text,chat,name):
         if text == "text":
@@ -985,7 +998,7 @@ class User:
             send_message("Send your photo here", chat)
             self.stage = self.blastA
         elif text == "back":
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
 
     def blastA(self,photo,chat,name):
@@ -1037,7 +1050,7 @@ class User:
             self.stage = self.blast3
         elif text == "back":
             self.stage = self.admin
-            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Deletes selected feedback\n/clearall - Erases all feedback\n\n/addevent - To add an event\n/surveyresults - To see survey results for an event\n/viewrating - To see ratings for an event\n/clearevent - To delete an event and its ratings\n/closeorder - To close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Displays blast results\n/viewusers - Displays blast name list\n/removeuser - Removes user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
+            send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
 
     def blast3(self,text,chat,name):
         global blast_message
