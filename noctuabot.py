@@ -271,7 +271,11 @@ class User:
         global hungerCriers
         global hungermessages
         if text == "Start Order"+u'\U0001F4CD':
-            orderstarters = list(set([x[1] for x in food.get_all()]))
+            orderstarters = []
+            for x in food.get_all():
+                if x[6] != "(locked)":
+                    orderstarters.append(x[1])
+            orderstarters = list(set(orderstarters)))
             if len(orderstarters) == 0:
                 send_message("Where would you like to order from?\n\nIf you decide not to start an order, click /back to return to the previous menu.", chat, remove_keyboard())
                 self.stage = self.StartOrder2
@@ -467,7 +471,7 @@ class User:
             self.stage = self.orderFood
         else:
             self.description[0] = text
-            send_message("What time would you like to close the order at?\n\nIf you decide not to start an order, click /back to return to the OrderFood menu.")
+            send_message("What time would you like to close the order at?\n\nIf you decide not to start an order, click /back to return to the OrderFood menu.", chat, remove_keyboard())
             self.stage = self.StartOrder3
 
     def StartOrder3(self,text,chat,name):
