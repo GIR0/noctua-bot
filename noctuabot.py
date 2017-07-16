@@ -214,7 +214,7 @@ class User:
         elif text == u"Help Desk\U0001F6CE":
             options = [[u"Ask Me Anything\U0001F48B"], [u"FAQ\U0001F50E", "back"]]
             keyboard = build_keyboard(options)
-            send_message(u"Help Desk\U0001F6CE", chat, keyboard)
+            send_message(u"Welcome to Nocbot Help Desk\U0001F6CE", chat, keyboard)
             self.stage = self.helpdesk
         elif text == "/survey":
             events = [x[0] for x in survey.get_all_events()]
