@@ -19,7 +19,7 @@ blast_message = " "
 blast_options = []
 NoctuachatID = -1001080757384
 hungerCriers = []
-hungermessages = ["Someone is hungy... "+u"\U0001F914", "Start an order soon maybe? "+u"\U0001F644", "Please order some food soon. My family hasn't ate for 3 days... "+u"\U0001F925"\
+hungermessages = ["Someone is hungry... "+u"\U0001F914", "Start an order soon maybe? "+u"\U0001F644", "Please order some food soon. My family hasn't ate for 3 days... "+u"\U0001F925"\
 , "My neighbour is starting to look juicy... "+u"\U0001F924", "McSpicy meal with coke. Now wouldn't that be lovely? If only someone started an order... "+u"\U0001F31A"\
 , "I'm not telling you it's going to be easy. I'm telling you it's going to be worth it "+u"\U0001F44D"+"Okay seriously, someone start an order PLEASE! "+u"\U0001F47F"\
 , "NO ONE can do everything, but EVERYONE can do something?! "+u"\U0001F60F", r"I am 700% ready to unhinge my jaw and swallow another owl whole like some owl species tend to do"+"... "+u"\U0001F643"\
@@ -158,7 +158,7 @@ def orderfood_message():
                 message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
     else:
         message = "There is currently no order ongoing"
-    message += "\nWhat would you like to do?"
+    message += "\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)) + "\n" + u"What would you like to do? \U0001F4AD"
     return message
 
 def orderfood_menu():
@@ -172,6 +172,7 @@ class User:
         self.survey =["","","",""]
         self.event = ""
         self.ordererid = [0, ""]
+        self.description = ["", ""]
         self.edit = ""
         self.idx = 0
         self.orderlist = []
@@ -182,7 +183,7 @@ class User:
                 self.stage = self.admin
                 send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
         elif text == "/start" or text == "back" or text == "/mainmenu":
-            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         elif text == u"Feedback\U0001F5D2":
@@ -206,9 +207,10 @@ class User:
                 send_message("There are currently no events to rate " + u'\U0001F607', chat, keyboard)
             self.stage = self.rate1
         elif text == u"About the Bot\U0001F989":
-            options =[["back"]]
-            keyboard = build_keyboard(options)
             send_message(u'\U0001F989' + " *About Nocbot* " + u'\U0001F989' + "\n\n" + u"\U0001F382" + " Birthday: June 2017\n\n" + u"\U0001F916" + " Bot Developers: Bai Chuan, Fiz, Youkuan\n\n" + u"\U0001F4AC" + " Language Team: Cherie, Jenn, Justin\n\n" + u"\U0001F171" + " Beta Test Team: Cheng Yong, Cherie, Ian, Jenn, Justin, Pohan, Vernon, Wesley", chat, keyboard)
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            keyboard = build_keyboard(options)
+            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         elif text == "/survey":
             events = [x[0] for x in survey.get_all_events()]
             if len(events) > 0:
@@ -248,7 +250,7 @@ class User:
             send_message("This option is for submitting feedback regarding any house events. Please submit any queries and suggestions you may have here! " + u"\U0001F618" + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
             self.stage = self.FeedbackHE
         elif text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -271,7 +273,7 @@ class User:
         if text == "Start Order"+u'\U0001F4CD':
             orderstarters = list(set([x[1] for x in food.get_all()]))
             if len(orderstarters) == 0:
-                send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
+                send_message("Where would you like to order from?\n\nIf you decide not to start an order, click /back to return to the previous menu.", chat, remove_keyboard())
                 self.stage = self.StartOrder2
             elif chat in orderstarters:
                 send_message("Your previous order has yet to be closed", chat, remove_keyboard())
@@ -367,35 +369,42 @@ class User:
             else:
                 send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Edit Order"+u'\U0001F4DD':
-            descriptions = []
-            for x in food.get_by_owner(chat):
+            allorders = []
+            for x in food.get_all():
                 if x[6] != "(locked)":
-                    descriptions.append(x[2])
-            descriptions = list(set(descriptions))
-            if len(descriptions) == 0:
-                options =[["Add Order"+u'\U0001F355'],["back"]]
-                keyboard = build_keyboard(options)
-                send_message("You have 0 orders added currently. Would you like to add an order?", chat, keyboard)
+                    allorders.append(x[1])
+            if len(allorders) > 0:
+                descriptions = []
+                for x in food.get_by_owner(chat):
+                    if x[6] != "(locked)":
+                        descriptions.append(x[2])
+                descriptions = list(set(descriptions))
+                if len(descriptions) == 0:
+                    options =[["Add Order"+u'\U0001F355'],["back"]]
+                    keyboard = build_keyboard(options)
+                    send_message("You have 0 orders added currently. Would you like to add an order?", chat, keyboard)
+                else:
+                    message = "My Orders:"
+                    count = 0
+                    for x in descriptions:
+                        message += "\n\n" + x +"\n"
+                        hold = [x[3] for x in food.get_by_owner_description(chat,x)]
+                        orders = []
+                        for x in hold:
+                            count += 1
+                            y = str(count) + ". " + x
+                            orders.append(y)
+                        message += "\n".join(orders)
+                    send_message(message, chat, remove_keyboard())
+                    options = []
+                    for x in xrange(count):
+                        options.append([str(x)])
+                    options.append(["back"])
+                    keyboard = build_keyboard(options)
+                    send_message("Please select the respective number of the order you would like to edit", chat, keyboard)
+                self.stage = self.EditOrder1
             else:
-                message = "My Orders:"
-                count = 0
-                for x in descriptions:
-                    message += "\n\n" + x +"\n"
-                    hold = [x[3] for x in food.get_by_owner_description(chat,x)]
-                    orders = []
-                    for x in hold:
-                        count += 1
-                        y = str(count) + ". " + x
-                        orders.append(y)
-                    message += "\n".join(orders)
-                send_message(message, chat, remove_keyboard())
-                options = []
-                for x in xrange(count):
-                    options.append([str(x)])
-                options.append(["back"])
-                keyboard = build_keyboard(options)
-                send_message("Please select the respective number of the order you would like to edit", chat, keyboard)
-            self.stage = self.EditOrder1
+                send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Clear Order"+	u'\U0001F5D1':
             descriptions = []
             for x in food.get_by_owner(chat):
@@ -430,16 +439,16 @@ class User:
                 hungerCriers.append(chat)
                 count = len(hungerCriers)
                 if count < 3:
-                    send_message(hungermessages[count-1] + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
+                    send_message(hungermessages[count-1] + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), NoctuachatID)
                 else:
                     message = hungermessages[random.randint(2,len(hungermessages)-1)]
                     send_message(message + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
                 send_message("Hoot hoot "+u'\U0001F989'+"Your cry has been heard!\n\nThe current number of people starving is "+str(len(hungerCriers))+". When an order is started, Nocbot will PM you "+u'\U0001F609', chat, remove_keyboard())
             else:
-                send_message("Your Cry has already been heard. Please hold on tight while we patiently wait for someone to start an order.\n\nThe current number of people starving is "+str(len(hungerCriers)), chat, remove_keyboard())
+                send_message(u"Your Cry has already been heard! \U0001F4E3", chat, remove_keyboard())
             send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -449,7 +458,7 @@ class User:
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         elif text == "Start Order"+u'\U0001F4CD':
-            send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
+            send_message("Where would you like to order from?\n\nIf you decide not to start an order, click /back to return to the previous menu.", chat, remove_keyboard())
             self.stage = self.StartOrder2
 
     def StartOrder2(self,text,chat,name):
@@ -457,18 +466,24 @@ class User:
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
         else:
-            try:
-                details = text.split()
-                send_message(name + " has started an order!\nFood from: " + details[0] + "\nOrder closing at: " + details[1], NoctuachatID, remove_keyboard())
-                food.add_order(chat, text, "-", 0, "-")
-                for x in hungerCriers:
-                    send_message(name + " has started an order!\nFood from: " + details[0] + "\nOrder closing at: " + details[1] + "\n\nNavigate to orderFood > Add Order to add your order!", x)
-                self.ordererid = [chat, text]
-                send_message(orderfood_message(), chat, orderfood_menu())
-                self.stage = self.orderFood
-            except:
-                send_message("Invalid format", chat, remove_keyboard())
-                send_message("Please key in the details of your order in the following format.\nSHOP <space> CLOSING TIME\n(e.g. Ameens 11:30pm)\nWhen you are done, press send to submit. If you decide not to start an order, click /back to return to the previous menu", chat, remove_keyboard())
+            self.description[0] = text
+            send_message("What time would you like to close the order at?\n\nIf you decide not to start an order, click /back to return to the OrderFood menu.")
+            self.stage = self.StartOrder3
+
+    def StartOrder3(self,text,chat,name):
+        if text == "/back":
+            self.description[0] = ""
+            send_message(orderfood_message(), chat, orderfood_menu())
+            self.stage = self.orderFood
+        else:
+            self.description[1] = text
+            send_message(u"\U0001F374"+ name + " has started an order!\n" + u"\U0001F6F5" + "Food from: " + self.description[0] + "\n" + u"\U0001F553" + "Order closing at: " + self.description[1], NoctuachatID)
+            food.add_order(chat, self.description[0] + " " + self.description[1], "-", 0, "-")
+            for x in hungerCriers:
+                send_message(name + " has started an order!\nFood from: " + self.description[0] + "\nOrder closing at: " + self.description[1] + "\n\nNavigate to orderFood > Add Order to add your order!", x)
+            send_message(orderfood_message(), chat, orderfood_menu())
+            self.stage = self.orderFood
+
 
     def AddOrder1(self,text,chat,name):
         descriptions = []
@@ -573,7 +588,7 @@ class User:
         global hungerCriers
         if text == "Close Order":
             food.clear_by_orderstarter(chat)
-            hungerCriers = []
+            self.description = ["",""]
             send_message("Order is closed", chat, remove_keyboard())
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
@@ -663,7 +678,7 @@ class User:
     def rate1(self,text,chat,name):
         events = [x[0] for x in rate.get_all_events()]
         if text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -691,7 +706,7 @@ class User:
         empty_answer(call_id)
         if data == u'\u274C'+"Cancel":
             edit_message(chat, message_id, "Cancelled")
-            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -718,7 +733,7 @@ class User:
             event = self.event
             rate.add_item(event,data,chat,name)
             edit_message(chat, message_id, "Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!")
-            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -728,7 +743,7 @@ class User:
         event = self.event
         rate.add_item(event,text,chat,name)
         send_message("Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
-        options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+        options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         self.stage = self.MainMenu
@@ -737,7 +752,7 @@ class User:
     def survey1(self,text,chat,name):
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -764,7 +779,7 @@ class User:
         answer = self.survey
         survey.add_item(answer,chat,name)
         send_message("Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
-        options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"FAQ\U0001F50E", u"About the Bot\U0001F989"]]
+        options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         self.stage = self.MainMenu
