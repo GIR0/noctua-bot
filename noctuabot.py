@@ -275,7 +275,7 @@ class User:
             for x in food.get_all():
                 if x[6] != "(locked)":
                     orderstarters.append(x[1])
-            orderstarters = list(set(orderstarters)))
+            orderstarters = list(set(orderstarters))
             if len(orderstarters) == 0:
                 send_message("Where would you like to order from?\n\nIf you decide not to start an order, click /back to return to the previous menu.", chat, remove_keyboard())
                 self.stage = self.StartOrder2
@@ -923,7 +923,6 @@ class User:
         elif text.encode("utf8") in descriptions:
             food.clear_by_description(text)
             send_message("Order is closed", chat, remove_keyboard())
-            send_message(text + " - Order is closed", NoctuachatID, remove_keyboard())
             send_message("Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode", chat, remove_keyboard())
             self.stage = self.admin
 
