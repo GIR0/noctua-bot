@@ -211,6 +211,11 @@ class User:
             options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
+        elif text == u"Help Desk\U0001F6CE":
+            options = [[u"Ask Me Anything\U0001F48B"], [u"FAQ\U0001F50E", "back"]]
+            keyboard = build_keyboard(options)
+            send_message(u"Help Desk\U0001F6CE", chat, keyboard)
+            self.stage = self.helpdesk
         elif text == "/survey":
             events = [x[0] for x in survey.get_all_events()]
             if len(events) > 0:
@@ -301,18 +306,18 @@ class User:
                             orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     if len(orders) > 0:
-                        message = "My List:\n\n" + "\n".join(orders)
+                        message = u"Order List\U0001F4DD" + "\n\n" + "\n".join(orders)
                     else:
                         message = "There are 0 orders on your list."
                     orders = ["("+x[2]+")"+ x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message += "\n\nMy Orders:\n\n"
+                    message += u"\n\nMy Orders\U0001F354\n\n"
                     if len(orders) > 0:
                         message += "\n".join(orders)
                     else:
                         message += "You have 0 orders added currently."
                 else:
-                    message = "Ongoing orders:\n\n"
+                    message = u"Ongoing orders\U0001F4DD\n\n"
                     descriptions = []
                     for x in food.get_all_description():
                         if not x[0].startswith("(locked)"):
@@ -324,7 +329,7 @@ class User:
                         if x[6] != "(locked)":
                             orders.append("("+x[2]+")"+ x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message += "\n\nMy orders:\n\n"
+                    message += u"\n\nMy orders\U0001F354\n\n"
                     if len(orders) > 0:
                         message += "\n".join(orders)
                     else:
@@ -787,6 +792,16 @@ class User:
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         self.stage = self.MainMenu
+
+    def helpdesk(self,text,chat,name):
+        if text == "back":
+            options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            keyboard = build_keyboard(options)
+            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
+            self.stage = self.MainMenu
+        elif text == u"Ask Me Anything\U0001F48B" or text == u"FAQ\U0001F50E":
+            send_message("Coming Soon!", chat)
+
 
     def admin(self,text,chat,name):
         if text == "/view":
