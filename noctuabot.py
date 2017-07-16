@@ -309,7 +309,7 @@ class User:
                         message = u"Order List\U0001F4DD" + "\n\n" + "\n".join(orders)
                     else:
                         message = "There are 0 orders on your list."
-                    orders = ["("+x[2]+")"+ x[3] for x in food.get_by_owner(chat)]
+                    orders = ["("+x[2]+")" + x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message += u"\n\nMy Orders\U0001F354\n\n"
                     if len(orders) > 0:
@@ -327,7 +327,7 @@ class User:
                     orders = []
                     for x in food.get_by_owner(chat):
                         if x[6] != "(locked)":
-                            orders.append("("+x[2]+")"+ x[3])
+                            orders.append("("+x[2]+") "+ x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message += u"\n\nMy orders\U0001F354\n\n"
                     if len(orders) > 0:
