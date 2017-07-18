@@ -124,8 +124,9 @@ class orderdb:
         stmt = "SELECT * FROM foodorders"
         try:
             self.cur.execute(stmt)
+            hold = []
             for x in self.cur:
-                hold = [(x[2],x[6])]
+                hold.append((x[2],x[6]))
             return hold
         except:
             print("Failure")

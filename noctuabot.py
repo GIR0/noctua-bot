@@ -141,7 +141,11 @@ def delayed_response(blast_message, keyboard):
         count += 1
 
 def daily_reset():
-    schedule.every().day.at("20:30").do(food.clear)
+    food.clear()
+    hungerCriers = []
+
+def daily_reset_run():
+    schedule.every().day.at("20:30").do(daily_reset)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -162,7 +166,7 @@ def orderfood_message():
     return message
 
 def orderfood_menu():
-    options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+	u'\U0001F5D1'], ["Manage Order"+	u'\U0001F510', "back"]]
+    options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', "Clear Order"+u'\U0001F5D1'], ["Manage Order"+u'\U0001F510', "back"]]
     keyboard = build_keyboard(options)
     return keyboard
 
@@ -290,7 +294,7 @@ class User:
             else:
                 options =[["Start Order"+u'\U0001F4CD'],["back"]]
                 keyboard = build_keyboard(options)
-                send_message("There is already an ongoing order being collated. Would you like to start a different order?", chat, keyboard)
+                send_message("There is already an ongoing order being collated..." + u"\U0001F914" +"\nWould you like to start a separate order?", chat, keyboard)
                 self.stage = self.StartOrder1
         elif text == "View Order"+u'\U0001F5D2':
             allorders = []
@@ -336,7 +340,7 @@ class User:
                         message += "You have 0 orders added currently."
                 send_message(message, chat, remove_keyboard())
             send_message(orderfood_message(), chat, orderfood_menu())
-        elif text == "Manage Order"+	u'\U0001F510':
+        elif text == "Manage Order"+u'\U0001F510':
             orderstarters = list(set([x[1] for x in food.get_all()]))
             if chat in orderstarters:
                 orders =[]
@@ -346,7 +350,7 @@ class User:
                 if len(orders) > 0:
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message = "\n".join(orders) + "\n\nWhen the order has been made and delivered, click payments to split the bill before you close the order"
-                    options =[["payments"],["Lock Order"],["Unlock Order"],["Close Order"],["back"]]
+                    options =[["payments"],["Lock/Unlock Order"],["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
                     send_message(message, chat, keyboard)
                 else:
@@ -489,7 +493,8 @@ class User:
             send_message(u"\U0001F374"+ name + " has started an order!\n" + u"\U0001F6F5" + "Food from: " + self.description[0] + "\n" + u"\U0001F553" + "Order closing at: " + self.description[1], NoctuachatID)
             food.add_order(chat, self.description[0] + " " + self.description[1], "-", 0, "-")
             for x in hungerCriers:
-                send_message(name + " has started an order!\nFood from: " + self.description[0] + "\nOrder closing at: " + self.description[1] + "\n\nNavigate to orderFood > Add Order to add your order!", x)
+                if x != chat:
+                    send_message("Hoot-ray, your knight in shining armour " + name + " has come to save you from impending starvation! " + 	u"\U0001F389\U0001F389\U0001F389" + "\n\n" + u"\U0001F6F5" + "Food from: " + self.description[0] + "\n" + u"\U0001F553" + "Order closing at: " + self.description[1] + '\n\nAdd your items via "Order Food → Add Order"!', x)
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
 
@@ -609,22 +614,19 @@ class User:
             keyboard = build_keyboard(options)
             send_message("Let me assist you splitting the bill!", chat, keyboard)
             self.stage = self.payments
-        elif text == "Lock Order":
+        elif text == "Lock/Unlock Order":
             for x in food.get_by_orderstarter(chat):
                 description = x[2]
+                status = x[6]
                 break
-            food.lock(chat)
-            send_message("Order is locked", chat, remove_keyboard())
-            send_message(description + " - Order has been locked", NoctuachatID)
-            send_message(orderfood_message(), chat, orderfood_menu())
-            self.stage = self.orderFood
-        elif text == "Unlock Order":
-            for x in food.get_by_orderstarter(chat):
-                description = x[2]
-                break
-            food.unlock(chat)
-            send_message("Order is unlocked", chat, remove_keyboard())
-            send_message(description + " - Order has been unlocked", NoctuachatID)
+            if status = "":
+                food.lock(chat)
+                send_message("Order is locked", chat, remove_keyboard())
+                send_message(description + " - Order has been locked", NoctuachatID)
+            else:
+                food.unlock(chat)
+                send_message("Order is unlocked", chat, remove_keyboard())
+                send_message(description + " - Order has been unlocked", NoctuachatID)
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
 
@@ -801,6 +803,9 @@ class User:
             self.stage = self.MainMenu
         elif text == u"Ask Me Anything\U0001F48B" or text == u"FAQ\U0001F50E":
             send_message("Coming Soon!", chat)
+            options = [[u"Ask Me Anything\U0001F48B"], [u"FAQ\U0001F50E", "back"]]
+            keyboard = build_keyboard(options)
+            send_message(u"Welcome to Nocbot Help Desk\U0001F6CE", chat, keyboard)
 
 
     def admin(self,text,chat,name):
@@ -1191,5 +1196,5 @@ if __name__ == '__main__':
     food.setup()
     rate.setup()
     survey.setup()
-    thread.start_new_thread(daily_reset, ())
+    thread.start_new_thread(daily_reset_run, ())
     main()
