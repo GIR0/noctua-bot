@@ -636,9 +636,7 @@ class User:
     def payments(self,text,chat,name):
         owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
         if text == "back":
-            options =[["payments"],["Lock Order"],["Unlock Order"],["Close Order"],["back"]]
-            keyboard = build_keyboard(options)
-            send_message(message, chat, keyboard)
+            send_message(orderfood_message, chat, orderfood_menu)
         elif text == "start":
             self.orderlist = []
             for x in owners:
