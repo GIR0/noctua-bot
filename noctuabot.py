@@ -560,7 +560,7 @@ class User:
                         options.append([x])
                 options.append(["back"])
                 keyboard = build_keyboard(options)
-                send_message("Which order?", chat, remove_keyboard())
+                send_message("Which order?", chat, keyboard)
                 self.stage = self.AddOrder1
                 return
             else:
@@ -575,11 +575,14 @@ class User:
             for x in descriptions:
                 for x in food.get_by_owner_description(chat,x):
                     orders.append(x[3])
-            try:
-                self.edit = orders[int(text)-1]
-                send_message("What would you like to order instead?\n\nor click /back to return to the Order Food menu", chat, remove_keyboard())
-                self.stage = self.EditOrder2
-            except:
+            if text > 0:
+                try:
+                    self.edit = orders[int(text)-1]
+                    send_message("What would you like to order instead?\n\nor click /back to return to the Order Food menu", chat, remove_keyboard())
+                    self.stage = self.EditOrder2
+                except:
+                    send_message("Invalid number. Try again\n\nWhich order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat)
+            else:
                 send_message("Invalid number. Try again\n\nWhich order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat)
             return
         send_message(orderfood_message(), chat, orderfood_menu())
