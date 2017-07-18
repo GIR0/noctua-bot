@@ -207,7 +207,7 @@ class User:
                 send_message("There are currently no events to rate " + u'\U0001F607', chat, keyboard)
             self.stage = self.rate1
         elif text == u"About the Bot\U0001F989":
-            send_message(u'\U0001F989' + " *About Nocbot* " + u'\U0001F989' + "\n\n" + u"\U0001F382" + " Birthday: June 2017\n\n" + u"\U0001F916" + " Bot Developers: Bai Chuan, Fiz, Youkuan\n\n" + u"\U0001F4AC" + " Language Team: Cherie, Jenn, Justin\n\n" + u"\U0001F171" + " Beta Test Team: Cheng Yong, Cherie, Ian, Jenn, Justin, Pohan, Vernon, Wesley", chat, keyboard)
+            send_message(u'\U0001F989' + " *About Nocbot* " + u'\U0001F989' + "\n\n" + u"\U0001F382" + " Birthday: June 2017\n\n" + u"\U0001F916" + " Bot Developers: Bai Chuan, Fiz, Youkuan\n\n" + u"\U0001F4AC" + " Language Team: Cherie, Jenn, Justin\n\n" + u"\U0001F171" + " Beta Test Team: Cheng Yong, Cherie, Ian, Jenn, Justin, Pohan, Vernon, Wesley", chat)
             options =[[u"OrderFood\U0001F35F"], [u"Rate Events\u2764\ufe0f", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
@@ -631,7 +631,7 @@ class User:
     def payments(self,text,chat,name):
         owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
         if text == "back":
-            options =[["payments"],["Lock Order"],["Close Order"],["back"]]
+            options =[["payments"],["Lock Order"],["Unlock Order"],["Close Order"],["back"]]
             keyboard = build_keyboard(options)
             send_message(message, chat, keyboard)
         elif text == "start":
