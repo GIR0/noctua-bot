@@ -157,9 +157,9 @@ def orderfood_message():
             descriptions.append(x[0])
     descriptions = list(set(descriptions))
     if len(descriptions) > 0:
-        message = ""
+        message = "Ongoing Order:\n"
         for x in descriptions:
-                message += "There is currently an order ongoing for "+x.split()[0]+", closing by "+x.split()[1]+".\n"
+                message += x + "\n"
     else:
         message = "There is currently no order ongoing"
     message += "\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)) + "\n" + u"What would you like to do? \U0001F4AD"
