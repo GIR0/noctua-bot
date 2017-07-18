@@ -619,7 +619,7 @@ class User:
                 description = x[2]
                 status = x[6]
                 break
-            if status = "":
+            if status == "":
                 food.lock(chat)
                 send_message("Order is locked", chat, remove_keyboard())
                 send_message(description + " - Order has been locked", NoctuachatID)
