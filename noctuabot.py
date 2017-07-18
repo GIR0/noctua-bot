@@ -494,7 +494,7 @@ class User:
             food.add_order(chat, self.description[0] + " " + self.description[1], "-", 0, "-")
             for x in hungerCriers:
                 if x != chat:
-                    send_message("Hoot-ray, your knight in shining armour " + name + " has come to save you from impending starvation! " + 	u"\U0001F389\U0001F389\U0001F389" + "\n\n" + u"\U0001F6F5" + "Food from: " + self.description[0] + "\n" + u"\U0001F553" + "Order closing at: " + self.description[1] + '\n\nAdd your items via "Order Food → Add Order"!', x)
+                    send_message("Hoot-ray, your knight in shining armour " + name + " has come to save you from impending starvation! " + 	u"\U0001F389\U0001F389\U0001F389" + "\n\n" + u"\U0001F6F5" + "Food from: " + self.description[0] + "\n" + u"\U0001F553" + "Order closing at: " + self.description[1] + '\n\nAdd your items via "Order Food ' + u"\u27A1" + ' Add Order"!', x)
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
 
