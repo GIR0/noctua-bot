@@ -312,7 +312,7 @@ class User:
                     if len(orders) > 0:
                         message = u"Order List\U0001F4DD" + "\n\n" + "\n".join(orders)
                     else:
-                        message = "There are 0 orders on your list."
+                        message = u"Order List\U0001F4DD" +"\n\n" + "Your list has 0 orders added currently" + u"\U0001F52A"
                     orders = ["("+x[2]+") " + x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     message += u"\n\nMy Orders\U0001F354\n\n"
@@ -650,21 +650,21 @@ class User:
                     each = [x,"",foods,details]
                     self.orderlist.append(each)
             self.idx = 0
-            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat, remove_keyboard())
+            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /previous to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat, remove_keyboard())
         elif text == "/skip":
             if self.idx == len(self.orderlist) - 1:
                 self.idx += 1
                 send_message("Done?\n\nclick /back to go back\nclick /done to continue", chat)
             elif self.idx < len(self.orderlist) - 1:
                 self.idx += 1
-                send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
+                send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /previous to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
         elif text == "/exit":
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
-        elif text == "/back":
+        elif text == "/previous":
             if self.idx != 0:
                 self.idx -= 1
-            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
+            send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /previous to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
         elif text == "/done":
             message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
             for x in self.orderlist:
@@ -682,10 +682,10 @@ class User:
                 self.orderlist[self.idx][1] = text
                 if self.idx == len(self.orderlist) - 1:
                     self.idx += 1
-                    send_message("Done?\n\nclick /back to go back\nclick /done to continue", chat)
+                    send_message("Done?\n\nclick /previous to go back\nclick /done to continue", chat)
                 else:
                     self.idx += 1
-                    send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /back to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
+                    send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /previous to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
 
     def rate1(self,text,chat,name):
         events = [x[0] for x in rate.get_all_events()]
