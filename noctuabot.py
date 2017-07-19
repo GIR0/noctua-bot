@@ -157,7 +157,8 @@ def orderfood_message():
             descriptions.append(x[0])
     descriptions = list(set(descriptions))
     if len(descriptions) > 0:
-        message = "Ongoing Order:\n"
+        descriptions = [str(i+1) + ") " + x for i, x in enumerate(descriptions)]
+        message = u"\u23F0Ongoing Order\U0001F4DD\n"
         for x in descriptions:
                 message += x + "\n"
     else:
@@ -310,30 +311,31 @@ class User:
                             orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     if len(orders) > 0:
-                        message = u"Order List\U0001F4DD" + "\n\n" + "\n".join(orders)
+                        message = u"Order List\U0001F4DD" + "\n" + "\n".join(orders)
                     else:
-                        message = u"Order List\U0001F4DD" +"\n\n" + "Your list has 0 orders added currently" + u"\U0001F52A"
+                        message = u"Order List\U0001F4DD" + "\n" + "Your list has 0 orders added currently" + u"\U0001F52A"
                     orders = ["("+x[2]+") " + x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message += u"\n\nMy Orders\U0001F354\n\n"
+                    message += u"\n\nMy Orders\U0001F354\n"
                     if len(orders) > 0:
                         message += "\n".join(orders)
                     else:
                         message += "You have 0 orders added currently."
                 else:
-                    message = u"Ongoing orders\U0001F4DD\n\n"
+                    message = u"Ongoing orders\U0001F4DD\n"
                     descriptions = []
                     for x in food.get_all_description():
                         if not x[0].startswith("(locked)"):
                             descriptions.append(x[0])
                     descriptions = list(set(descriptions))
-                    message += "\n\n".join(descriptions)
+                    descriptions = [str(i+1) + ") " + x for i, x in enumerate(descriptions)]
+                    message += "\n".join(descriptions)
                     orders = []
                     for x in food.get_by_owner(chat):
                         if x[6] != "(locked)":
                             orders.append("("+x[2]+") "+ x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message += u"\n\nMy orders\U0001F354\n\n"
+                    message += u"\n\nMy orders\U0001F354\n"
                     if len(orders) > 0:
                         message += "\n".join(orders)
                     else:
@@ -348,11 +350,10 @@ class User:
                     if x[5] != "-":
                         orders.append(x[5] + " - " + x[3])
                 if len(orders) > 0:
-                    orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message = "\n".join(orders) + "\n\nWhen the order has been made and delivered, click payments to split the bill before you close the order"
-                    options =[["payments"],["Lock/Unlock Order"],["Close Order"],["back"]]
+                    options =[["Lock/Unlock List", u"Hotlines\u260E"], [u"Settle Payments\U0001F3E6", "Close Order"], ["Cancel Order", "back"]]
                     keyboard = build_keyboard(options)
-                    send_message(message, chat, keyboard)
+                    send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
+                    send_message("If this is your first time ordering, click /tutorial for detailed operating instructions.\n\nClick /tutorialOff to prevent such tutorial messages from appearing again.", chat)
                 else:
                     options =[["Close Order"],["back"]]
                     keyboard = build_keyboard(options)
