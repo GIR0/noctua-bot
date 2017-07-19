@@ -398,7 +398,7 @@ class User:
                     keyboard = build_keyboard(options)
                     send_message("You have 0 orders added currently. Would you like to add an order?", chat, keyboard)
                 else:
-                    message = "My Orders:"
+                    message = u"My Orders\U0001F354"
                     count = 0
                     for x in descriptions:
                         message += "\n\n" + x +"\n"
@@ -434,7 +434,7 @@ class User:
                 send_message("You have 0 orders added currently.", chat, remove_keyboard())
                 send_message(orderfood_message(), chat, orderfood_menu())
             else:
-                message = "My Orders:"
+                message = u"My Orders\U0001F354"
                 count = 0
                 for x in descriptions:
                     message += "\n\n" + x +"\n"
