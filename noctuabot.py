@@ -447,9 +447,14 @@ class User:
                     message += "\n".join(orders)
                 send_message(message, chat, remove_keyboard())
                 options = []
-                for x in xrange(count):
-                    options.append([str(x+1)])
-                options.append(["back"])
+                i = 1
+                while i < count:
+                    options.append([str(i), str(i+1)])
+                    i += 2
+                if count%2:
+                    options.append([str(count), "back"])
+                else:
+                    options.append(["back"])
                 keyboard = build_keyboard(options)
                 send_message("Please select the respective number of the order you would like to remove", chat, keyboard)
                 self.stage = self.ClearOrder
