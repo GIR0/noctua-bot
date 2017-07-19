@@ -411,9 +411,14 @@ class User:
                         message += "\n".join(orders)
                     send_message(message, chat, remove_keyboard())
                     options = []
-                    for x in xrange(count):
-                        options.append([str(x+1)])
-                    options.append(["back"])
+                    i = 1
+                    while i < count:
+                        options.append([str(i), str(i+1)])
+                        i += 2
+                    if count%2:
+                        options.append([str(count), "back"])
+                    else:
+                        options.append(["back"])
                     keyboard = build_keyboard(options)
                     send_message("Please select the respective number of the order you would like to edit", chat, keyboard)
                 self.stage = self.EditOrder1
@@ -613,12 +618,12 @@ class User:
         elif text == "back":
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
-        elif text == "payments":
+        elif text == u"Settle Payments\U0001F3E6":
             options = [["start"],["back"]]
             keyboard = build_keyboard(options)
             send_message("Let me assist you splitting the bill!", chat, keyboard)
             self.stage = self.payments
-        elif text == "Lock/Unlock Order":
+        elif text == "Lock/Unlock List":
             for x in food.get_by_orderstarter(chat):
                 description = x[2]
                 status = x[6]
