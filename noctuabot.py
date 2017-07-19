@@ -512,7 +512,7 @@ class User:
             for x in food.get_by_description(text):
                 self.ordererid[0] = x[1]
                 break
-            send_message("What would you like to order?\n\n or click /back if you are not ordering", chat, remove_keyboard())
+            send_message(u'What would you like to order?\neg. "McFlurry x 2 " \U0001F366\n\n or click /back if you are not ordering', chat, remove_keyboard())
             self.stage = self.AddOrder2
 
     def AddOrder2(self,text,chat,name):
@@ -578,7 +578,7 @@ class User:
             if text > 0:
                 try:
                     self.edit = orders[int(text)-1]
-                    send_message("What would you like to order instead?\n\nor click /back to return to the Order Food menu", chat, remove_keyboard())
+                    send_message(u'What would you like to order instead?eg. "McFlurry x 2 " \U0001F366\n\nor click /back to return to the Order Food menu', chat, remove_keyboard())
                     self.stage = self.EditOrder2
                 except:
                     send_message("Invalid number. Try again\n\nWhich order would you like to edit? Please input the respective numbers.\n\nor click /back to exit", chat)
