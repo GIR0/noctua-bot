@@ -635,6 +635,14 @@ class User:
                 break
             if status == "":
                 food.lock(chat)
+                orders =[]
+                for x in food.get_by_orderstarter(chat):
+                    if x[5] != "-":
+                        orders.append(x[3] + " - (" + x[5]+ ")")
+                sorted(order)
+                orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
+                message = u"Final Order\U0001F50F" + "\n" + "\n".join(orders)
+                send_message(message, chat, remove_keyboard())
                 send_message("Order is locked", chat, remove_keyboard())
                 send_message(description + " - Order has been locked", NoctuachatID)
             else:
@@ -647,7 +655,7 @@ class User:
     def payments(self,text,chat,name):
         owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
         if text == "back":
-            send_message(orderfood_message, chat, orderfood_menu)
+            send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "start":
             self.orderlist = []
             for x in owners:
