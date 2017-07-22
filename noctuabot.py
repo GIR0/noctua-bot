@@ -290,7 +290,7 @@ class User:
                 send_message("Where would you like to order from?\n\nIf you decide not to start an order, click /back to return to the previous menu.", chat, remove_keyboard())
                 self.stage = self.StartOrder2
             elif chat in orderstarters:
-                send_message("Your previous order has yet to be closed", chat, remove_keyboard())
+                send_message(u'Please close your current order before starting a new one via "Order Food \u27A1 Manage Order \u27A1" Close Order".', chat, remove_keyboard())
                 send_message(orderfood_message(), chat, orderfood_menu())
             else:
                 options =[["Start Order"+u'\U0001F4CD'],["back"]]
@@ -350,17 +350,17 @@ class User:
                     if x[5] != "-":
                         orders.append(x[5] + " - " + x[3])
                 if len(orders) > 0:
-                    options =[["Lock/Unlock List", u"Hotlines\u260E"], [u"Settle Payments\U0001F3E6", "Close Order"], ["Cancel Order", "back"]]
+                    options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
                     keyboard = build_keyboard(options)
                     send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
-                    send_message("If this is your first time ordering, click /tutorial for detailed operating instructions.\n\nClick /tutorialOff to prevent such tutorial messages from appearing again.", chat)
+                    send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
                 else:
-                    options =[["Close Order"],["back"]]
+                    options =[[u"Close Order\u2611"],["back"]]
                     keyboard = build_keyboard(options)
                     send_message("There are 0 orders on your list. Proceed to close?", chat, keyboard)
                 self.stage = self.ManageOrder
             else:
-                send_message("Only the person who started an order can manage the orders", chat, remove_keyboard())
+                send_message(u"\u26D4 Only the order initiator may manage the order.", chat, remove_keyboard())
                 send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "Add Order"+u'\U0001F355':
             allorders = []
@@ -614,21 +614,35 @@ class User:
 
     def ManageOrder(self,text,chat,name):
         global hungerCriers
-        if text == "Close Order":
-            food.clear_by_orderstarter(chat)
-            self.description = ["",""]
-            send_message("Order is closed", chat, remove_keyboard())
-            send_message(orderfood_message(), chat, orderfood_menu())
-            self.stage = self.orderFood
+        if text == u"Close Order\u2611":
+            options = [[u"Yes\u2714", u"No\u2716"]]
+            keyboard = build_keyboard(options)
+            send_message(u"Are you sure you want to close the order? \U0001F914", chat, keyboard)
         elif text == "back":
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
-        elif text == u"Settle Payments\U0001F3E6":
+        elif text == u"Settle Payments\U0001F4B0":
             options = [["start"],["back"]]
             keyboard = build_keyboard(options)
             send_message("Let me assist you splitting the bill!", chat, keyboard)
             self.stage = self.payments
-        elif text == "Lock/Unlock List":
+        elif text == u"Quick Tutorial\U0001F393":
+            send_message(u"Follow these steps to submit a successful order!\n\nStep 1: Lock/Unlock List\U0001F510\nClicking 'Lock' prevents anyone from adding more orders to the list. Your order list will also be compiled and sorted to assist you in making a smooth phone call later on. Clicking 'Unlock' will undo this action." +\
+            u"\n\nStep 2: Hotlines\u260E (Optional)\nThis command sends you a cheatsheet containing the hotlines of all the eateries that are usually ordered from, as well as RC4's address and postal code." +\
+            u"\n\nStep 3: Settle Payments\U0001F4B0\nOnce the call has been made and the food delivered, use this command to auto message everyone in the order how much they'll need to pay." +\
+            u"\n\nStep 4: Close Order\u2611\nThis command should only be used when everything is settled (ie. food has been ordered, and the bill has been split via Settle Payments). This will remove your list from the master list, which then allows you to create a new list." +\
+            u'\n\n\U0001F914 If you have any further questions, do send it via "Help Desk \u27A1 Ask me Anything".', chat, remove_keyboard())
+            options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
+            keyboard = build_keyboard(options)
+            send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
+            send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
+        elif text == u"Hotlines\u260E":
+            send_message(u"Quick access to crucial info! \U0001F60F\n\nRC4 Address:-\n\U0001F3E1Residential College 4\n\U0001F6E46 College Avenue East\n\U0001F1F8\U0001F1ECSingapore 138614\n\nDelivery Hotlines:-\n\U0001F35DAmeens: 6777 0555\n\U0001F355Dominos Pizza: 6222 6333\n\U0001F357KFC: 6222 6111\n\U0001F35FMcDonalds: 6777 6333", chat, remove_keyboard())
+            options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
+            keyboard = build_keyboard(options)
+            send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
+            send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
+        elif text == u"Lock/Unlock List\U0001F510":
             for x in food.get_by_orderstarter(chat):
                 description = x[2]
                 status = x[6]
@@ -644,18 +658,48 @@ class User:
                 message = u"Final Order\U0001F50F" + "\n" + "\n".join(orders)
                 send_message(message, chat, remove_keyboard())
                 send_message("Order is locked", chat, remove_keyboard())
-                send_message(description + " - Order has been locked", NoctuachatID)
+                send_message(description + u" - Order has been locked \U0001F512", NoctuachatID)
             else:
                 food.unlock(chat)
                 send_message("Order is unlocked", chat, remove_keyboard())
-                send_message(description + " - Order has been unlocked", NoctuachatID)
+                send_message(description + u" - Order has been unlocked \U0001F512", NoctuachatID)
+            options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
+            keyboard = build_keyboard(options)
+            send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
+            send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
+
+    def CloseOrder(self,text,chat,name):
+        if text == u"Yes\u2714":
+            food.clear_by_orderstarter(chat)
+            self.description = ["",""]
+            send_message("Order is closed", chat, remove_keyboard())
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
+        elif text == u"No\u2716":
+            orders =[]
+            for x in food.get_by_orderstarter(chat):
+                if x[5] != "-":
+                    orders.append(x[5] + " - " + x[3])
+            if len(orders) > 0:
+                options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
+                keyboard = build_keyboard(options)
+                send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
+                send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
+            else:
+                options =[[u"Close Order\u2611"],["back"]]
+                keyboard = build_keyboard(options)
+                send_message("There are 0 orders on your list. Proceed to close?", chat, keyboard)
+            self.stage = self.ManageOrder
+
 
     def payments(self,text,chat,name):
         owners = list(set([x[4] for x in food.get_by_orderstarter(chat)]))
         if text == "back":
-            send_message(orderfood_message(), chat, orderfood_menu())
+            options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
+            keyboard = build_keyboard(options)
+            send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
+            send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
+            self.stage = self.ManageOrder
         elif text == "start":
             self.orderlist = []
             for x in owners:
