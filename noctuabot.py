@@ -653,7 +653,7 @@ class User:
                 for x in food.get_by_orderstarter(chat):
                     if x[5] != "-":
                         orders.append(x[3] + " - (" + x[5]+ ")")
-                sorted(order)
+                sorted(orders)
                 orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                 message = u"Final Order\U0001F50F" + "\n" + "\n".join(orders)
                 send_message(message, chat, remove_keyboard())
