@@ -286,12 +286,16 @@ class User:
                 if x[6] != "(locked)":
                     orderstarters.append(x[1])
             orderstarters = list(set(orderstarters))
-            if len(orderstarters) == 0:
-                send_message("Where would you like to order from?\n\nIf you decide not to start an order, click /back to return to the previous menu.", chat, remove_keyboard())
-                self.stage = self.StartOrder2
-            elif chat in orderstarters:
+            orderstarters2 = []
+            for x in food.get_all():
+                    orderstarters2.append(x[1])
+            orderstarters2 = list(set(orderstarters2))
+            if chat in orderstarters2:
                 send_message(u'Please close your current order before starting a new one via "Order Food \u27A1 Manage Order \u27A1" Close Order".', chat, remove_keyboard())
                 send_message(orderfood_message(), chat, orderfood_menu())
+            elif len(orderstarters) == 0:
+                send_message("Where would you like to order from?\n\nIf you decide not to start an order, click /back to return to the previous menu.", chat, remove_keyboard())
+                self.stage = self.StartOrder2
             else:
                 options =[["Start Order"+u'\U0001F4CD'],["back"]]
                 keyboard = build_keyboard(options)
