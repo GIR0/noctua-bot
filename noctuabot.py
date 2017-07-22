@@ -690,11 +690,10 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
                 send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
+                self.stage = self.ManageOrder
             else:
-                options =[[u"Close Order\u2611"],["back"]]
-                keyboard = build_keyboard(options)
-                send_message("There are 0 orders on your list. Proceed to close?", chat, keyboard)
-            self.stage = self.ManageOrder
+                send_message(orderfood_message(), chat, orderfood_menu())
+                self.stage = self.orderFood
 
 
     def payments(self,text,chat,name):
