@@ -618,6 +618,7 @@ class User:
             options = [[u"Yes\u2714", u"No\u2716"]]
             keyboard = build_keyboard(options)
             send_message(u"Are you sure you want to close the order? \U0001F914", chat, keyboard)
+            self.stage = self.CloseOrder
         elif text == "back":
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
