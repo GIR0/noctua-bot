@@ -315,7 +315,7 @@ class User:
                             orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     if len(orders) > 0:
-                        message = u"Order List\U0001F4DD" + "\n" + "\n".join(orders)
+                        message = u"Order List\U0001F4DD" + u"\n" + u"\n".join(orders)
                     else:
                         message = u"Order List\U0001F4DD" + "\n" + "Your list has 0 orders added currently" + u"\U0001F52A"
                     orders = ["("+x[2]+") " + x[3] for x in food.get_by_owner(chat)]
