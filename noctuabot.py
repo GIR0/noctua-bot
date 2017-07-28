@@ -315,18 +315,18 @@ class User:
                             orders.append(x[5] + " - " + x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                     if len(orders) > 0:
-                        message = u"Order List\U0001F4DD" + u"\n" + u"\n".join(orders)
+                        message = u"Order List\U0001F4DD".encode("utf8") + u"\n" + "\n".join(orders)
                     else:
-                        message = u"Order List\U0001F4DD" + "\n" + "Your list has 0 orders added currently" + u"\U0001F52A"
+                        message = u"Order List\U0001F4DD".encode("utf8") + "\n" + "Your list has 0 orders added currently" + u"\U0001F52A".encode("utf8")
                     orders = ["("+x[2]+") " + x[3] for x in food.get_by_owner(chat)]
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message += u"\n\nMy Orders\U0001F354\n"
+                    message += u"\n\nMy Orders\U0001F354\n".encode("utf8")
                     if len(orders) > 0:
                         message += "\n".join(orders)
                     else:
                         message += "You have 0 orders added currently."
                 else:
-                    message = u"Ongoing orders\U0001F4DD\n"
+                    message = u"Ongoing orders\U0001F4DD\n".encode("utf8")
                     descriptions = []
                     for x in food.get_all_description():
                         if not x[0].startswith("(locked)"):
@@ -339,7 +339,7 @@ class User:
                         if x[6] != "(locked)":
                             orders.append("("+x[2]+") "+ x[3])
                     orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                    message += u"\n\nMy orders\U0001F354\n"
+                    message += u"\n\nMy orders\U0001F354\n".encode("utf8")
                     if len(orders) > 0:
                         message += "\n".join(orders)
                     else:
