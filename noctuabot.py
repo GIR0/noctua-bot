@@ -200,7 +200,7 @@ class User:
         elif text == u"OrderFood\U0001F35F":
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
-        elif text = u"AlmaNoc\U0001F4C6":
+        elif text == u"AlmaNoc\U0001F4C6":
             options = [[u"Noctua Events\U0001F4E3", u"College Calendar\U0001F5D3"], [u"Rate Our Events\U0001F4AF", "back"]]
             keyboard = build_keyboard(options)
             send_message("Hello " + name + u", welcome to the AlmaNoc! \U0001F4C6",chat, keyboard)
