@@ -636,7 +636,7 @@ class User:
             send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
             send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
         elif text == u"Hotlines\u260E":
-            send_message(u"Quick access to crucial info! \U0001F60F\n\nRC4 Address:-\n\U0001F3E1Residential College 4\n\U0001F6E46 College Avenue East\n\U0001F1F8\U0001F1ECSingapore 138614\n\nDelivery Hotlines:-\n\U0001F35DAmeens: 6777 0555\n\U0001F355Dominos Pizza: 6222 6333\n\U0001F357KFC: 6222 6111\n\U0001F35FMcDonalds: 6777 6333", chat, remove_keyboard())
+            send_message(u"Quick access to crucial info! \U0001F60F\n\nRC4 Address:-\n\U0001F3E1Residential College 4\n\U0001F6E46 College Avenue East\n\U0001F1F8\U0001F1ECSingapore 138614\n\nDelivery Hotlines:-\n\U0001F35DAmeens: +65 6777 0555\n\U0001F355Dominos Pizza: +65 6222 6333\n\U0001F357KFC: +65 6222 6111\n\U0001F35FMcDonalds: +65 6777 6333", chat, remove_keyboard())
             options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
             keyboard = build_keyboard(options)
             send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
@@ -1155,7 +1155,7 @@ class User:
             send_photo(photo_id, x[1],text)
         send_message("Photo sent", chat, remove_keyboard())
         self.stage = self.admin
-
+        send_message(admin_msg, chat, remove_keyboard())
 
     def blast1(self,text,chat,name):
         global blast_message
