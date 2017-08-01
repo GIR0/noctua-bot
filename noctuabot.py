@@ -526,6 +526,7 @@ class User:
                 self.stage = self.ChangeOrder1
             else:
                 send_message(orderfood_message(), chat, orderfood_menu())
+                self.stage = self.orderFood
         elif text == u"Remove Order\U0001F5D1":
             descriptions = []
             for x in food.get_by_owner(chat):
