@@ -260,15 +260,15 @@ class User:
             self.stage = self.MainMenu
 
     def FeedbackGF(self,text,chat,name):
-        db.add_item(text + "\n" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "General Feedback", chat, name)
+        db.add_item(text + " [" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "]", "General Feedback", chat, name)
         send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def FeedbackBI(self,text,chat,name):
-        db.add_item(text + "\n" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "Bot Suggestions", chat, name)
+        db.add_item(text + " [" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "]", "Bot Suggestions", chat, name)
         send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def FeedbackHE(self,text,chat,name):
-        db.add_item(text + "\n" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "About House Events", chat, name)
+        db.add_item(text + " [" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "]", "About House Events", chat, name)
         send_message("Your feedback has been received! Thank you for your submission " + u'\U0001F60A' + "\n\nAny other feedback to add? Continue typing and hit send to submit more feedback " + u'\ud83d\uddd2' + "\n\nWhen you are done, please enter /mainmenu to finish.", chat)
 
     def orderFood(self,text,chat,name):
