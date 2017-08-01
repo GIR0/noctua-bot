@@ -1125,6 +1125,7 @@ class User:
                     send_message("Error deleting " + x, chat)
             if count > 0:
                 send_message("Feedback(s) deleted", chat, remove_keyboard())
+            send_message(admin_msg, chat, remove_keyboard())
             self.stage = self.admin
         else:
             send_message(admin_msg, chat, remove_keyboard())
