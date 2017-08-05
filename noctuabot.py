@@ -670,8 +670,8 @@ class User:
                 orders = sorted(orders, key=str.lower)
                 orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
                 message = u"Final Order\U0001F50F" + "\n" + "\n".join(orders)
-                send_message(message, chat, remove_keyboard())
                 send_message("Order is locked", chat, remove_keyboard())
+                send_message(message, chat, remove_keyboard())
                 send_message(description + u" - Order has been locked \U0001F512", NoctuachatID)
             else:
                 food.unlock(chat)
@@ -908,16 +908,17 @@ class User:
             keyboard = build_keyboard(options)
             send_message(u"Welcome to Nocbot Help Desk\U0001F6CE", chat, keyboard)
         elif text == u"Ask Me Anything\U0001F48B":
-            send_message(u"What would you like to ask me? \U0001F62C", chat, remove_keyboard())
+            send_message(u"What would you like to ask me? \U0001F62C\nClick /back to return to the main menu.", chat, remove_keyboard())
             self.stage = self.ask
 
     def ask(self,text,chat,name):
-        send_message(name + " asked:\n" + text, NoctuachatID, remove_keyboard())
-        send_message(u"Understood! I'll get back to you when I have an answer! \U0001F609", chat, remove_keyboard())
-        options = [[u"Ask Me Anything\U0001F48B"], [u"Nocbot FAQ\U0001F4E1", "back"]]
+        if text != "/back":
+            send_message(name + " asked:\n" + text, NoctuachatID, remove_keyboard())
+            send_message(u"Understood! I'll get back to you when I have an answer! \U0001F609", chat, remove_keyboard())
+        options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
         keyboard = build_keyboard(options)
-        send_message(u"Welcome to Nocbot Help Desk\U0001F6CE", chat, keyboard)
-        self.stage = self.helpdesk
+        send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
+        self.stage = self.MainMenu
 
     def admin(self,text,chat,name):
         if text == "/view":
@@ -1279,10 +1280,10 @@ def main():
                                             user.stage(photo,chat,name)
                                         break
                                 if not check:
-                                    send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
+                                    send_message(u"I can't understand stickers, images or GIFs. Text me, would ya? \U0001F618", chat)
                         elif "audio" in update["message"] or "video" in update["message"] or "sticker" in update["message"] or "document" in update["message"]:
                             chat = update["message"]["chat"]["id"]
-                            send_message("Sorry, but I'm unable to process pictures, stickers or GIFs . . . Text-only please!", chat)
+                            send_message(u"I can't understand stickers, images or GIFs. Text me, would ya? \U0001F618", chat)
                     elif "callback_query" in update:
                         chat = update["callback_query"]["message"]["chat"]["id"]
                         for user in users:
