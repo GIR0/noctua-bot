@@ -1076,7 +1076,7 @@ class User:
             ratings = []
             for x in survey.get_by_event(text):
                 if x[2] != "-":
-                    ratings.append(x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4]+"\n"+x[5])
+                    ratings.append(x[7]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4]+"\n"+x[5])
             ratings = [str(i+1) + ". " + x for i, x in enumerate(ratings)]
             message = "\n\n".join(ratings)
             send_message(message, chat, remove_keyboard())
