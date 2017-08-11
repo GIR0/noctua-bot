@@ -8,8 +8,8 @@ import random
 from db import *
 
 admin =[221211693,174955135]
-Ameens1 = 0
-Ameens2 = 0
+Ameens1 = "AgADBQAD16cxG1D9cVRAUqPXgTANtFQfzDIABOshQWnOm5M0oWgBAAEC"
+Ameens2 = "AgADBQAD2KcxG1D9cVRRdymN_tg3LqEQzDIABBvz5QnkSWatPm0BAAEC"
 db = feedbackdb()
 USERS = userdb()
 poll = polldb()
