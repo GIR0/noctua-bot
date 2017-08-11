@@ -8,6 +8,8 @@ import random
 from db import *
 
 admin =[221211693,174955135]
+Ameens1 = 0
+Ameens2 = 0
 db = feedbackdb()
 USERS = userdb()
 poll = polldb()
@@ -159,6 +161,7 @@ def orderfood_message():
     descriptions = list(set(descriptions))
     if len(descriptions) > 0:
         descriptions = [str(i+1) + ") " + x for i, x in enumerate(descriptions)]
+        descriptions.reverse()
         message = u"\u23F0Ongoing Order\U0001F4DD\n"
         for x in descriptions:
                 message += x + "\n"
@@ -168,7 +171,7 @@ def orderfood_message():
     return message
 
 def orderfood_menu():
-    options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', u"Hotlines\u260E"], ["Manage Order"+u'\U0001F510', "back"]]
+    options =[["Hunger Cry"+u'\U0001F4E2', "Start Order"+u'\U0001F4CD'], ["View Order"+u'\U0001F5D2', "Add Order"+u'\U0001F355'], ["Edit Order"+u'\U0001F4DD', u"Menus\U0001F374"], ["Manage Order"+u'\U0001F510', "back"]]
     keyboard = build_keyboard(options)
     return keyboard
 
@@ -385,9 +388,11 @@ class User:
             keyboard = build_keyboard(options)
             send_message("What would you like to do?", chat, keyboard)
             self.stage = self.EditOrder
-        elif text == u"Hotlines\u260E":
-            send_message(u"Quick access to crucial info! \U0001F60F\n\nRC4 Address:-\n\U0001F3E1Residential College 4\n\U0001F6E46 College Avenue East\n\U0001F1F8\U0001F1ECSingapore 138614\n\nDelivery Hotlines:-\n\U0001F35DAmeens: +65 6777 0555\n\U0001F355Dominos Pizza: +65 6222 6333\n\U0001F357KFC: +65 6222 6111\n\U0001F35FMcDonalds: +65 6777 6333", chat, remove_keyboard())
-            send_message(orderfood_message(), chat, orderfood_menu())
+        elif text == u"Menus\U0001F374":
+            options = [[u"Ameens\U0001F958"], [u"Suggest New Menu\U0001F4A1", "back"]]
+            keyboard = build_keyboard(options)
+            send_message("These are the menus from places that we usually order from!", chat, keyboard)
+            self.stage = self.Menus1
         elif text == "Hunger Cry"+u'\U0001F4E2':
             if chat not in hungerCriers:
                 hungerCriers.append(chat)
@@ -625,6 +630,26 @@ class User:
         send_message(orderfood_message(), chat, orderfood_menu())
         self.stage = self.orderFood
 
+    def Menus1(self,text,chat,name):
+        if text == u"Ameens\U0001F958":
+            send_photo(Ameens1, chat)
+            send_photo(Ameens2, chat)
+            send_message(orderfood_message(), chat, orderfood_menu())
+            self.stage = self.orderFood
+        elif text == u"Suggest New Menu\U0001F4A1":
+            send_message("What other restaurants would you like included in the menu list?\nClick /back to return to the main menu.", chat, remove_keyboard())
+            self.stage = self.Menus2
+        elif text == "back":
+            send_message(orderfood_message(), chat, orderfood_menu())
+            self.stage = self.orderFood
+
+    def Menus2(self,text,chat,name):
+        if text != "/back":
+            send_message(name + " suggested a new menu:\n" + text, NoctuachatID, remove_keyboard())
+            send_message(u"Thank you for your input! We'll do our best to implement it in our next update! \U0001F607", chat, remove_keyboard())
+        send_message(orderfood_message(), chat, orderfood_menu())
+        self.stage = self.orderFood
+
     def ManageOrder(self,text,chat,name):
         global hungerCriers
         if text == u"Close Order\u2611":
@@ -651,7 +676,8 @@ class User:
             send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
             send_message(u'First time here? Select "Quick Tutorial\U0001F393" for detailed instructions.', chat)
         elif text == u"Hotlines\u260E":
-            send_message(u"Quick access to crucial info! \U0001F60F\n\nRC4 Address:-\n\U0001F3E1Residential College 4\n\U0001F6E46 College Avenue East\n\U0001F1F8\U0001F1ECSingapore 138614\n\nDelivery Hotlines:-\n\U0001F35DAmeens: +65 6777 0555\n\U0001F355Dominos Pizza: +65 6222 6333\n\U0001F357KFC: +65 6222 6111\n\U0001F35FMcDonalds: +65 6777 6333", chat, remove_keyboard())
+            send_message(u"Quick access to crucial info! \U0001F60F\n\nRC4 Address:-\n\U0001F3E1Residential College 4\n\U0001F6E46 College Avenue East\n\U0001F1F8\U0001F1ECSingapore 138614", chat, remove_keyboard())
+            send_message(u"Delivery Hotlines:-\n\U0001F35DAmeens: +65 6777 0555\n\U0001F355Dominos Pizza: +65 6222 6333\n\U0001F357KFC: +65 6222 6111\n\U0001F35FMcDonalds: +65 6777 6333", chat, remove_keyboard())
             options =[[u"Lock/Unlock List\U0001F510", u"Hotlines\u260E"], [u"Settle Payments\U0001F4B0", u"Close Order\u2611"], [u"Quick Tutorial\U0001F393", "back"]]
             keyboard = build_keyboard(options)
             send_message(u"Hello there, Orderer! \U0001F607\nWhat would you like to do?", chat, keyboard)
