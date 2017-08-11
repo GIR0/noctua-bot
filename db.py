@@ -335,14 +335,14 @@ class surveydb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS SurveyEvents (id serial, event varchar, A varchar, B varchar, C varchar, owner integer, name varchar);"
+        tblstmt = "CREATE TABLE IF NOT EXISTS SurveyEvents (id serial, event varchar, A varchar, B varchar, C varchar, D varchar, owner integer, name varchar);"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
     def add_item(self, answer, owner, name):
-        event, A, B, C = answer
-        stmt = "INSERT INTO SurveyEvents (event, A, B, C, owner, name) VALUES (%s, %s, %s, %s, %s, %s)"
-        args = (event, A, B, C, owner, name)
+        event, A, B, C , D = answer
+        stmt = "INSERT INTO SurveyEvents (event, A, B, C, D, owner, name) VALUES (%s, %s, %s, %s ,%s, %s, %s)"
+        args = (event, A, B, C, D, owner, name)
         self.cur.execute(stmt, args)
         self.connection.commit()
 

@@ -18,7 +18,7 @@ photo_id = " "
 blast_message = " "
 blast_options = []
 NoctuachatID = -1001080757384
-admin_msg = "Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode"
+admin_msg = "Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/AARresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode"
 hungerCriers = []
 hungermessages = ["Someone is hungry... "+u"\U0001F914", "Start an order soon maybe? "+u"\U0001F644", "Please order some food soon. My family hasn't ate for 3 days... "+u"\U0001F925"\
 , "My neighbour is starting to look juicy... "+u"\U0001F924", "McSpicy meal with coke. Now wouldn't that be lovely? If only someone started an order... "+u"\U0001F31A"\
@@ -175,7 +175,7 @@ def orderfood_menu():
 class User:
     def __init__(self, id):
         self.id = id
-        self.survey =["","","",""]
+        self.survey =["","","","",""]
         self.event = ""
         self.ordererid = [0, ""]
         self.description = ["", ""]
@@ -215,7 +215,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message(u"Welcome to Nocbot Help Desk\U0001F6CE", chat, keyboard)
             self.stage = self.helpdesk
-        elif text == "/survey":
+        elif text == "/AAR":
             events = [x[0] for x in survey.get_all_events()]
             if len(events) > 0:
                 options = [[x] for x in list(set(events))]
@@ -800,7 +800,7 @@ class User:
             ratings = list(set(ratings))
             options = []
             for x in ratings:
-                if x != "-":
+                if x != "NA":
                     options.append([{"text":x, "callback_data":x}])
             options.append([{"text": u'\u2764'+"New Option", "callback_data": u'\u2764'+"New Option"}])
             options.append([{"text": u'\u274C'+"Cancel", "callback_data": u'\u274C'+"Cancel"}])
@@ -870,24 +870,26 @@ class User:
             self.stage = self.MainMenu
         elif text.encode("utf8") in events:
             self.survey[0] = text
-            send_message("What did you like about the event?", chat, remove_keyboard())
+            send_message("What do you think went well during the event?", chat, remove_keyboard())
             self.stage = self.survey2
 
     def survey2(self,text,chat,name):
         self.survey[1] = text
-        send_message("What could be improved with regards to the event?", chat, remove_keyboard())
+        send_message("What did you feel could be improved about this event?", chat, remove_keyboard())
         self.stage = self.survey3
 
     def survey3(self,text,chat,name):
         self.survey[2] = text
-        x = u'\u2b50\ufe0f'
-        options = [[x*5], [x*4], [x*3], [x*2], [x]]
-        keyboard = build_keyboard(options)
-        send_message("Please rate your overall experience with this event!", chat, keyboard)
+        send_message("Do you have suggestions for how we should execute this event again in the future?", chat, remove_keyboard())
         self.stage = self.survey4
 
     def survey4(self,text,chat,name):
         self.survey[3] = text
+        send_message("Any other comments?", chat, remove_keyboard())
+        self.stage = self.survey5
+
+    def survey5(self,text,chat,name):
+        self.survey[4] = text
         answer = self.survey
         survey.add_item(answer,chat,name)
         send_message("Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
@@ -1060,8 +1062,8 @@ class User:
 
     def addevent(self,text,chat,name):
         if text != "/back":
-            survey.add_item([text,"-","-","-"],chat,name)
-            rate.add_item(text,"-",chat,name)
+            survey.add_item([text,"-","-","-","-"],chat,name)
+            rate.add_item(text,"NA",chat,name)
             send_message("Event added!", chat, remove_keyboard())
         send_message(admin_msg, chat, remove_keyboard())
         self.stage = self.admin
@@ -1071,7 +1073,10 @@ class User:
         if text == "back":
             send_message(admin_msg, chat, remove_keyboard())
         elif text.encode("utf8") in events:
-            ratings = [x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4]+ " " for x in survey.get_by_event(text)]
+            ratings = []
+            for x in survey.get_by_event(text):
+                if x[2] != "-":
+                    ratings.append(x[6]+"\n"+x[2]+"\n"+x[3]+"\n"+x[4]+"\n"+x[5])
             ratings = [str(i+1) + ". " + x for i, x in enumerate(ratings)]
             message = "\n\n".join(ratings)
             send_message(message, chat, remove_keyboard())
