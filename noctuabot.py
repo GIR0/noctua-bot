@@ -20,7 +20,7 @@ photo_id = " "
 blast_message = " "
 blast_options = []
 NoctuachatID = -1001080757384
-admin_msg = "Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/surveyresults - View survey results for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode"
+admin_msg = "Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/reviewresponses - View review responses for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode"
 hungerCriers = []
 hungermessages = ["Someone is hungry... "+u"\U0001F914", "Start an order soon maybe? "+u"\U0001F644", "Please order some food soon. My family hasn't ate for 3 days... "+u"\U0001F925"\
 , "My neighbour is starting to look juicy... "+u"\U0001F924", "McSpicy meal with coke. Now wouldn't that be lovely? If only someone started an order... "+u"\U0001F31A"\
@@ -218,7 +218,7 @@ class User:
             keyboard = build_keyboard(options)
             send_message(u"Welcome to Nocbot Help Desk\U0001F6CE", chat, keyboard)
             self.stage = self.helpdesk
-        elif text == "/AAR":
+        elif text == "/review":
             events = [x[0] for x in survey.get_all_events()]
             if len(events) > 0:
                 options = [[x] for x in list(set(events))]
@@ -1015,7 +1015,7 @@ class User:
         elif text == "/addevent":
             send_message("Add an event to be rated\n\nor click /back to exit", chat, remove_keyboard())
             self.stage = self.addevent
-        elif text == "/surveyresults":
+        elif text == "/reviewresponses":
             events = [x[0] for x in survey.get_all_events()]
             if len(events) > 0:
                 options = [[x] for x in list(set(events))]
