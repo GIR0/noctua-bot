@@ -1106,6 +1106,7 @@ class User:
             ratings = [str(i+1) + ". " + x for i, x in enumerate(ratings)]
             message = "\n\n".join(ratings)
             send_message(message, chat, remove_keyboard())
+            send_message(admin_msg, chat, remove_keyboard())
         self.stage = self.admin
 
     def clearevent(self,text,chat,name):
