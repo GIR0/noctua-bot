@@ -1025,7 +1025,7 @@ class User:
         elif text == "/startONO":
             ono.start()
         elif text == "/ONO":
-            items = [x[1] + "-" + x[3] for x in ono.get_four()]
+            items = [str(x[1]) + "-" + x[3] for x in ono.get_four()]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
