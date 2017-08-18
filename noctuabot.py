@@ -302,7 +302,7 @@ class User:
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
-            owlet = ONO[(ONO.index(me) + 1)]
+            owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
             for x in ono.get_owner_from_four(owlet):
                 self.owlet = x[2]
                 break
