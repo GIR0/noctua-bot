@@ -1073,7 +1073,7 @@ class User:
             for x in ONO:
                 ono.start(x)
         elif text == "/ONO":
-            items = [str(x[1]) + "-" + x[3] for x in ono.get_four()]
+            items = [x[1] + "-" + x[3] for x in ono.get_four()]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/reset":
