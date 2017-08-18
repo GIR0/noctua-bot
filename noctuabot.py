@@ -317,7 +317,6 @@ class User:
                 self.owl = x[2]
                 break
             send_message("You have been connected with your Owl. Whatever you type here will be sent anonymously to him/her.", chat)
-            self.stage = self.owlchat
             return
         if self.owl != 0:
             send_message("From your Owlet:\n" + text, self.owl)
@@ -345,7 +344,6 @@ class User:
                 self.owlet = x[2]
                 break
             send_message("You have been connected with your Owlet. Whatever you type here will be sent anonymously to him/her.", chat)
-            self.stage = self.owletchat
             return
         if self.owlet != 0:
             send_message("From your Owl:\n" + text, self.owlet)
