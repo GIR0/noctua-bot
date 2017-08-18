@@ -7,6 +7,8 @@ import schedule
 import random
 from db import *
 
+
+ONO = [0001, 0002, 0003 0004]
 admin =[221211693,174955135]
 Ameens1 = "AgADBQAD16cxG1D9cVRAUqPXgTANtFQfzDIABOshQWnOm5M0oWgBAAEC"
 Ameens2 = "AgADBQAD2KcxG1D9cVRRdymN_tg3LqEQzDIABBvz5QnkSWatPm0BAAEC"
@@ -16,6 +18,7 @@ poll = polldb()
 food = orderdb()
 rate = ratedb()
 survey = surveydb()
+ono = onodb()
 photo_id = " "
 blast_message = " "
 blast_options = []
@@ -186,13 +189,15 @@ class User:
         self.idx = 0
         self.orderlist = []
         self.display = ""
+        self.owl = 0
+        self.owlet = 0
     def MainMenu(self,text,chat,name):
         if text == "/admin":
             if chat in admin:
                 self.stage = self.admin
                 send_message(admin_msg, chat, remove_keyboard())
         elif text == "/start" or text == "back" or text == "/mainmenu":
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         elif text == u"Feedback\U0001F5D2":
@@ -210,7 +215,7 @@ class User:
             self.stage = self.AlmaNoc
         elif text == u"About the Bot\U0001F989":
             send_message(u'\U0001F989' + " *About Nocbot* " + u'\U0001F989' + "\n\n" + u"\U0001F382" + " Birthday: June 2017\n\n" + u"\U0001F916" + " Bot Developers: Bai Chuan, Fiz, Youkuan\n\n" + u"\U0001F4AC" + " Language Team: Cherie, Jenn, Justin\n\n" + u"\U0001F171" + " Beta Test Team: Cheng Yong, Cherie, Ian, Jenn, Justin, Pohan, Vernon, Wesley", chat)
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         elif text == u"Help Desk\U0001F6CE":
@@ -230,6 +235,14 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message("There are currently no events to give feedback on " + u'\U0001F607', chat, keyboard)
             self.stage = self.survey1
+        elif text == u"Owl-Owlet Secret Chat\U0001F93A":
+            owners = [x[2] for x in ono.get_four]
+            if chat in owners:
+                send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
+                self.stage = self.Anonymous
+            else:
+                send_message("What is your UserID?\n\nor click /back to exit the registration process" chat, remove_keyboard())
+                self.stage = self.register
         else:
             send_message("Did you mean: /start", chat, remove_keyboard())
     def stage(self,text,chat,name):
@@ -244,6 +257,54 @@ class User:
     def empty(self,text,chat,name):
         pass
 
+    def register(self,text,chat,name):
+        if text == "/back":
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            keyboard = build_keyboard(options)
+            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
+            self.stage = self.MainMenu
+        if int(text) not in ONO:
+            send_message("UserID not found. Please try again!\n\nor click /back to exit the registration process", chat, remove_keyboard())
+            return
+        else:
+            ono.register(int(text), chat, name)
+            send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
+            self.stage = self.Anonymous
+
+    def Anonymous(self,text,chat,name):
+        if text == /owl:
+            for x in ono.get_four_from_owner(chat):
+                me = x[1]
+                break
+            owl = ONO[(ONO.index(me) - 1)]
+            for x in ono.get_owner_from_four(owl):
+                self.owl = x[2]
+                break
+            send_message("You have been connected with your Owl. Whatever you type here will be sent anonymously to him/her.", chat)
+            self.stage = self.owlchat
+        elif text == /owlet:
+            for x in ono.get_four_from_owner(chat):
+                me = x[1]
+                break
+            owlet = ONO[(ONO.index(me) + 1)]
+            for x in ono.get_owner_from_four(owlet):
+                self.owlet = x[2]
+                break
+            send_message("You have been connected with your Owlet. Whatever you type here will be sent anonymously to him/her.", chat)
+            self.stage = self.owletchat
+
+    def owlchat(self,text,chat,name):
+        if self.owl != 0:
+            send_message("Your owlet sent:\n" + text, self.owl)
+        else:
+            send_message(u"Your message has failed to send, because he/she has yet to sign in to Nocbot. Please be patient and try again soon! \U0001F642", chat)
+
+    def owletchat(self,text,chat,name):
+        if self.owl != 0:
+            send_message("Your owl sent:\n" + text, self.owlet)
+        else:
+            send_message(u"Your message has failed to send, because he/she has yet to sign in to Nocbot. Please be patient and try again soon! \U0001F642", chat)
+
     def Feedback1(self,text,chat,name):
         if text == u"General Feedback\u2601":
             send_message("This option is for submitting feedback about any general issues. Please submit any house-related queries and suggestions you may have here! We want to hear your voice " + u'\ud83d\udce3'\
@@ -257,7 +318,7 @@ class User:
             send_message("This option is for submitting feedback regarding any house events. Please submit any queries and suggestions you may have here! " + u"\U0001F618" + "\n\nWhen you are done, hit send to submit your feedback. If you decide not to submit feedback, please enter /mainmenu to cancel.", chat, remove_keyboard())
             self.stage = self.FeedbackHE
         elif text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -407,7 +468,7 @@ class User:
                 send_message(u"Your Cry has already been heard! \U0001F4E3", chat, remove_keyboard())
             send_message(orderfood_message(), chat, orderfood_menu())
         elif text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -808,7 +869,7 @@ class User:
                 send_message("There are currently no events to rate " + u'\U0001F607', chat, keyboard)
             self.stage = self.rate1
         elif text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -844,7 +905,7 @@ class User:
         empty_answer(call_id)
         if data == u'\u274C'+"Cancel":
             edit_message(chat, message_id, "Cancelled")
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -871,7 +932,7 @@ class User:
             event = self.event
             rate.add_item(event,data,chat,name)
             edit_message(chat, message_id, "Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!")
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -881,7 +942,7 @@ class User:
         event = self.event
         rate.add_item(event,text,chat,name)
         send_message("Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
-        options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+        options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         self.stage = self.MainMenu
@@ -890,7 +951,7 @@ class User:
     def survey1(self,text,chat,name):
         events = [x[0] for x in survey.get_all_events()]
         if text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -919,14 +980,14 @@ class User:
         answer = self.survey
         survey.add_item(answer,chat,name)
         send_message("Thank you for your review!"+u'\U0001F647'+"\n\nWe'll take your views into consideration, and hope to provide an even greater experience for you in our next upcoming event!", chat, remove_keyboard())
-        options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+        options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         self.stage = self.MainMenu
 
     def helpdesk(self,text,chat,name):
         if text == "back":
-            options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
             keyboard = build_keyboard(options)
             send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
             self.stage = self.MainMenu
@@ -943,7 +1004,7 @@ class User:
         if text != "/back":
             send_message(name + " asked:\n" + text, NoctuachatID, remove_keyboard())
             send_message(u"Understood! I'll get back to you when I have an answer! \U0001F609", chat, remove_keyboard())
-        options =[[u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
+        options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
         keyboard = build_keyboard(options)
         send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
         self.stage = self.MainMenu
@@ -960,6 +1021,12 @@ class User:
             message = "There are no feedbacks submitted at the moment."
             if len(items) > 0:
                 message = "\n".join(items)
+            send_message(message, chat, remove_keyboard())
+        elif text == "/startONO":
+            ono.start()
+        elif text == "/ONO":
+            items = [x[1] + "-" + x[3] for x in ono.get_four_from_owner()]
+            message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/delete":
             items = db.get_Bot()
@@ -1342,5 +1409,6 @@ if __name__ == '__main__':
     food.setup()
     rate.setup()
     survey.setup()
+    ono.setup()
     thread.start_new_thread(daily_reset_run, ())
     main()

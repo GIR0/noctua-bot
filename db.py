@@ -443,3 +443,88 @@ class ratedb:
         stmt = "DELETE FROM RateEvents;"
         self.cur.execute(stmt)
         self.connection.commit()
+
+class onodb:
+    def __init__(self):
+        self.connection = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        self.cur = self.connection.cursor()
+
+    def setup(self):
+        tblstmt = "CREATE TABLE IF NOT EXISTS ONO (id serial, four integer, owner integer, name varchar, registered varchar);"
+        self.cur.execute(tblstmt)
+        self.connection.commit()
+
+    def start(self):
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        args = (0001, 0, "-", "no")
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        args = (0002, 0, "-", "no")
+        self.cur.execute(stmt, args)
+        self.connection.commit()stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        args = (0003, 0, "-", "no")
+        self.cur.execute(stmt, args)
+        self.connection.commit()stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        args = (0004, 0, "-", "no")
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+
+    def register(self, four, owner, name):
+        stmt = "DELETE FROM ONO WHERE four = %s"
+        args = (four, )
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        args = (four, owner, name, "yes")
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def reset(self, four):
+        stmt = "DELETE FROM ONO WHERE four = %s"
+        args = (four, )
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        args = (four, 0, "-", "no")
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def get_four(self):
+        stmt = "SELECT * FROM ONO"
+        try:
+            self.cur.execute(stmt)
+            print("get_four executed")
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_four_from_owner(self, owner):
+        stmt = "SELECT * FROM ONO WHERE owner = %s"
+        args = (owner, )
+        try:
+            self.cur.execute(stmt, args)
+            print("get_four_from_owner executed")
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_owner_from_four(self, four):
+        stmt = "SELECT * FROM ONO WHERE four = %s"
+        args = (four, )
+        try:
+            self.cur.execute(stmt, args)
+            print("get_owner_from_four executed")
+            return self.cur
+        except:
+            print("Failure")
+            return []
