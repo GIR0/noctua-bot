@@ -460,24 +460,11 @@ class onodb:
         self.cur.execute(tblstmt)
         self.connection.commit()
 
-    def start(self):
+    def start(self, four):
         stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (1000, 0, "-", "no")
+        args = (four, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
-        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (2000, 0, "-", "no")
-        self.cur.execute(stmt, args)
-        self.connection.commit()
-        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (3000, 0, "-", "no")
-        self.cur.execute(stmt, args)
-        self.connection.commit()
-        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (4000, 0, "-", "no")
-        self.cur.execute(stmt, args)
-        self.connection.commit()
-
 
     def register(self, four, owner, name):
         stmt = "DELETE FROM ONO WHERE four = %s"

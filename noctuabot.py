@@ -320,7 +320,7 @@ class User:
             self.stage = self.owlchat
             return
         if self.owl != 0:
-            send_message("Your owlet sent:\n" + text, self.owl)
+            send_message("From your Owlet:\n" + text, self.owl)
         else:
             send_message(u"Your message has failed to send, because he/she has yet to sign in to Nocbot. Please be patient and try again soon! \U0001F642", chat)
 
@@ -348,7 +348,7 @@ class User:
             self.stage = self.owletchat
             return
         if self.owlet != 0:
-            send_message("Your owl sent:\n" + text, self.owlet)
+            send_message("From your Owl:\n" + text, self.owlet)
         else:
             send_message(u"Your message has failed to send, because he/she has yet to sign in to Nocbot. Please be patient and try again soon! \U0001F642", chat)
 
@@ -1071,7 +1071,8 @@ class User:
             send_message(message, chat, remove_keyboard())
         elif text == "/startONO":
             ono.clear()
-            ono.start()
+            for x in ONO:
+                ono.start(x)
         elif text == "/ONO":
             items = [str(x[1]) + "-" + x[3] for x in ono.get_four()]
             message = "\n".join(items)
