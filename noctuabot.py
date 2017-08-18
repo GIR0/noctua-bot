@@ -241,7 +241,7 @@ class User:
                 send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
                 self.stage = self.Anonymous
             else:
-                send_message("What is your UserID?\n\nor click /back to exit the registration process" chat, remove_keyboard())
+                send_message("What is your UserID?\n\nor click /back to exit the registration process", chat, remove_keyboard())
                 self.stage = self.register
         else:
             send_message("Did you mean: /start", chat, remove_keyboard())
