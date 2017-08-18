@@ -270,7 +270,7 @@ class User:
                 send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
                 self.stage = self.Anonymous
             else:
-                send_message("You have entered the wrong 4-digit number. Please try again, or type /mainmenu to exit.")
+                send_message("You have entered the wrong 4-digit number. Please try again, or type /mainmenu to exit.", chat, remove_keyboard())
 
     def Anonymous(self,text,chat,name):
         if text == "/owl":
