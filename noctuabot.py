@@ -1077,8 +1077,8 @@ class User:
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/reset":
-            ono.reset(four)
-            send_message("Done", chat)
+            send_message("Enter the code!", chat)
+            self.stage = self.reset
         elif text == "/delete":
             items = db.get_Bot()
             items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
@@ -1192,6 +1192,12 @@ class User:
             pass
         else:
             return
+
+    def reset(self,text,chat,name):
+        ono.reset(text)
+        send_message("Done!", chat)
+        send_message(admin_msg, chat, remove_keyboard())
+        self.stage = self.admin
 
     def adminclose(self,text,chat,name):
         descriptions = [x[0] for x in food.get_all_description()]
