@@ -303,7 +303,7 @@ class User:
             send_message(u"Your message has failed to send, because he/she has yet to sign in to Nocbot. Please be patient and try again soon! \U0001F642", chat)
 
     def owletchat(self,text,chat,name):
-        if self.owl != 0:
+        if self.owlet != 0:
             send_message("Your owl sent:\n" + text, self.owlet)
         else:
             send_message(u"Your message has failed to send, because he/she has yet to sign in to Nocbot. Please be patient and try again soon! \U0001F642", chat)
