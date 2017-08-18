@@ -484,7 +484,7 @@ class onodb:
         args = (four, )
         self.cur.execute(stmt, args)
         self.connection.commit()
-        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
         args = (four, owner, name, "yes")
         self.cur.execute(stmt, args)
         self.connection.commit()
@@ -494,7 +494,7 @@ class onodb:
         args = (four, )
         self.cur.execute(stmt, args)
         self.connection.commit()
-        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
         args = (four, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
