@@ -288,7 +288,7 @@ class User:
                 me = x[1]
                 print me
                 break
-            owlet = ONO[(ONO.index(me) + 1)]
+            owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
             print owlet
             for x in ono.get_owner_from_four(owlet):
                 self.owlet = x[2]
