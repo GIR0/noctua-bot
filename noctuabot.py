@@ -258,18 +258,19 @@ class User:
         pass
 
     def register(self,text,chat,name):
-        if text == "/back":
-            options =[[u"Owl-Owlet Secret Chat\U0001F93A"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
-            keyboard = build_keyboard(options)
-            send_message("Hello there, " + name + "! Nocbot at your service! " + u'\U0001F989', chat, keyboard)
-            self.stage = self.MainMenu
         if int(text) not in ONO:
-            send_message("UserID not found. Please try again!\n\nor click /back to exit the registration process", chat, remove_keyboard())
+            send_message("You have entered the wrong 4-digit number. Please try again, or type /mainmenu to exit.", chat, remove_keyboard())
             return
         else:
-            ono.register(int(text), chat, name)
-            send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
-            self.stage = self.Anonymous
+            for x in ono.get_owner_from_four(text):
+                test = x[2]
+                break
+            if test == 0:
+                ono.register(int(text), chat, name)
+                send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
+                self.stage = self.Anonymous
+            else:
+                send_message("You have entered the wrong 4-digit number. Please try again, or type /mainmenu to exit.")
 
     def Anonymous(self,text,chat,name):
         if text == "/owl":
