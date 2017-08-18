@@ -236,7 +236,7 @@ class User:
                 send_message("There are currently no events to give feedback on " + u'\U0001F607', chat, keyboard)
             self.stage = self.survey1
         elif text == u"Owl-Owlet Secret Chat\U0001F93A":
-            owners = [x[2] for x in ono.get_four]
+            owners = [x[2] for x in ono.get_four()]
             if chat in owners:
                 send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
                 self.stage = self.Anonymous
