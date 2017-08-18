@@ -1023,6 +1023,7 @@ class User:
                 message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
         elif text == "/startONO":
+            ono.clear()
             ono.start()
         elif text == "/ONO":
             items = [str(x[1]) + "-" + x[3] for x in ono.get_four()]
