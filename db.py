@@ -461,17 +461,19 @@ class onodb:
         self.connection.commit()
 
     def start(self):
-        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
         args = (0001, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
-        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
         args = (0002, 0, "-", "no")
         self.cur.execute(stmt, args)
-        self.connection.commit()stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        self.connection.commit()
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
         args = (0003, 0, "-", "no")
         self.cur.execute(stmt, args)
-        self.connection.commit()stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)
+        self.connection.commit()
+        stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
         args = (0004, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
