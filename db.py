@@ -456,7 +456,7 @@ class onodb:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS ONO (id serial, four integer, owner integer, name varchar, registered varchar);"
+        tblstmt = "CREATE TABLE IF NOT EXISTS ONO (id serial, four varchar, owner integer, name varchar, registered varchar);"
         self.cur.execute(tblstmt)
         self.connection.commit()
 

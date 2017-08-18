@@ -8,7 +8,7 @@ import random
 from db import *
 
 
-ONO = [1234, 4567, 7890]
+ONO = ['123A', '456B', '789C']
 admin =[221211693,174955135]
 Ameens1 = "AgADBQAD16cxG1D9cVRAUqPXgTANtFQfzDIABOshQWnOm5M0oWgBAAEC"
 Ameens2 = "AgADBQAD2KcxG1D9cVRRdymN_tg3LqEQzDIABBvz5QnkSWatPm0BAAEC"
@@ -258,7 +258,7 @@ class User:
         pass
 
     def register(self,text,chat,name):
-        if int(text) not in ONO:
+        if text not in ONO:
             send_message("You have entered the wrong 4-digit number. Please try again, or type /mainmenu to exit.", chat, remove_keyboard())
             return
         else:
@@ -266,7 +266,7 @@ class User:
                 test = x[2]
                 break
             if test == 0:
-                ono.register(int(text), chat, name)
+                ono.register(text, chat, name)
                 send_message("Hello there, Anonymous! Click or type any of the following:\n/owl: Chat with your Owl\n/owlet: Chat with your Owlet\n/mainmenu: Exits the Chat feature, and return to the Main Menu", chat, remove_keyboard())
                 self.stage = self.Anonymous
             else:
@@ -966,7 +966,7 @@ class User:
             ratings = list(set(ratings))
             options = []
             for x in ratings:
-                if x != "-":
+                if x != "NA":
                     options.append([{"text":x, "callback_data":x}])
             options.append([{"text": u'\u2764'+"New Option", "callback_data": u'\u2764'+"New Option"}])
             options.append([{"text": u'\u274C'+"Cancel", "callback_data": u'\u274C'+"Cancel"}])
@@ -1076,6 +1076,9 @@ class User:
             items = [str(x[1]) + "-" + x[3] for x in ono.get_four()]
             message = "\n".join(items)
             send_message(message, chat, remove_keyboard())
+        elif text == "/reset":
+            ono.reset(four)
+            send_message("Done", chat)
         elif text == "/delete":
             items = db.get_Bot()
             items = ["("+x[2]+")"+" "+x[4]+": "+x[1] for x in items]
