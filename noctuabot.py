@@ -272,7 +272,7 @@ class User:
             self.stage = self.Anonymous
 
     def Anonymous(self,text,chat,name):
-        if text == /owl:
+        if text == "/owl":
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
@@ -282,7 +282,7 @@ class User:
                 break
             send_message("You have been connected with your Owl. Whatever you type here will be sent anonymously to him/her.", chat)
             self.stage = self.owlchat
-        elif text == /owlet:
+        elif text == "/owlet":
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
