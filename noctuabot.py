@@ -297,12 +297,37 @@ class User:
             self.stage = self.owletchat
 
     def owlchat(self,text,chat,name):
+        if text == "/owlet":
+            for x in ono.get_four_from_owner(chat):
+                me = x[1]
+                print me
+                break
+            owlet = ONO[(ONO.index(me) + 1)]
+            print owlet
+            for x in ono.get_owner_from_four(owlet):
+                self.owlet = x[2]
+                print self.owlet
+                break
+            send_message("You have been connected with your Owlet. Whatever you type here will be sent anonymously to him/her.", chat)
+            self.stage = self.owletchat
+            return
         if self.owl != 0:
             send_message("Your owlet sent:\n" + text, self.owl)
         else:
             send_message(u"Your message has failed to send, because he/she has yet to sign in to Nocbot. Please be patient and try again soon! \U0001F642", chat)
 
     def owletchat(self,text,chat,name):
+        if text == "/owl":
+            for x in ono.get_four_from_owner(chat):
+                me = x[1]
+                break
+            owl = ONO[(ONO.index(me) - 1)]
+            for x in ono.get_owner_from_four(owl):
+                self.owl = x[2]
+                break
+            send_message("You have been connected with your Owl. Whatever you type here will be sent anonymously to him/her.", chat)
+            self.stage = self.owlchat
+            return
         if self.owlet != 0:
             send_message("Your owl sent:\n" + text, self.owlet)
         else:
