@@ -308,6 +308,17 @@ class User:
             send_message("You have been connected with your Owlet. Whatever you type here will be sent anonymously to him/her.", chat)
             self.stage = self.owletchat
             return
+        elif text == "/owl":
+            for x in ono.get_four_from_owner(chat):
+                me = x[1]
+                break
+            owl = ONO[(ONO.index(me) - 1)]
+            for x in ono.get_owner_from_four(owl):
+                self.owl = x[2]
+                break
+            send_message("You have been connected with your Owl. Whatever you type here will be sent anonymously to him/her.", chat)
+            self.stage = self.owlchat
+            return
         if self.owl != 0:
             send_message("Your owlet sent:\n" + text, self.owl)
         else:
@@ -324,6 +335,17 @@ class User:
                 break
             send_message("You have been connected with your Owl. Whatever you type here will be sent anonymously to him/her.", chat)
             self.stage = self.owlchat
+            return
+        elif text == "/owlet":
+            for x in ono.get_four_from_owner(chat):
+                me = x[1]
+                break
+            owlet = ONO[(ONO.index(me) + 1)]
+            for x in ono.get_owner_from_four(owlet):
+                self.owlet = x[2]
+                break
+            send_message("You have been connected with your Owlet. Whatever you type here will be sent anonymously to him/her.", chat)
+            self.stage = self.owletchat
             return
         if self.owlet != 0:
             send_message("Your owl sent:\n" + text, self.owlet)
