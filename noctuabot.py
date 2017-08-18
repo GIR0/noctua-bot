@@ -8,7 +8,7 @@ import random
 from db import *
 
 
-ONO = [0001, 0002, 0003, 0004]
+ONO = [1000, 2000, 3000, 4000]
 admin =[221211693,174955135]
 Ameens1 = "AgADBQAD16cxG1D9cVRAUqPXgTANtFQfzDIABOshQWnOm5M0oWgBAAEC"
 Ameens2 = "AgADBQAD2KcxG1D9cVRRdymN_tg3LqEQzDIABBvz5QnkSWatPm0BAAEC"

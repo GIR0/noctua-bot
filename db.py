@@ -462,19 +462,19 @@ class onodb:
 
     def start(self):
         stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (0001, 0, "-", "no")
+        args = (1000, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
         stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (0002, 0, "-", "no")
+        args = (2000, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
         stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (0003, 0, "-", "no")
+        args = (3000, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
         stmt = "INSERT INTO ONO (four, owner, name, registered) VALUES (%s, %s, %s, %s)"
-        args = (0004, 0, "-", "no")
+        args = (4000, 0, "-", "no")
         self.cur.execute(stmt, args)
         self.connection.commit()
 
@@ -503,7 +503,6 @@ class onodb:
         stmt = "SELECT * FROM ONO"
         try:
             self.cur.execute(stmt)
-            print("get_four executed")
             return self.cur
         except:
             print("Failure")
@@ -514,7 +513,6 @@ class onodb:
         args = (owner, )
         try:
             self.cur.execute(stmt, args)
-            print("get_four_from_owner executed")
             return self.cur
         except:
             print("Failure")
@@ -525,8 +523,12 @@ class onodb:
         args = (four, )
         try:
             self.cur.execute(stmt, args)
-            print("get_owner_from_four executed")
             return self.cur
         except:
             print("Failure")
             return []
+
+    def clear(self):
+        stmt = "DELETE FROM ONO;"
+        self.cur.execute(stmt)
+        self.connection.commit()
