@@ -508,7 +508,7 @@ class User:
                     send_message(hungermessages[count-1] + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), NoctuachatID)
                 else:
                     message = hungermessages[random.randint(2,len(hungermessages)-1)]
-                    send_message(message + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers), NoctuachatID, remove_keyboard())
+                    send_message(message + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
                 send_message("Hoot hoot "+u'\U0001F989'+"Your cry has been heard!\n\nThe current number of people starving is "+str(len(hungerCriers))+". When an order is started, Nocbot will PM you "+u'\U0001F609', chat, remove_keyboard())
             else:
                 send_message(u"Your Cry has already been heard! \U0001F4E3", chat, remove_keyboard())
