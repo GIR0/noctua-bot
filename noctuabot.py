@@ -8,7 +8,10 @@ import random
 from db import *
 
 
-ONO = ['123A', '456B', '789C']
+ONO = ["PYKH", "W9N7", "GYPX", "9MAG", "YYCJ", "F5PM", "X3SK", "FXN9", "BQFG", "73S9", "5W6W", "KZBJ", "3Q4E", "HDDB", "7E4R", "2NBG", "FN2R", "EA34", "MM7U"\
+, "UHRY", "9F77", "RZBD", "SU9P", "EJDU", "KFFY", "Y34B", "HVJV", "2R9Z", "7E4T", "U4GT", "T6R6", "FGFH", "GXH7", "XBDD", "FRDJ", "RSJQ", "U5UG", "CCZJ", "PJKG"\
+,"PZCG", "B5FV", "8MMR", "KDHT", "HFE5", "C2WT", "J62H", "E697", "J7TS", "C54U", "H5EP", "629Y", "MAK6", "BWDX", "GJPE", "VEXC", "3XK7", "CASD", "BQED", "S8EQ"\
+, "2FVN"]
 admin =[221211693,174955135]
 Ameens1 = "AgADBQAD16cxG1D9cVRAUqPXgTANtFQfzDIABOshQWnOm5M0oWgBAAEC"
 Ameens2 = "AgADBQAD2KcxG1D9cVRRdymN_tg3LqEQzDIABBvz5QnkSWatPm0BAAEC"
@@ -505,7 +508,7 @@ class User:
                     send_message(hungermessages[count-1] + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), NoctuachatID)
                 else:
                     message = hungermessages[random.randint(2,len(hungermessages)-1)]
-                    send_message(message + "\n\nhungerCount is " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
+                    send_message(message + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers), NoctuachatID, remove_keyboard())
                 send_message("Hoot hoot "+u'\U0001F989'+"Your cry has been heard!\n\nThe current number of people starving is "+str(len(hungerCriers))+". When an order is started, Nocbot will PM you "+u'\U0001F609', chat, remove_keyboard())
             else:
                 send_message(u"Your Cry has already been heard! \U0001F4E3", chat, remove_keyboard())
