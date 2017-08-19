@@ -286,13 +286,10 @@ class User:
         elif text == "/owlet":
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
-                print me
                 break
             owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
-            print owlet
             for x in ono.get_owner_from_four(owlet):
                 self.owlet = x[2]
-                print self.owlet
                 break
             send_message("You have been connected with your Owlet. Whatever you type here will be sent anonymously to him/her.", chat)
             self.stage = self.owletchat
