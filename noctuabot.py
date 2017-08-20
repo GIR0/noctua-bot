@@ -1415,7 +1415,6 @@ def main():
                                         x = User(chat)
                                         users.append(x)
                                         USERS.add_user(chat,name)
-                                        print("new temporary user")
                                         if text.startswith("!"):
                                             x.blast_poll(text,chat,name)
                                         elif text == "/mainmenu":
@@ -1449,7 +1448,6 @@ def main():
                         if chat not in [user.id for user in users]:
                                 x = User(chat)
                                 users.append(x)
-                                print("new temporary user")
                                 x.inline(update)
                 last_update_id = get_last_update_id(updates) + 1
         except KeyError, e:
