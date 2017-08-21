@@ -12,6 +12,7 @@ ONO = ["PYKH", "W9N7", "GYPX", "9MAG", "YYCJ", "F5PM", "X3SK", "FXN9", "BQFG", "
 , "UHRY", "9F77", "RZBD", "SU9P", "EJDU", "KFFY", "Y34B", "HVJV", "2R9Z", "7E4T", "U4GT", "T6R6", "FGFH", "GXH7", "XBDD", "FRDJ", "RSJQ", "U5UG", "CCZJ", "PJKG"\
 ,"PZCG", "B5FV", "8MMR", "KDHT", "HFE5", "C2WT", "J62H", "E697", "J7TS", "C54U", "H5EP", "629Y", "MAK6", "BWDX", "GJPE", "VEXC", "3XK7", "CASD", "BQED", "S8EQ"\
 , "2FVN"]
+ONO2 =[]
 admin =[221211693,174955135]
 Ameens1 = "AgADBQAD16cxG1D9cVRAUqPXgTANtFQfzDIABOshQWnOm5M0oWgBAAEC"
 Ameens2 = "AgADBQAD2KcxG1D9cVRRdymN_tg3LqEQzDIABBvz5QnkSWatPm0BAAEC"
@@ -261,7 +262,7 @@ class User:
         pass
 
     def register(self,text,chat,name):
-        if text not in ONO:
+        if text not in ONO and text not in ONO2:
             send_message("You have entered the wrong 4-digit number. Please try again, or type /mainmenu to exit.", chat, remove_keyboard())
             return
         else:
@@ -280,7 +281,10 @@ class User:
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
-            owl = ONO[(ONO.index(me) - 1)]
+            if me in ONO:
+                owl = ONO[(ONO.index(me) - 1)]
+            else:
+                owl = ONO2[(ONO2.index(me) - 1)]
             for x in ono.get_owner_from_four(owl):
                 self.owl = x[2]
                 break
@@ -290,7 +294,10 @@ class User:
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
-            owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
+            if me in ONO:
+                owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
+            else:
+                owlet = ONO2[(ONO2.index(me) + 1)%len(ONO2)]
             for x in ono.get_owner_from_four(owlet):
                 self.owlet = x[2]
                 break
@@ -302,7 +309,10 @@ class User:
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
-            owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
+            if me in ONO:
+                owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
+            else:
+                owlet = ONO2[(ONO2.index(me) + 1)%len(ONO2)]
             for x in ono.get_owner_from_four(owlet):
                 self.owlet = x[2]
                 break
@@ -313,7 +323,10 @@ class User:
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
-            owl = ONO[(ONO.index(me) - 1)]
+            if me in ONO:
+                owl = ONO[(ONO.index(me) - 1)]
+            else:
+                owl = ONO2[(ONO2.index(me) - 1)]
             for x in ono.get_owner_from_four(owl):
                 self.owl = x[2]
                 break
@@ -329,7 +342,10 @@ class User:
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
-            owl = ONO[(ONO.index(me) - 1)]
+            if me in ONO:
+                owl = ONO[(ONO.index(me) - 1)]
+            else:
+                owl = ONO2[(ONO2.index(me) - 1)]
             for x in ono.get_owner_from_four(owl):
                 self.owl = x[2]
                 break
@@ -340,7 +356,10 @@ class User:
             for x in ono.get_four_from_owner(chat):
                 me = x[1]
                 break
-            owlet = ONO[(ONO.index(me) + 1)]
+            if me in ONO:
+                owlet = ONO[(ONO.index(me) + 1)%len(ONO)]
+            else:
+                owlet = ONO2[(ONO2.index(me) + 1)%len(ONO2)]
             for x in ono.get_owner_from_four(owlet):
                 self.owlet = x[2]
                 break
@@ -1071,6 +1090,9 @@ class User:
         elif text == "/startONO":
             ono.clear()
             for x in ONO:
+                ono.start(x)
+        elif text == "/startONO2"
+            for x in ONO2:
                 ono.start(x)
         elif text == "/ONO":
             items = [x[1] + "-" + x[3] for x in ono.get_four()]
