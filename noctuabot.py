@@ -1091,7 +1091,7 @@ class User:
             ono.clear()
             for x in ONO:
                 ono.start(x)
-        elif text == "/startONO2"
+        elif text == "/startONO2":
             for x in ONO2:
                 ono.start(x)
         elif text == "/ONO":
