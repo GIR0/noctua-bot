@@ -284,7 +284,7 @@ class User:
                 break
             if me in ONO:
                 owl = ONO[(ONO.index(me) - 1)]
-            elif me in ONO:
+            elif me in ONO2:
                 owl = ONO2[(ONO2.index(me) - 1)]
             else:
                 owl = ONO3[(ONO3.index(me) - 1)]
@@ -332,7 +332,7 @@ class User:
                 break
             if me in ONO:
                 owl = ONO[(ONO.index(me) - 1)]
-            elif me in ONO:
+            elif me in ONO2:
                 owl = ONO2[(ONO2.index(me) - 1)]
             else:
                 owl = ONO3[(ONO3.index(me) - 1)]
@@ -353,7 +353,7 @@ class User:
                 break
             if me in ONO:
                 owl = ONO[(ONO.index(me) - 1)]
-            elif me in ONO:
+            elif me in ONO2:
                 owl = ONO2[(ONO2.index(me) - 1)]
             else:
                 owl = ONO3[(ONO3.index(me) - 1)]
