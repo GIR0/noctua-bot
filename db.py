@@ -444,6 +444,78 @@ class ratedb:
         self.cur.execute(stmt)
         self.connection.commit()
 
+class sampledb:
+    def __init__(self):
+        self.connection = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        self.cur = self.connection.cursor()
+
+    def setup(self):
+        tblstmt = "CREATE TABLE IF NOT EXISTS Sample (id serial, title varchar, option varchar, owner integer, name varchar, CONSTRAINT owner_name5 UNIQUE (option, owner, name));"
+        self.cur.execute(tblstmt)
+        self.connection.commit()
+
+    def action(self, title, option, owner, name):
+        stmt = "INSERT INTO Sample (title, option, owner, name) VALUES (%s, %s, %s, %s) ON CONFLICT (option,owner,name) DO NOTHING;"
+        args = (title, option, owner, name)
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def delete_title(self, title):
+        stmt = "DELETE FROM Sample WHERE title = %s"
+        args = (title, )
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def get_all_titles(self):
+        stmt = "SELECT title FROM Sample"
+        self.cur.execute(stmt)
+        return self.cur
+
+    def get_by_title(self, title):
+        try:
+            self.cur.execute("SELECT * FROM Sample WHERE title = %s", (title,))
+            print("get_by_title executed")
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_results(self, title, option):
+        stmt = "SELECT * FROM Sample WHERE title = %s AND option = %s"
+        try:
+            args = (title, option)
+            self.cur.execute(stmt, args)
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def get_stats(self, title):
+        x = dict()
+        try:
+            self.cur.execute("SELECT * FROM Sample WHERE title = %s", (title,))
+            for each in self.cur:
+                key = each[2]
+                if key in x:
+                    x[key] += 1
+                else:
+                    x[key] = 1
+            return x
+        except:
+            print("Failure")
+            return x
+
+    def clear(self):
+        stmt = "DELETE FROM Sample;"
+        self.cur.execute(stmt)
+        self.connection.commit()
+
 class onodb:
     def __init__(self):
         self.connection = psycopg2.connect(

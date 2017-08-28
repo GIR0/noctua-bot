@@ -24,6 +24,7 @@ food = orderdb()
 rate = ratedb()
 survey = surveydb()
 ono = onodb()
+sample = sampledb()
 photo_id = " "
 blast_message = " "
 blast_options = []
@@ -908,9 +909,11 @@ class User:
             send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /previous to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
         elif text == "/done":
             message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
+            send_message(message,chat)
+            items = []
             for x in self.orderlist:
-                message += "$" + x[1] + " - " + x[3]
-            send_message(message, chat)
+                items.append("$" + x[1] + " - " + x[3])
+            send_message("\n".join(items), chat)
             for x in self.orderlist:
                 if x[1] != "":
                     send_message("You are required to pay $" + x[1] + " to " + name + " for your latest order:\n" + x[2], x[0])
@@ -1487,11 +1490,21 @@ def main():
                                 x = User(chat)
                                 users.append(x)
                                 x.inline(update)
+                    elif "inline_query" in update:
+                        chat = update["inline_query"]["from"]["id"]
+                        for user in users:
+                            if chat == user.id:
+                                user.inline_mode(update)
+                                break
+                        if chat not in [user.id for user in users]:
+                                x = User(chat)
+                                users.append(x)
+                                x.inline_mode(update)
                 last_update_id = get_last_update_id(updates) + 1
         except KeyError, e:
                 print('I got a KeyError - reason "%s"' % str(e))
                 last_update_id = get_last_update_id(updates) + 1
-                continue
+                pass
         time.sleep(0.5)
 
 if __name__ == '__main__':
@@ -1503,5 +1516,6 @@ if __name__ == '__main__':
     rate.setup()
     survey.setup()
     ono.setup()
+    sample.setup()
     thread.start_new_thread(daily_reset_run, ())
     main()
