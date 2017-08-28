@@ -1214,7 +1214,7 @@ class User:
             else:
                 send_message("There are currently no events added " + u'\U0001F607', chat)
         elif text == "/countmein":
-            send_message("Let's create a new poll. First, send me the title.", chat)]
+            send_message("Let's create a new poll. First, send me the title.", chat)
             self.stage = self.create_title
         elif text == "/closeorder":
             descriptions = [x[0] for x in food.get_all_description()]
