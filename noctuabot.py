@@ -913,7 +913,7 @@ class User:
             items = []
             for x in self.orderlist:
                 items.append("$" + x[1] + " - " + urllib.quote_plus(x[3]) ) #for emoji names
-            message = "\n".join(items
+            message = "\n".join(items)
             send_message(message, chat)
             for x in self.orderlist:
                 if x[1] != "":
