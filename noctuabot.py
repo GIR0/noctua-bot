@@ -169,8 +169,8 @@ def orderfood_message():
             descriptions.append(x[0])
     descriptions = list(set(descriptions))
     if len(descriptions) > 0:
-        descriptions = [str(i+1) + ") " + x for i, x in enumerate(descriptions)]
         descriptions.reverse()
+        descriptions = [str(i+1) + ") " + x for i, x in enumerate(descriptions)]
         message = u"\u23F0Ongoing Order\U0001F4DD\n"
         for x in descriptions:
                 message += x + "\n"
