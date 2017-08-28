@@ -503,9 +503,11 @@ class sampledb:
             for each in self.cur:
                 key = each[2]
                 if key in x:
-                    x[key] += 1
+                    if each[3] != 0:
+                        x[key] += 1
                 else:
-                    x[key] = 1
+                    if each[3] != 0:
+                        x[key] = 1
             return x
         except:
             print("Failure")
@@ -513,6 +515,41 @@ class sampledb:
 
     def clear(self):
         stmt = "DELETE FROM Sample;"
+        self.cur.execute(stmt)
+        self.connection.commit()
+
+class samplerecord:
+    def __init__(self):
+        self.connection = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        self.cur = self.connection.cursor()
+
+    def setup(self):
+        tblstmt = "CREATE TABLE IF NOT EXISTS SampleRecord (id serial, title varchar, inline_message_id integer);"
+        self.cur.execute(tblstmt)
+        self.connection.commit()
+
+    def add_id(self, title, inline_message_id):
+        stmt = "INSERT INTO SampleRecord (title, inline_message_id) VALUES (%s, %s);"
+        args = (title, inline_message_id)
+        self.cur.execute(stmt, args)
+        self.connection.commit()
+
+    def get_by_id(self, inline_message_id):
+        try:
+            self.cur.execute("SELECT * FROM SampleRecord WHERE inline_message_id = %s", (inline_message_id,))
+            return self.cur
+        except:
+            print("Failure")
+            return []
+
+    def clear(self):
+        stmt = "DELETE FROM SampleRecord;"
         self.cur.execute(stmt)
         self.connection.commit()
 

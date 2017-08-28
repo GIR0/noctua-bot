@@ -28,7 +28,8 @@ sample = sampledb()
 photo_id = " "
 blast_message = " "
 blast_options = []
-NoctuachatID = -1001080757384
+AdminchatID = -1001080757384
+NoctuachatID = -1001031211284
 admin_msg = "Hello there, Administrator! " + u'\U0001F916' +"\n\n/view - Displays all feedback\n/delete - Delete selected feedback\n/clearall - Erase all feedback\n\n/addevent - Add an event\n/reviewresponses - View review responses for an event\n/viewrating - View ratings for an event\n/clearevent - Delete an event and its ratings\n/closeorder - Close an ongoing food order\n\n/blast - Ultimate spam function\n/blastresults - Display blast results\n/viewusers - Display blast name list\n/removeuser - Remove user from blast list\n\n/mainmenu - Exit Admin mode"
 hungerCriers = []
 hungermessages = ["Someone is hungry... "+u"\U0001F914", "Start an order soon maybe? "+u"\U0001F644", "Please order some food soon. My family hasn't ate for 3 days... "+u"\U0001F925"\
@@ -98,6 +99,17 @@ def edit_message(chat_id, message_id, text, reply_markup=None):
         pass
     text = urllib.quote_plus(text)
     url = URL + "editMessageText?text={}&chat_id={}&message_id={}".format(text, chat_id, message_id)
+    if reply_markup:
+        url += "&reply_markup={}".format(reply_markup)
+    get_url(url)
+
+def edit_message2(inline_message_id, text, reply_markup=None):
+    try:
+        text = (text.encode("utf8"))
+    except:
+        pass
+    text = urllib.quote_plus(text)
+    url = URL + "editMessageText?text={}&inline_message_id={}".format(text, inline_message_id)
     if reply_markup:
         url += "&reply_markup={}".format(reply_markup)
     get_url(url)
@@ -538,10 +550,10 @@ class User:
                 hungerCriers.append(chat)
                 count = len(hungerCriers)
                 if count < 3:
-                    send_message(hungermessages[count-1] + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), NoctuachatID)
+                    send_message(hungermessages[count-1] + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), AdminchatID)
                 else:
                     message = hungermessages[random.randint(2,len(hungermessages)-1)]
-                    send_message(message + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), NoctuachatID, remove_keyboard())
+                    send_message(message + "\n\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)), AdminchatID, remove_keyboard())
                 send_message("Hoot hoot "+u'\U0001F989'+"Your cry has been heard!\n\nThe current number of people starving is "+str(len(hungerCriers))+". When an order is started, Nocbot will PM you "+u'\U0001F609', chat, remove_keyboard())
             else:
                 send_message(u"Your Cry has already been heard! \U0001F4E3", chat, remove_keyboard())
@@ -583,7 +595,6 @@ class User:
                     send_message("Hoot-ray, your knight in shining armour " + name + " has come to save you from impending starvation! " + 	u"\U0001F389\U0001F389\U0001F389" + "\n\n" + u"\U0001F6F5" + "Food from: " + self.description[0] + "\n" + u"\U0001F553" + "Order closing at: " + self.description[1] + '\n\nAdd your items via "Order Food ' + u"\u27A1" + ' Add Order"!', x)
             send_message(orderfood_message(), chat, orderfood_menu())
             self.stage = self.orderFood
-
 
     def AddOrder1(self,text,chat,name):
         descriptions = []
@@ -785,7 +796,7 @@ class User:
 
     def Menus2(self,text,chat,name):
         if text != "/back":
-            send_message(name + " suggested a new menu:\n" + text, NoctuachatID, remove_keyboard())
+            send_message(name + " suggested a new menu:\n" + text, AdminchatID, remove_keyboard())
             send_message(u"Thank you for your input! We'll do our best to implement it in our next update! \U0001F607", chat, remove_keyboard())
         send_message(orderfood_message(), chat, orderfood_menu())
         self.stage = self.orderFood
@@ -1082,7 +1093,7 @@ class User:
 
     def ask(self,text,chat,name):
         if text != "/back":
-            send_message(name + " asked:\n" + text, NoctuachatID, remove_keyboard())
+            send_message(name + " asked:\n" + text, AdminchatID, remove_keyboard())
             send_message(u"Understood! I'll get back to you when I have an answer! \U0001F609", chat, remove_keyboard())
         options =[[u"Owl-Owlet Anonymous Chat\U0001F4AC"], [u"OrderFood\U0001F35F"], [u"AlmaNoc\U0001F4C6", u"Feedback\U0001F5D2"], [u"Help Desk\U0001F6CE", u"About the Bot\U0001F989"]]
         keyboard = build_keyboard(options)
@@ -1202,6 +1213,9 @@ class User:
                 self.stage = self.viewrating
             else:
                 send_message("There are currently no events added " + u'\U0001F607', chat)
+        elif text == "/countmein":
+            send_message("Let's create a new poll. First, send me the title.", chat)]
+            self.stage = self.create_title
         elif text == "/closeorder":
             descriptions = [x[0] for x in food.get_all_description()]
             descriptions = list(set(descriptions))
@@ -1232,6 +1246,20 @@ class User:
             pass
         else:
             return
+
+    def create_title(self,text,chat,name):
+        self.create[0] = text
+        send_message("New poll: " + text + "\n\nPlease send me the first answer option.", chat)
+        self.stage = self.create_options
+
+    def create_options(self,text,chat,name):
+        if text == "/done":
+            for x in self.create[1]:
+                sample.action(self.create[0], x, 0, "-")
+            send_message("Poll created", chat)
+        else:
+            self.create[1].append(text)
+            send_message("Good. Now send me another answer option, or /done to finish.", chat, remove_keyboard())
 
     def reset(self,text,chat,name):
         ono.reset(text)
@@ -1424,6 +1452,47 @@ class User:
         send_message("Response recorded!\n\nType /mainmenu to return to the main menu.", chat)
 
 
+    def inline_mode(self,update):
+        chat = update["inline_query"]["from"]["id"]
+        query_id = update["inline_query"]["id"]
+        query = update["inline_query"]["query"]
+        if query == "":
+            query_results = []
+            titles = list(set(sample.get_all_titles()))
+            for x in titles:
+                stats = sample.get_stats(x)
+                message = ""
+                options = []
+                for key in stats:
+                    message += key + ": " + str(stats[key]) + "\n"
+                    options.append([{"text":key, "callback_data":key}])
+                keyboard = inline_keyboard(sorted(options, key=str.lower))
+                query_results.append({"type": "article", "id": x[:20], "title": x, "input_message_content": {"message_text": x + "\n\n" + message}, "reply_markup": keyboard })
+            query_results = json.dumps(query_results)
+            answer_inline_query(query_id, query_results)
+
+    def sampling(self,update):
+        call_id = update["callback_query"]["id"]
+        chat = update["callback_query"]["from"]["id"]
+        data = update["callback_query"]["data"]
+        message = update["callback_query"]["message"]["text"]
+        inline_message_id = update["callback_query"]["inline_message_id"]
+        message_id = update["callback_query"]["message"]["message_id"]
+        name = update["callback_query"]["from"]["first_name"]
+        empty_answer(call_id)
+        for x in samplerecord.get_by_id(inline_message_id):
+            title = x[0]
+            break
+        sample.action(title,data,chat,name)
+        stats = sample.get_stats(title)
+        message = ""
+        options = []
+        for key in stats:
+            message += key + ": " + str(stats[key]) + "\n"
+            options.append([{"text":key, "callback_data":key}])
+        keyboard = inline_keyboard(sorted(options, key=str.lower))
+        edit_message2(inline_message_id, title + "\n\n" + message, keyboard)
+
 users = []
 
 def main():
@@ -1480,15 +1549,26 @@ def main():
                             chat = update["message"]["chat"]["id"]
                             send_message(u"I can't understand stickers, images or GIFs. Text me, would ya? \U0001F618", chat)
                     elif "callback_query" in update:
-                        chat = update["callback_query"]["message"]["chat"]["id"]
-                        for user in users:
-                            if chat == user.id:
-                                user.inline(update)
-                                break
-                        if chat not in [user.id for user in users]:
-                                x = User(chat)
-                                users.append(x)
-                                x.inline(update)
+                        if "message" in update["callback_query"]:
+                            chat = update["callback_query"]["message"]["chat"]["id"]
+                            for user in users:
+                                if chat == user.id:
+                                    user.inline(update)
+                                    break
+                            if chat not in [user.id for user in users]:
+                                    x = User(chat)
+                                    users.append(x)
+                                    x.inline(update)
+                        elif "inline_message_id" in update["callback_query"]:
+                            chat = update["callback_query"]["from"]["id"]
+                            for user in users:
+                                if chat == user.id:
+                                    user.sampling(update)
+                                    break
+                            if chat not in [user.id for user in users]:
+                                    x = User(chat)
+                                    users.append(x)
+                                    x.sampling(update)
                     elif "inline_query" in update:
                         chat = update["inline_query"]["from"]["id"]
                         for user in users:
@@ -1499,6 +1579,14 @@ def main():
                                 x = User(chat)
                                 users.append(x)
                                 x.inline_mode(update)
+                    elif "chosen_inline_result" in update:
+                        inline_message_id = update["chosen_inline_result"]["inline_message_id"]
+                        result_id = update["chosen_inline_result"]["result_id"]
+                        titles = list(set(sample.get_all_titles()))
+                        for title in titles:
+                            if title.startswith(result_id):
+                                check = x
+                        samplerecord.add_id(x,inline_message_id)
                 last_update_id = get_last_update_id(updates) + 1
         except KeyError, e:
                 print('I got a KeyError - reason "%s"' % str(e))
