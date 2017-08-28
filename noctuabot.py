@@ -911,7 +911,7 @@ class User:
             message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
             for x in self.orderlist:
                 print x[3]
-                message += ("$" + x[1] + " - " + x[3]) #for emoji names
+                message += ("$" + x[1].encode("utf8") + " - " + x[3]) #for emoji names
             send_message(message, chat)
             for x in self.orderlist:
                 if x[1] != "":
