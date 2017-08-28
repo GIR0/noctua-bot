@@ -908,13 +908,10 @@ class User:
                 self.idx -= 1
             send_message("Please enter amount owed by:\n\n" + self.orderlist[self.idx][3] + "click /previous to go back\nclick /skip to skip this entry\nclick /exit to cancel payments", chat)
         elif text == "/done":
-            message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n"
-            send_message(message,chat)
-            items = []
+            message = "Here's the final order list, together with the amounts you've entered. I have forwarded this to everyone who ordered!\n\n
             for x in self.orderlist:
                 print x[3]
-                items.append("$" + x[1] + " - " + x[3]) #for emoji names
-            message = "\n".join(items)
+                message += ("$" + x[1] + " - " + x[3]) #for emoji names
             send_message(message, chat)
             for x in self.orderlist:
                 if x[1] != "":
