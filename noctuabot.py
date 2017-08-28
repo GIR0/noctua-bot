@@ -912,8 +912,9 @@ class User:
             send_message(message,chat)
             items = []
             for x in self.orderlist:
-                items.append("$" + x[1] + " - " + x[3])
-            send_message("\n".join(items), chat)
+                items.append("$" + x[1] + " - " + x[3].encode("utf8") ) #for emoji names
+            message = "\n".join(items)
+            send_message(message, chat)
             for x in self.orderlist:
                 if x[1] != "":
                     send_message("You are required to pay $" + x[1] + " to " + name + " for your latest order:\n" + x[2], x[0])
