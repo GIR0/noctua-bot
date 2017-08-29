@@ -209,6 +209,7 @@ class User:
         self.display = ""
         self.owl = 0
         self.owlet = 0
+        self.create =["", []]
     def MainMenu(self,text,chat,name):
         if text == "/admin":
             if chat in admin:
@@ -846,9 +847,10 @@ class User:
                         orders.append(x[3] + " - (" + x[5]+ ")")
                 orders = sorted(orders, key=str.lower)
                 orders = [str(i+1) + ". " + x for i, x in enumerate(orders)]
-                message = u"Final Order\U0001F50F" + "\n" + "\n".join(orders)
-                send_message("Order is locked", chat, remove_keyboard())
+                message = u"Final Order\U0001F50F"
                 send_message(message, chat, remove_keyboard())
+                send_message("\n".join(orders), chat, remove_keyboard())
+                send_message("Order is locked", chat, remove_keyboard())
                 send_message(description + u" - Order has been locked \U0001F512", NoctuachatID)
             else:
                 food.unlock(chat)
