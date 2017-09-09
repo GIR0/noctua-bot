@@ -1460,7 +1460,7 @@ class User:
         query = update["inline_query"]["query"]
         if query == "":
             query_results = []
-            titles = list(set(sample.get_all_titles()))
+            titles = list(set([x[0] for x in sample.get_all_titles()]))
             for x in titles:
                 stats = sample.get_stats(x)
                 message = ""
@@ -1469,7 +1469,7 @@ class User:
                     message += key + ": " + str(stats[key]) + "\n"
                     options.append([{"text":key, "callback_data":key}])
                 keyboard = inline_keyboard(sorted(options, key=str.lower))
-                query_results.append({"type": "article", "id": "abc", "title": x, "input_message_content": {"message_text": x + "\n\n" + message}, "reply_markup": keyboard })
+                query_results.append({"type": "article", "id": x[:20], "title": x, "input_message_content": {"message_text": x + "\n\n" + message}, "reply_markup": keyboard })
             query_results = json.dumps(query_results)
             answer_inline_query(query_id, query_results)
 
