@@ -25,6 +25,7 @@ rate = ratedb()
 survey = surveydb()
 ono = onodb()
 sample = sampledb()
+samplerecord = samplerecord()
 photo_id = " "
 blast_message = " "
 blast_options = []
@@ -1611,5 +1612,6 @@ if __name__ == '__main__':
     survey.setup()
     ono.setup()
     sample.setup()
+    samplerecord.setup()
     thread.start_new_thread(daily_reset_run, ())
     main()
