@@ -531,7 +531,7 @@ class samplerecord:
         self.cur = self.connection.cursor()
 
     def setup(self):
-        tblstmt = "CREATE TABLE IF NOT EXISTS SampleRecord (id serial, title varchar, inline_message_id integer);"
+        tblstmt = "CREATE TABLE IF NOT EXISTS SampleRecord (id serial, title varchar, inline_message_id varchar);"
         self.cur.execute(tblstmt)
         self.connection.commit()
 
