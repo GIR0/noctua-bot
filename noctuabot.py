@@ -1253,8 +1253,27 @@ class User:
             sample.clear()
             samplerecord.clear()
             send_message("Cleared", chat)
+        elif text == "/counts":
+            titles = list(set([x[0] for x in sample.get_all_titles]))
+            for y in titles:
+                options = [[y] for y in titles]
+                keyboard = build_keyboard(options)
+            send_message("Which one?", chat, keyboard)
+            self.stage = self.counts
         else:
             return
+
+    def counts(self,text,chat,name):
+        if text.encode("utf8") in list(set([x[0] for x in sample.get_all_titles])):
+            title = text.encode("utf8")
+            stats = sample.get_stats(title)
+            message = ""
+            for key in stats:
+                message += key + ": " + str(stats[key]) + "\n"
+                results = [x[4] for x in sample.get_results(title, key)]
+                results = [str(i+1) + ". " + x for i, x in enumerate(results)]
+                message += "\n".join(results) + "\n\n"
+            send_message(message, chat, remove_keyboard())
 
     def create_title(self,text,chat,name):
         self.create[0] = text
@@ -1469,7 +1488,6 @@ class User:
             query_results = []
             titles = list(set([x[0] for x in sample.get_all_titles()]))
             for x in titles:
-                print x
                 stats = sample.get_stats(x)
                 message = ""
                 options = []
@@ -1477,7 +1495,6 @@ class User:
                     message += key + ": " + str(stats[key]) + "\n"
                     options.append([{"text":key, "callback_data":key}])
                 query_results.append({"type": "article", "id": x[:20].decode("utf8"), "title": x, "input_message_content": {"message_text": x.decode("utf8") + "\n\n" + message}, "reply_markup": {"inline_keyboard":options}})
-                print message
             query_results = json.dumps(query_results)
             answer_inline_query(query_id, query_results)
 
