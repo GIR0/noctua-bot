@@ -1593,7 +1593,7 @@ def main():
                         titles = list(set([x[0] for x in sample.get_all_titles()]))
                         for title in titles:
                             if title.startswith(result_id):
-                                check = x
+                                x = title
                         samplerecord.add_id(x,inline_message_id)
                 last_update_id = get_last_update_id(updates) + 1
         except KeyError, e:
