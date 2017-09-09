@@ -1594,7 +1594,7 @@ def main():
                         result_id = update["chosen_inline_result"]["result_id"]
                         titles = list(set([x[0] for x in sample.get_all_titles()]))
                         for title in titles:
-                            if title.startswith(result_id):
+                            if title.startswith(result_id.encode("utf8")):
                                 x = title
                         samplerecord.add_id(x,inline_message_id)
                 last_update_id = get_last_update_id(updates) + 1
