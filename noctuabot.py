@@ -1249,8 +1249,10 @@ class User:
                 keyboard = build_keyboard(options)
                 send_message("There are currently no ongoing orders " + u'\U0001F607', chat, keyboard)
             self.stage = self.adminclose
-        elif text == "/mainmenu":
-            pass
+        elif text == "/countclear":
+            sample.clear()
+            samplerecord.clear()
+            send_message("Cleared", chat)
         else:
             return
 
