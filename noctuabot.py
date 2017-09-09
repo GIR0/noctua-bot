@@ -1473,7 +1473,6 @@ class User:
                 for key in stats:
                     message += key + ": " + str(stats[key]) + "\n"
                     options.append([{"text":key, "callback_data":key}])
-                options = sorted(options, key=str.lower)
                 query_results.append({"type": "article", "id": x[:20], "title": x, "input_message_content": {"message_text": x + "\n\n" + message}, "reply_markup": {"inline_keyboard":options}})
                 print message
             query_results = json.dumps(query_results)
