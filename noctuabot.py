@@ -1589,7 +1589,7 @@ def main():
                     elif "chosen_inline_result" in update:
                         inline_message_id = update["chosen_inline_result"]["inline_message_id"]
                         result_id = update["chosen_inline_result"]["result_id"]
-                        titles = list(set(sample.get_all_titles()))
+                        titles = list(set([x[0] for x in sample.get_all_titles()]))
                         for title in titles:
                             if title.startswith(result_id):
                                 check = x
