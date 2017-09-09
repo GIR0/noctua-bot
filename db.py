@@ -506,6 +506,7 @@ class sampledb:
                     if each[3] != 0:
                         x[key] += 1
                 else:
+                    x[key] = 0
                     if each[3] != 0:
                         x[key] = 1
             return x
