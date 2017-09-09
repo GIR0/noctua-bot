@@ -1485,9 +1485,7 @@ class User:
         call_id = update["callback_query"]["id"]
         chat = update["callback_query"]["from"]["id"]
         data = update["callback_query"]["data"]
-        message = update["callback_query"]["message"]["text"]
         inline_message_id = update["callback_query"]["inline_message_id"]
-        message_id = update["callback_query"]["message"]["message_id"]
         name = update["callback_query"]["from"]["first_name"]
         empty_answer(call_id)
         for x in samplerecord.get_by_id(inline_message_id):
@@ -1500,8 +1498,8 @@ class User:
         for key in stats:
             message += key + ": " + str(stats[key]) + "\n"
             options.append([{"text":key, "callback_data":key}])
-        keyboard = inline_keyboard(sorted(options, key=str.lower))
-        edit_message2(inline_message_id, title + "\n\n" + message, keyboard)
+        keyboard = inline_keyboard(options)
+        edit_message2(inline_message_id, title.decode("utf8") + "\n\n" + message, keyboard)
 
 users = []
 
