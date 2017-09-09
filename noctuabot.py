@@ -1254,7 +1254,7 @@ class User:
             samplerecord.clear()
             send_message("Cleared", chat)
         elif text == "/counts":
-            titles = list(set([x[0] for x in sample.get_all_titles]))
+            titles = list(set([x[0] for x in sample.get_all_titles()]))
             for y in titles:
                 options = [[y] for y in titles]
                 keyboard = build_keyboard(options)
@@ -1264,7 +1264,7 @@ class User:
             return
 
     def counts(self,text,chat,name):
-        if text.encode("utf8") in list(set([x[0] for x in sample.get_all_titles])):
+        if text.encode("utf8") in list(set([x[0] for x in sample.get_all_titles()])):
             title = text.encode("utf8")
             stats = sample.get_stats(title)
             message = ""
