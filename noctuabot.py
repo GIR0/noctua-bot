@@ -124,7 +124,7 @@ def answer_callback_query(call_id, text, show_alert=None):
 def answer_inline_query(query_id, query_results):
     url = URL + "answerInlineQuery?inline_query_id={}&results={}".format(query_id, query_results)
     get_url(url)
-    
+
 def empty_answer(call_id):
     url = URL + "answerCallbackQuery?callback_query_id={}".format(call_id)
     get_url(url)
@@ -1466,6 +1466,7 @@ class User:
             query_results = []
             titles = list(set([x[0] for x in sample.get_all_titles()]))
             for x in titles:
+                print x
                 stats = sample.get_stats(x)
                 message = ""
                 options = []
@@ -1474,6 +1475,7 @@ class User:
                     options.append([{"text":key, "callback_data":key}])
                 keyboard = inline_keyboard(sorted(options, key=str.lower))
                 query_results.append({"type": "article", "id": x[:20], "title": x, "input_message_content": {"message_text": x + "\n\n" + message}, "reply_markup": keyboard })
+                print message
             query_results = json.dumps(query_results)
             answer_inline_query(query_id, query_results)
 
