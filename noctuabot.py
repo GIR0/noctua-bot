@@ -185,7 +185,7 @@ def orderfood_message():
         descriptions = [str(i+1) + ") " + x for i, x in enumerate(descriptions)]
         message = u"\u23F0Ongoing Order\U0001F4DD\n"
         for x in descriptions:
-                message.append(x + "\n")
+                message += x.decode("utf8") + "\n"
     else:
         message = "There is currently no order ongoing"
     message += "\n" + u"\U0001F354 HungerCount \U0001F35F: " + str(len(hungerCriers)) + "\n" + u"What would you like to do? \U0001F4AD"
