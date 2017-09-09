@@ -121,6 +121,10 @@ def answer_callback_query(call_id, text, show_alert=None):
         url += "&show_alert=true"
     get_url(url)
 
+def answer_inline_query(query_id, query_results):
+    url = URL + "answerInlineQuery?inline_query_id={}&results={}".format(query_id, query_results)
+    get_url(url)
+    
 def empty_answer(call_id):
     url = URL + "answerCallbackQuery?callback_query_id={}".format(call_id)
     get_url(url)
