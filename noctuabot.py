@@ -1270,7 +1270,10 @@ class User:
             message = ""
             for key in stats:
                 message += key + ": " + str(stats[key]) + "\n"
-                results = [x[4] for x in sample.get_results(title, key)]
+                results = []
+                for x in sample.get_results(title, key):
+                    if x[4] != "-":
+                        results.append(x[4])
                 results = [str(i+1) + ". " + x for i, x in enumerate(results)]
                 message += "\n".join(results) + "\n\n"
             send_message(message, chat, remove_keyboard())
