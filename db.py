@@ -461,10 +461,20 @@ class sampledb:
         self.connection.commit()
 
     def action(self, title, option, owner, name):
-        stmt = "INSERT INTO Sample (title, option, owner, name) VALUES (%s, %s, %s, %s) ON CONFLICT (option,owner,name) DO NOTHING;"
-        args = (title, option, owner, name)
+        stmt = "SELECT * FROM Sample WHERE title = %s AND owner = %s"
+        args = (title, owner)
         self.cur.execute(stmt, args)
-        self.connection.commit()
+        options = [x[2] for x in self.cur]
+        if option in options:
+            stmt = "DELETE FROM Sample WHERE title = %s AND owner = %s AND option = %s"
+            args = (title, owner, option)
+            self.cur.execute(stmt, args)
+            self.connection.commit()
+        else:
+            stmt = "INSERT INTO Sample (title, option, owner, name) VALUES (%s, %s, %s, %s) ON CONFLICT (option,owner,name) DO NOTHING;"
+            args = (title, option, owner, name)
+            self.cur.execute(stmt, args)
+            self.connection.commit()
 
     def delete_title(self, title):
         stmt = "DELETE FROM Sample WHERE title = %s"
