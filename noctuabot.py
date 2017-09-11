@@ -1260,6 +1260,13 @@ class User:
                 keyboard = build_keyboard(options)
             send_message("Which one?", chat, keyboard)
             self.stage = self.counts
+        elif text -- "/countdelete":
+            titles = list(set([x[0] for x in sample.get_all_titles()]))
+            for y in titles:
+                options = [[y] for y in titles]
+                keyboard = build_keyboard(options)
+            send_message("Which one?", chat, keyboard)
+            self.stage = self.countdelete
         else:
             return
 
@@ -1277,6 +1284,16 @@ class User:
                 results = [str(i+1) + ". " + x for i, x in enumerate(results)]
                 message += "\n".join(results) + "\n\n"
             send_message(message, chat, remove_keyboard())
+            send_message(admin_msg, chat, remove_keyboard())
+            self.stage = self.admin
+
+    def countdelete(self,text,chat,name):
+        if text.encode("utf8") in list(set([x[0] for x in sample.get_all_titles()])):
+            title = text.encode("utf8")
+            sample.delete(title)
+            send_message("Deleted", chat, remove_keyboard())
+            send_message(admin_msg, chat, remove_keyboard())
+            self.stage = self.admin
 
     def create_title(self,text,chat,name):
         self.create[0] = text
