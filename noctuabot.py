@@ -1260,7 +1260,7 @@ class User:
                 keyboard = build_keyboard(options)
             send_message("Which one?", chat, keyboard)
             self.stage = self.counts
-        elif text -- "/countdelete":
+        elif text == "/countdelete":
             titles = list(set([x[0] for x in sample.get_all_titles()]))
             for y in titles:
                 options = [[y] for y in titles]
