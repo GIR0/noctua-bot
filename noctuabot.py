@@ -1525,10 +1525,13 @@ class User:
         inline_message_id = update["callback_query"]["inline_message_id"]
         name = update["callback_query"]["from"]["first_name"]
         empty_answer(call_id)
-        for x in samplerecord.get_by_id(inline_message_id):
-            title = x[1]
-            break
-        sample.action(title,data,chat,name)
+        try:
+            for x in samplerecord.get_by_id(inline_message_id):
+                title = x[1]
+                break
+            sample.action(title,data,chat,name)
+        except:
+            return
         stats = sample.get_stats(title)
         message = ""
         options = []
