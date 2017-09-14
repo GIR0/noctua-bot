@@ -1305,6 +1305,7 @@ class User:
             for x in self.create[1]:
                 sample.action(self.create[0], x, 0, "-")
             send_message("Poll created", chat)
+            self.stage = self.admin
         else:
             self.create[1].append(text)
             send_message("Good. Now send me another answer option, or /done to finish.", chat, remove_keyboard())
