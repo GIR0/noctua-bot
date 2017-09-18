@@ -698,6 +698,7 @@ class User:
             if len(descriptions) == 0:
                 send_message("You have 0 orders added currently.", chat, remove_keyboard())
                 send_message(orderfood_message(), chat, orderfood_menu())
+                self.stage = self.orderFood
             else:
                 message = u"My Orders\U0001F354"
                 count = 0
