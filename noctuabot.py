@@ -1278,7 +1278,7 @@ class User:
             if x[0].startswith(text[:20].encode("utf8")):
                 check = 1
                 title = x[0]
-        if check = 1:
+        if check == 1:
             stats = sample.get_stats(title)
             message = ""
             for key in stats:
